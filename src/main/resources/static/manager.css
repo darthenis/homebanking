@@ -1,0 +1,27 @@
+.btnDelete{
+
+    background-color: red;
+    color: white;
+    border-radius: 10px;
+    border: none;
+    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+    padding: 0px 10px 0px 10px;
+
+}
+
+.btnEdit{
+
+    background-color: #0d6efd;
+    color: white;
+    border: none;
+    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    padding: 0px 10px 0px 10px;
+
+}
+
+.activeButton:active{
+
+    transform: scale(.97);
+
+}
