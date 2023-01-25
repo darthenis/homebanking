@@ -25,6 +25,11 @@ createApp({
         lastName: "",
         email: "",
       },
+      isLoading: {
+        create : false,
+        edit : false,
+        delete: false
+      }
     };
   },
   created() {
@@ -44,23 +49,28 @@ createApp({
     },
     createClient() {
       this.validateInputs(true, this.errors, this.newClient);
-
       if (!Object.values(this.errors).some((e) => e !== "")) {
+        this.setLoading("create");
         axios
           .post("http://localhost:8080/clients", this.newClient)
           .then((res) => {
             this.loadData();
             this.messageAlert("Client created succesfully");
             this.resetNewClient();
+            this.setLoading("create");
           })
           .catch((err) => console.log(err));
       }
     },
     deleteClient() {
-      axios.delete(this.selectedClient._links.self.href).then((res) => {
-        this.loadData();
-        this.messageAlert("Client deleted succesfully");
-        this.selectedClient = null;
+      this.setLoading("delete");
+      axios.delete(this.selectedClient._links.self.href)
+        .then((res) => {
+          this.loadData();
+          this.closeModal("closeDeleteModal")
+          this.messageAlert("Client deleted succesfully");
+          this.selectedClient = null;
+          this.setLoading("delete");
       });
     },
     selectClient(client) {
@@ -71,12 +81,14 @@ createApp({
     },
     putClient() {
       this.validateInputs(true, this.editErrors, this.selectedClient);
-
       if (!Object.values(this.editErrors).some((e) => e !== "")) {
+        this.setLoading("edit");
         axios
           .put(this.selectedClient._links.self.href, this.selectedClient)
-          .then(() => {
+          .then((res) => {
+            this.setLoading("edit");
             this.loadData();
+            this.closeModal("editModalClose")
             this.messageAlert("Client edited succesfully");
             this.selecteClient = null;
           });
@@ -121,6 +133,18 @@ createApp({
         }
       }
     },
+    setLoading(key){
+
+      this.isLoading[key] = !this.isLoading[key];
+
+    },
+    closeModal(id){
+
+      let button = document.getElementById(id);
+
+      button.click();
+
+    }
   },
   computed: {
     validateChange() {
