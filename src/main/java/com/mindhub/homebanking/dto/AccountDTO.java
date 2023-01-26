@@ -1,17 +1,13 @@
-package com.mindhub.homebanking.models;
+package com.mindhub.homebanking.dto;
 
-import org.hibernate.annotations.GenericGenerator;
+import com.mindhub.homebanking.models.Account;
+import com.mindhub.homebanking.models.Client;
 
-import javax.persistence.*;
 import java.time.LocalDate;
 
-@Entity
-public class Account {
+public class AccountDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
-    @GenericGenerator(name = "native", strategy = "native")
-    private long id;
+    private Long id;
 
     private String number;
 
@@ -19,20 +15,24 @@ public class Account {
 
     private Double balance;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "client_id")
-    private Client client;
+    public AccountDTO(Account account) {
 
-    public Account(){}
+        this.id = account.getId();
 
-    public Account(String number, LocalDate creationDate, Double balance) {
-        this.number = number;
-        this.creationDate = creationDate;
-        this.balance = balance;
+        this.number = account.getNumber();
+
+        this.creationDate = account.getCreationDate();
+
+        this.balance = account.getBalance();
+
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getNumber() {
@@ -59,22 +59,13 @@ public class Account {
         this.balance = balance;
     }
 
-    public Client getClient() {
-        return client;
-    }
-
-    public void setClient(Client client) {
-        this.client = client;
-    }
-
     @Override
     public String toString() {
-        return "Account{" +
+        return "AccountDTO{" +
                 "id=" + id +
                 ", number='" + number + '\'' +
                 ", creationDate=" + creationDate +
                 ", balance=" + balance +
-                ", client=" + client +
                 '}';
     }
 }
