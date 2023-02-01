@@ -38,7 +38,7 @@ createApp({
   methods: {
     loadData() {
       axios
-        .get("http://localhost:8080/clients")
+        .get("http://localhost:8080/rest/clients")
         .then((res) => {
           this.clientsData = res.data;
         })
@@ -52,7 +52,7 @@ createApp({
       if (!Object.values(this.errors).some((e) => e !== "")) {
         this.setLoading("create");
         axios
-          .post("http://localhost:8080/clients", this.newClient)
+          .post("http://localhost:8080/rest/clients", this.newClient)
           .then((res) => {
             this.loadData();
             this.messageAlert("Client created succesfully");

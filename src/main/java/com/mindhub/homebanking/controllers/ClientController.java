@@ -23,7 +23,7 @@ public class ClientController {
         return repo.findAll().stream().map(ClientDTO::new).collect(toList());
     }
 
-    @RequestMapping("clients/{id}")
+    @RequestMapping("client/{id}")
     public ClientDTO getPet(@PathVariable Long id){
 
         return repo.findById(id).map(ClientDTO::new).orElse(null);
