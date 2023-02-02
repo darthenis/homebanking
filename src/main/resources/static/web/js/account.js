@@ -12,36 +12,46 @@ createApp({
       themeDark: localStorage.getItem('themeBH') === "dark" ? true : false || false,
       numbersAccounts: [],
       balanceTotal: null,
+      isLoadingData : false
     };
   },
   created() {
     window.addEventListener("resize", this.resizeEvent);
-    axios.get('http://localhost:8080/api/client/1')
-          .then(res => {
-
-            this.clientData = res.data;
-
-            this.clientData.accounts = this.clientData.accounts.map(account => {
-
-              return {...account, firstPeriod: true}
-
-            });
-
-            this.clientData.accounts.sort((a, b) => a.id - b.id);
-
-            this.accountsShowed.push({...this.clientData.accounts[0]});
-            this.accountsShowed.push({...this.clientData.accounts[1]});
-
-            this.numbersAccounts = res.data.accounts.map(account => account.number)
-
-            this.balanceTotal = this.clientData.accounts.reduce((sum, account) => sum += account.balance, 0)
-
-          })
+    this.loadData();
   },
   destroyed() {
     window.removeEventListener("resize", this.resizeEvent);
   },
   methods:{
+    loadData(){
+
+      this.isLoadingData = true;
+
+      axios.get('http://localhost:8080/api/client/1')
+            .then(res => {
+  
+              this.isLoadingData = false;
+  
+              this.clientData = res.data;
+  
+              this.clientData.accounts = this.clientData.accounts.map(account => {
+  
+                return {...account, firstPeriod: true}
+  
+              });
+  
+              this.clientData.accounts.sort((a, b) => a.id - b.id);
+  
+              this.accountsShowed.push({...this.clientData.accounts[0]});
+              this.accountsShowed.push({...this.clientData.accounts[1]});
+  
+              this.numbersAccounts = res.data.accounts.map(account => account.number)
+  
+              this.balanceTotal = this.clientData.accounts.reduce((sum, account) => sum += account.balance, 0)
+  
+            })
+
+    },
     resizeEvent(){
       this.resizeResetBarTogle();
       this.setIsMobile();
@@ -77,15 +87,15 @@ createApp({
 
       if(direction === "left" && firstIndex !== 0){
 
-        this.accountsShowed[0] = {...this.clientData.accounts[firstIndex - 2]};
+        this.accountsShowed[0] = {...this.clientData.accounts[firstIndex - 1]};
 
-        this.accountsShowed[1] = {...this.clientData.accounts[secondIndex - 2]};
+        this.accountsShowed[1] = {...this.clientData.accounts[secondIndex - 1]};
 
       } else if(direction === "right" && secondIndex !== this.clientData.accounts.length - 1){
 
-        this.accountsShowed[0] = {...this.clientData.accounts[firstIndex + 2]};
+        this.accountsShowed[0] = {...this.clientData.accounts[firstIndex + 1]};
 
-        this.accountsShowed[1] = {...this.clientData.accounts[secondIndex + 2]};
+        this.accountsShowed[1] = {...this.clientData.accounts[secondIndex + 1]};
 
       }
 
@@ -102,7 +112,7 @@ createApp({
 
     unselectAccount(){
 
-      this.selectedAccount = null;
+      this.selectedAccount = false;
 
       this.disableScroll(true);
 
@@ -137,7 +147,7 @@ createApp({
     },
     getAnimationMovement(){
 
-      if(!this.selectedAccount){
+      if(!this.selectedAccount && this.selectedAccount !== null){
 
         return {'animation-name': `modal__movement__slideout`};
 
@@ -245,7 +255,7 @@ createApp({
             }
           }
         },
-        colors:['rgb(0, 199, 0)', '#E91E63', '#9C27B0'],
+        colors: this.themeDark ? ['rgb(0, 199, 0)'] : ["#ff9975"],
         dataLabels: {
           style: {
             colors: ['#fffff', '#fffff', '#fffff']

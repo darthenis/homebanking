@@ -83,7 +83,6 @@ h1, h2, h3, h4, h5, h6{
     grid-template-rows: 70px 1fr;
     height: 100%;
     grid-row: 1/-1;
-
 }
 
 .header{
@@ -441,6 +440,7 @@ h1, h2, h3, h4, h5, h6{
 
     border-radius: 10px;
     padding: 10px;
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
 
 }
 
@@ -479,13 +479,14 @@ h1, h2, h3, h4, h5, h6{
 
     width: 250px; 
     background-color: #2a2c32;
-
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
 }
 
 .balance__total__light{
 
     width: 250px; 
     background-color: #ececec;
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
 
 }
 
@@ -505,7 +506,7 @@ h1, h2, h3, h4, h5, h6{
 .modal__movement{
 
     position: fixed;
-    right: -100vw;
+    right: -1000px;
     top: 0;
     width: 100%;
     max-width: 400px;
@@ -579,7 +580,7 @@ h1, h2, h3, h4, h5, h6{
 
     to{
 
-        right: -1000vw;
+        right: -1000px;
 
     }
 

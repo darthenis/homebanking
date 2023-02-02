@@ -58,12 +58,13 @@
                     <a class="d-flex align-items-center gap-1" href="#">
                         <i class="bi bi-bell"></i>
                         Notifications
-                        <span class="badge rounded-pill" style="background-color: #ff9975">5</span>
+                        <span   class="badge rounded-pill" 
+                                :style="{'backgroundColor': themeDark ? 'rgb(0, 199, 0)' : '#ff9975', 'color' : themeDark ? 'black' : 'white'}">5</span>
                     </a>
                     <a class="d-flex align-items-center gap-1" href="#">
                         <i class="bi bi-gear"></i>
                         Settings
-                    </a>
+                    </a>    
                 </nav>
 
             </div>
@@ -76,7 +77,9 @@
                     <i  @click="toggleHandle" class="bi bi-sun" v-else></i>
                     <div class="position-relative"> 
                         <i class="bi bi-bell"></i>
-                        <span class="position-absolute translate-middle start-100 badge rounded-pill" style="background-color: #ff9975; top: -2px;">
+                        <span   class="position-absolute translate-middle start-100 badge rounded-pill" 
+                                style="top: -2px;"
+                                :style="{'backgroundColor': themeDark ? 'rgb(0, 199, 0)' : '#ff9975', 'color' : themeDark ? 'black' : 'white'}">
                         5
                         <span class="visually-hidden">unread messages</span>
                         </span>
@@ -84,95 +87,107 @@
                 </div>
                 
             </div>
-            <main class="main__account p-2">
-                <div  class="d-flex justify-content-center"> 
-                    <div    class="text-center p-2 rounded-2 d-flex flex-column"
-                            :class="{balance__total__dark: themeDark, balance__total__light: !themeDark}">
-                        <span class="fw-bold fs-4">Balance Total</span> 
-                        <span class="fs-5">${{balanceTotal}}</span>
+
+                <main class="main__account p-2 position-relative" >
+                    <div v-if="isLoadingData" class="position-absolute top-50 start-50 translate-middle d-flex justify-content-center align-items-center">
+                        <div    
+                                class="spinner-border text-dark" :class="{'text-dark': !themeDark, 'text-white': themeDark}" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                        </div>
                     </div>
-                </div>
-                <div class="gridLayoutAccounts">
-                        <article class="card__balance" :class="{card__balance__dark: themeDark, card__balance__light: !themeDark}">
-                            <template v-if="accountsShowed.length">
-                                <h3 class="text-center">{{accountsShowed[0].number}}</h3>
-                            </template>
-                            <div id="chart1">
-                                
+                    <div style="visibility: hidden;" :style="{'visibility': isLoadingData ? 'hidden' : 'visible'}">
+                        <div  class="d-flex justify-content-center"> 
+                            <div   
+                                    class="text-center p-2 rounded-2 d-flex flex-column"
+                                    :class="{balance__total__dark: themeDark, balance__total__light: !themeDark}">
+                                <span class="fw-bold fs-4">Balance Total</span> 
+                                <span class="fs-5">${{balanceTotal}}</span>
                             </div>
-                            <template v-if="accountsShowed.length">
-                                <p class="fs-6">Creation Date: {{formatDate(accountsShowed[0].creationDate)}}</p>
-                                <span class="fs-6 d-flex flex-column">
-                                    Balance: 
-                                    <span class="fs-4">
-                                        ${{accountsShowed[0].balance}}
-                                    </span>
-                                    <span v-if="!themeDark" class="align-self-end btn btn-outline-dark" @click="selectAccount(accountsShowed[1])">
-                                        Movements
-                                    </span>
-                                    <span v-if="themeDark" class="align-self-end btn btn-outline-light" @click="selectAccount(accountsShowed[1])">
-                                        Movements
-                                    </span>
-                                </span>
-                            </template>
-                        </article>
-                        <article class="card__balance" :class="{card__balance__dark: themeDark, card__balance__light: !themeDark}">
-                            <template v-if="accountsShowed.length">
-                                <h3 class="text-center">{{accountsShowed[1].number}}</h3>
-                            </template>
-                            <div id="chart2">
-                                
-                            </div> 
-                            <template v-if="accountsShowed.length">
-                                <p class="fs-6">Creation Date: {{formatDate(accountsShowed[1].creationDate)}}</p>
-                                <span class="fs-6 d-flex flex-column">
-                                    Balance: 
-                                    <span class="fs-4">
-                                        ${{accountsShowed[1].balance}}
-                                    </span>
-                                    <span v-if="!themeDark" class="align-self-end btn btn-outline-dark" @click="selectAccount(accountsShowed[1])">
-                                        Movements
-                                    </span>
-                                    <span v-if="themeDark" class="align-self-end btn btn-outline-light" @click="selectAccount(accountsShowed[1])">
-                                        Movements
-                                    </span>
-                                </span>
-                            </template>
-                        </article>
-                </div>
-                <div    class="d-flex align-items-center justify-content-center gap-5 mt-2" 
-                        v-if="accountsShowed.length">
-                    <button class="rounded-circle btn__pass__accounts"
-                            :disabled="clientData?.accounts.length < 3 || clientData?.accounts[0].id === accountsShowed[0]?.id"
-                            :class="{btn__pass__accounts__dark: themeDark, btn__pass__accounts__light: !themeDark}"
-                            @click="toggleAccountsShowed('left')">
-                        <i class="bi bi-arrow-left"></i>
-                    </button>
-                    <button class="rounded-circle btn__pass__accounts" 
-                            :disabled="clientData?.accounts.length < 3 || clientData?.accounts[clientData.accounts.length - 1].id === accountsShowed[1]?.id"
-                            :class="{btn__pass__accounts__dark: themeDark, btn__pass__accounts__light: !themeDark}"
-                            @click="toggleAccountsShowed('right')"> 
-                        <i class="bi bi-arrow-right"></i>
-                    </button>
-                </div>
-            </main>
+                        </div>
+                        <div class="gridLayoutAccounts">
+                                <article class="card__balance" 
+                                        :class="{card__balance__dark: themeDark, card__balance__light: !themeDark}">
+                                    <template v-if="accountsShowed.length">
+                                        <h3 class="text-center">{{accountsShowed[0].number}}</h3>
+                                    </template>
+                                    <div id="chart1" style="max-width: 85vw; padding-right: 15px;">
+                                        
+                                    </div>
+                                    <template v-if="accountsShowed.length">
+                                        <p class="fs-6">Creation Date: {{formatDate(accountsShowed[0].creationDate)}}</p>
+                                        <span class="fs-6 d-flex flex-column">
+                                            Balance: 
+                                            <span class="fs-4">
+                                                ${{accountsShowed[0].balance}}
+                                            </span>
+                                            <span class="align-self-end btn"
+                                                :class="{'btn-outline-dark': !themeDark, 'btn-outline-light': themeDark}" 
+                                                @click="selectAccount(accountsShowed[0])">
+                                                Movements
+                                            </span>
+                                        </span>
+                                    </template>
+                                </article>
+                                <article class="card__balance" :class="{card__balance__dark: themeDark, card__balance__light: !themeDark}">
+                                    <template v-if="accountsShowed.length">
+                                        <h3 class="text-center">{{accountsShowed[1].number}}</h3>
+                                    </template>
+                                    <div id="chart2" style="max-width: 85vw; padding-right: 15px;">
+                                        
+                                    </div> 
+                                    <template v-if="accountsShowed.length">
+                                        <p class="fs-6">Creation Date: {{formatDate(accountsShowed[1].creationDate)}}</p>
+                                        <span class="fs-6 d-flex flex-column">
+                                            Balance: 
+                                            <span class="fs-4">
+                                                ${{accountsShowed[1].balance}}
+                                            </span>
+                                            <span   class="align-self-end btn"
+                                                    :class="{'btn-outline-dark': !themeDark, 'btn-outline-light': themeDark}" 
+                                                    @click="selectAccount(accountsShowed[1])">
+                                                Movements
+                                            </span>
+                                        </span>
+                                    </template>
+                                </article>
+                        </div>
+                        <div    class="d-flex align-items-center justify-content-center gap-5 mt-2" 
+                                v-if="accountsShowed.length > 2">
+                            <button class="rounded-circle btn__pass__accounts"
+                                    :disabled="clientData?.accounts.length < 3 || clientData?.accounts[0].id === accountsShowed[0]?.id"
+                                    :class="{btn__pass__accounts__dark: themeDark, btn__pass__accounts__light: !themeDark}"
+                                    @click="toggleAccountsShowed('left')">
+                                <i class="bi bi-arrow-left"></i>
+                            </button>
+                            <button class="rounded-circle btn__pass__accounts" 
+                                    :disabled="clientData?.accounts.length < 3 || clientData?.accounts[clientData.accounts.length - 1].id === accountsShowed[1]?.id"
+                                    :class="{btn__pass__accounts__dark: themeDark, btn__pass__accounts__light: !themeDark}"
+                                    @click="toggleAccountsShowed('right')"> 
+                                <i class="bi bi-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>  
+                </main>
         </div>
 
         <template  v-if="selectedAccount">
-            <div class="modal__movement__parent" :styled="{visibility: selectedAccount ? 'visible' : 'hidden'}"></div>
+            <div    class="modal__movement__parent" 
+                    :styled="{visibility: selectedAccount ? 'visible' : 'hidden'}" 
+                    @click="unselectAccount"></div>
         </template>
-            <article class="modal__movement p-2 text-center" :class="{modal__movement__light : !themeDark, modal__movement__dark : themeDark}" :style="getAnimationMovement()">
-                <div class="d-flex justify-content-between aling-items-center">
-                    <h2>{{selectedAccount?.number}}</h2>
-                    <span v-if="themeDark" class="btn rounded-circle btn-outline-light" @click="unselectAccount">X</span>
-                    <span v-if="!themeDark" class="btn rounded-circle btn-outline-dark" @click="unselectAccount">X</span>
-                </div>
-                <h4>Movements</h4>
-                <span class="d-flex flex-column text-start p-1 rounded" :class="{movement__card__light: !themeDark, movement__card__dark: themeDark}">
-                    <span>{{formateDateNotYear(selectedAccount?.creationDate || "222-22-22")}}</span>
-                    creacion de cuenta
-                </span>
-            </article>
+        <article class="modal__movement p-2 text-center" :class="{modal__movement__light : !themeDark, modal__movement__dark : themeDark}" :style="getAnimationMovement()">
+            <div class="d-flex justify-content-between aling-items-center">
+                <h2>{{selectedAccount?.number}}</h2>
+                <span   class="btn rounded-circle "
+                        :class="{'btn-outline-light': themeDark, 'btn-outline-dark' : !themeDark}" 
+                        @click="unselectAccount">X</span>
+            </div>
+            <h4>Movements</h4>
+            <span class="d-flex flex-column text-start p-1 rounded" :class="{movement__card__light: !themeDark, movement__card__dark: themeDark}">
+                <span>{{selectedAccount?.creationDate && formateDateNotYear(selectedAccount.creationDate)}}</span>
+                creacion de cuenta
+            </span>
+        </article>
     
     </div>
 </body>
