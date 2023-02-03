@@ -1,328 +1,73 @@
-const { createApp } = Vue;
+const {createApp} = Vue;
+
 
 createApp({
-  data() {
-    return {
-      clientData : null,
-      accountData : undefined,
-      isMobile: false,
-      activeBar: null,
-      accountsShowed: [],
-      selectedAccount: null,
-      themeDark: localStorage.getItem('themeBH') === "dark" ? true : false || false,
-      numbersAccounts: [],
-      balanceTotal: null,
-      isLoadingData : false
-    };
-  },
-  created() {
-    window.addEventListener("resize", this.resizeEvent);
-    this.loadData();
-  },
-  destroyed() {
-    window.removeEventListener("resize", this.resizeEvent);
-  },
-  methods:{
-    loadData(){
-
-      this.isLoadingData = true;
-
-      axios.get('http://localhost:8080/api/client/1')
-            .then(res => {
-  
-              this.isLoadingData = false;
-  
-              this.clientData = res.data;
-  
-              this.clientData.accounts = this.clientData.accounts.map(account => {
-  
-                return {...account, firstPeriod: true}
-  
-              });
-  
-              this.clientData.accounts.sort((a, b) => a.id - b.id);
-  
-              this.accountsShowed.push({...this.clientData.accounts[0]});
-              this.accountsShowed.push({...this.clientData.accounts[1]});
-  
-              this.numbersAccounts = res.data.accounts.map(account => account.number)
-  
-              this.balanceTotal = this.clientData.accounts.reduce((sum, account) => sum += account.balance, 0)
-  
-            })
-
-    },
-    resizeEvent(){
-      this.resizeResetBarTogle();
-      this.setIsMobile();
-    },
-
-    setIsMobile(){
-
-      if(window.screen.width <= 631){
-
-        this.isMobile = true;
-
-      } else {
-
-        this.isMobile = false;
-
-      }
-
-    },
-
-    toggleHandle(){
-
-      this.themeDark = !this.themeDark;
-
-      localStorage.setItem("themeBH", this.themeDark ? "dark" : "light");
-
-    },
-
-    toggleAccountsShowed(direction){
-
-      let firstIndex = this.clientData.accounts.findIndex(account => account.id === this.accountsShowed[0].id);
-
-      let secondIndex = this.clientData.accounts.findIndex(account => account.id === this.accountsShowed[1].id);
-
-      if(direction === "left" && firstIndex !== 0){
-
-        this.accountsShowed[0] = {...this.clientData.accounts[firstIndex - 1]};
-
-        this.accountsShowed[1] = {...this.clientData.accounts[secondIndex - 1]};
-
-      } else if(direction === "right" && secondIndex !== this.clientData.accounts.length - 1){
-
-        this.accountsShowed[0] = {...this.clientData.accounts[firstIndex + 1]};
-
-        this.accountsShowed[1] = {...this.clientData.accounts[secondIndex + 1]};
-
-      }
-
-
-    },
-
-    selectAccount(account){
-
-      this.selectedAccount = {...account};
-
-      this.disableScroll(false);
-
-    },
-
-    unselectAccount(){
-
-      this.selectedAccount = false;
-
-      this.disableScroll(true);
-
-
-    },
-
-    getAnimationBar(barNum){
-
-      if(!this.activeBar && this.activeBar !== null){
-
-        return {'animation-name': `animatedBar${barNum}Reverse`};
-
-      } else if(this.activeBar){
-
-        return {'animation-name': `animatedBar${barNum}`};
-
-      }
-
-    },
-    getAnimationNav(){
-
-      if(!this.activeBar && this.activeBar !== null){
-
-        return {'animation-name': `navAnimateReverse`};
-
-      } else if(this.activeBar){
-
-        return {'animation-name': `navAnimate`};
-
-      }
-
-    },
-    getAnimationMovement(){
-
-      if(!this.selectedAccount && this.selectedAccount !== null){
-
-        return {'animation-name': `modal__movement__slideout`};
-
-      } else if(this.selectedAccount){
-
-        return {'animation-name': `modal__movement__slide`};
-
-      }
-
-    },
-    resizeResetBarTogle(){
-
-      this.activeBar = null;
-
-    },
-
-    getLastSixMonth(){
-
-      const monthsNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-
-      let today = new Date();
-      let d;
-      let months = { names: [], numbers: []};
-
-      for(var i = 5; i >= 0; i -= 1) {
-        d = new Date(today.getFullYear(), today.getMonth() - i, 1);
-        months.names.push(monthsNames[d.getMonth()]);
-        months.numbers.push(today.getMonth() - i);
-      }
-
-      return months
-
-    },
-
-    getMovementsLastSixMonth(index){
-
-      let months = this.getLastSixMonth();
-
-      let dateCreation = this.accountsShowed[index].creationDate.split("-")
-
-      let newData = [];
-
-      for(let [idx, number] of months.numbers.entries()){
-
-        if(dateCreation[1] - 1 <= number){
-
-          newData.push(this.accountsShowed[index].balance)
-
-        } else {
-
-          newData.push(0)
-
-        }
-
-      }
-
-      return newData;
-
-    },
-
-    createChart(index){
-
-      let monthsNames = this.getLastSixMonth().names;
-
-      let newData = this.getMovementsLastSixMonth(index);
-
-      let options = {
-        chart: {
-          type: 'line',
-          toolbar: {
-            show: false
-          },
-          animations: {
-            enabled: false,
-          },
-        },
-        series: [{
-          name: 'balance',
-          data: newData
-        }],
-        xaxis: {
-          categories: monthsNames,
-          tickPlacement: 'between',
-          labels:{
-            style:{
-              colors: this.themeDark ? "#ffffff" : "#111",
-              cssClass: "labelChart"
+    data(){
+
+            return{
+                accountData : null,
+                isLoadingData: true,
+                themeDark: localStorage.getItem('themeBH') === "dark" ? true : false || false,
+                activeBar: null,
+                clientName: localStorage.getItem("clientName")
             }
-          },
-          axisBorder: {
-            width: '300px'
-          },
+
+    },
+    created(){
+        this.loadAccount(this.getParamFromUrl("id"));
+
+    },
+    methods : {
+        getParamFromUrl(param){
+
+            return new URLSearchParams(window.location.search).get(param);
+        
         },
-        yaxis: {
-          labels: {
-            style: {
-              colors: this.themeDark ? "#ffffff" : "#111",
-            }
-          }
+        loadAccount(id){
+
+            axios.get("http://localhost:8080/api/accounts/"+id)
+                    .then(res => {
+
+                        this.accountData = res.data;
+
+                    })
         },
-        grid: {
-          yaxis: {
-            lines: {
-              show: false
-            }
-          }
+        
+        toggleHandle(){
+
+          this.themeDark = !this.themeDark;
+
+          localStorage.setItem("themeBH", this.themeDark ? "dark" : "light");
+
         },
-        colors: this.themeDark ? ['rgb(0, 199, 0)'] : ["#ff9975"],
-        dataLabels: {
-          style: {
-            colors: ['#fffff', '#fffff', '#fffff']
-          }
-        },
-        tooltip: {
-          theme: "dark"
-        }
-      }
+        getAnimationBar(barNum){
+
+            if(!this.activeBar && this.activeBar !== null){
       
-      const chart = new ApexCharts(document.querySelector("#chart"+(index + 1)), options);
+              return {'animation-name': `animatedBar${barNum}Reverse`};
       
-      chart.render();
-    },
+            } else if(this.activeBar){
+      
+              return {'animation-name': `animatedBar${barNum}`};
+      
+            }
+      
+        },
+        getAnimationNav(){
 
-    formatDate(date){
-
-      return date.split("-").reverse().join("/");
-
-    },
-
-    disableScroll(disabled){
-
-      if(!disabled) document.body.style.overflow = 'hidden';
-
-      else document.body.style.overflow = 'auto';
-
-    },
-
-    formateDateNotYear(date){
-
-     let array = date.split("-").reverse()
-
-     return array[0] + "/" + array[1]
-
-    },
-
-    renderCharts(){
-
-      if(!this.clientData || !this.accountsShowed.length) return;
-
-      const chart1 = document.querySelector("#chart1");
-
-      const chart2 = document.querySelector("#chart2");
-
-      if(chart1) chart1.innerHTML = "";
-
-      if(chart2) chart2.innerHTML = "";
-
-      this.createChart(0);
-      this.createChart(1);
+            if(!this.activeBar && this.activeBar !== null){
+      
+              return {'animation-name': `navAnimateReverse`};
+      
+            } else if(this.activeBar){
+      
+              return {'animation-name': `navAnimate`};
+      
+            }
+      
+          },
 
     }
-  },
-  computed:{
 
-      reLoadData(){
 
-        this.renderCharts();
-
-      }
-
-  },
-  mounted(){
-
-    this.resizeEvent();
-    this.renderCharts();
-
-  }
-}).mount("#app");
+}).mount("#app")

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="./styles/account.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js" defer></script>
+    <script src="./js/accounts.js" defer></script>
+    <title>accounts</title>
+</head>
+<body>
+    <div id="app" >
+        {{reLoadData}}
+        <div class="gridLayout" :class="{ backgroundDark: themeDark, backgroundLight: !themeDark }">
+            <div class="nav__account" :class="{navList: !themeDark, border__right : themeDark && !isMobile, border__right__light: !themeDark && !isMobile}">
+                <header class="p-4 header h-100">
+                    <button class="toggleBar" @click="activeBar = !activeBar" >
+                        <div :style="getAnimationBar(1)"></div>
+                        <div :style="getAnimationBar(2)"></div>
+                        <div :style="getAnimationBar(3)"></div>
+                    </button>
+                    <h3 class="title__icon">HB</h3>
+                </header>
+
+                <nav class="d-flex flex-column ps-2 pe-2 gap-2 nav__basic colorLink"  :class="{navLight: !themeDark, nav: themeDark}" :style="getAnimationNav()"> 
+                    Menu
+                    <a class="d-flex align-items-center gap-1" :class="{actived__section: themeDark, actived__section__light: !themeDark}" href="#"> 
+                        <i class="bi bi-house"></i>
+                        Home
+                    </a>
+                    <a class="d-flex align-items-center gap-1" href="#">
+                        <i class="bi bi-credit-card"></i>
+                        Cards
+                    </a>
+                    <a class="d-flex align-items-center gap-1" href="#">
+                        <i class="bi bi-cash"></i>
+                        Loans
+                    </a>
+                    <a class="d-flex align-items-center gap-1" href="#">
+                        <i class="bi bi-bar-chart"></i>
+                        Statics
+                    </a>
+                    <hr/>
+                    Account
+                    <a class="d-flex align-items-center gap-1" href="#">
+                        <i class="bi bi-person"></i>
+                        Profile
+                    </a>
+                    <a class="d-flex align-items-center gap-1" href="#">
+                        <i class="bi bi-bell"></i>
+                        Notifications
+                        <span   class="badge rounded-pill" 
+                                :style="{'backgroundColor': themeDark ? 'rgb(0, 199, 0)' : '#ff9975', 'color' : themeDark ? 'black' : 'white'}">5</span>
+                    </a>
+                    <a class="d-flex align-items-center gap-1" href="#">
+                        <i class="bi bi-gear"></i>
+                        Settings
+                    </a>    
+                </nav>
+
+            </div>
+            <div class="p-4 container__header"  :class="{headerLight: !themeDark, border__bottom: themeDark, border__bottom__light: !themeDark}">
+                <h1>Home</h1>
+
+                <div class="d-flex justify-content-around gap-4 align-items-center">
+                    <template v-if="clientData">{{ clientData?.firstName + " " + clientData?.lastName }}</template>
+                    <i  @click="toggleHandle" class="bi bi-moon" v-if="!themeDark"></i>
+                    <i  @click="toggleHandle" class="bi bi-sun" v-else></i>
+                    <div class="position-relative"> 
+                        <i class="bi bi-bell"></i>
+                        <span   class="position-absolute translate-middle start-100 badge rounded-pill" 
+                                style="top: -2px;"
+                                :style="{'backgroundColor': themeDark ? 'rgb(0, 199, 0)' : '#ff9975', 'color' : themeDark ? 'black' : 'white'}">
+                        5
+                        <span class="visually-hidden">unread messages</span>
+                        </span>
+                    </div>
+                </div>
+                
+            </div>
+
+                <main class="main__account p-2 position-relative" >
+                    <div v-if="isLoadingData" class="position-absolute top-50 start-50 translate-middle d-flex justify-content-center align-items-center">
+                        <div    
+                                class="spinner-border text-dark" :class="{'text-dark': !themeDark, 'text-white': themeDark}" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                    <div style="visibility: hidden;" :style="{'visibility': isLoadingData ? 'hidden' : 'visible'}">
+                        <div  class="d-flex justify-content-center"> 
+                            <div   
+                                    class="text-center p-2 rounded-2 d-flex flex-column"
+                                    :class="{balance__total__dark: themeDark, balance__total__light: !themeDark}">
+                                <span class="fw-bold fs-1">${{balanceTotal}}</span> 
+                                <span class="fs-6">Balance Total</span>
+                            </div>
+                        </div>
+                        <div class="gridLayoutAccounts">
+                                <article class="card__balance" 
+                                        :class="{card__balance__dark: themeDark, card__balance__light: !themeDark}">
+                                    <template v-if="accountsShowed.length">
+                                        <h3 class="text-center">{{accountsShowed[0].number}}</h3>
+                                    </template>
+                                    <div id="chart1" style="max-width: 150px; padding-right: 15px;">
+                                        
+                                    </div>
+                                    <template v-if="accountsShowed.length">
+                                        <p class="fs-6">Creation Date: {{formatDate(accountsShowed[0].creationDate)}}</p>
+                                        <span class="fs-6 d-flex flex-column">
+                                            Balance: 
+                                            <span class="fs-4">
+                                                ${{accountsShowed[0].balance}}
+                                            </span>
+                                            <span class="align-self-end btn"
+                                                :class="{'btn-outline-dark': !themeDark, 'btn-outline-light': themeDark}" 
+                                                @click="selectAccount(accountsShowed[0])">
+                                                Movements
+                                            </span>
+                                        </span>
+                                    </template>
+                                </article>
+                                <article class="card__balance" :class="{card__balance__dark: themeDark, card__balance__light: !themeDark}">
+                                    <template v-if="accountsShowed.length">
+                                        <h3 class="text-center">{{accountsShowed[1].number}}</h3>
+                                    </template>
+                                    <div id="chart2" style="max-width: 150px; padding-right: 15px;">
+                                        
+                                    </div> 
+                                    <template v-if="accountsShowed.length">
+                                        <p class="fs-6">Creation Date: {{formatDate(accountsShowed[1].creationDate)}}</p>
+                                        <span class="fs-6 d-flex flex-column">
+                                            Balance: 
+                                            <span class="fs-4">
+                                                ${{accountsShowed[1].balance}}
+                                            </span>
+                                            <span   class="align-self-end btn"
+                                                    :class="{'btn-outline-dark': !themeDark, 'btn-outline-light': themeDark}" 
+                                                    @click="selectAccount(accountsShowed[1])">
+                                                Movements
+                                            </span>
+                                        </span>
+                                    </template>
+                                </article>
+                        </div>
+                        <div    class="d-flex align-items-center justify-content-center gap-5 mt-2" 
+                                v-if="accountsShowed.length > 2">
+                            <button class="rounded-circle btn__pass__accounts"
+                                    :disabled="clientData?.accounts.length < 3 || clientData?.accounts[0].id === accountsShowed[0]?.id"
+                                    :class="{btn__pass__accounts__dark: themeDark, btn__pass__accounts__light: !themeDark}"
+                                    @click="toggleAccountsShowed('left')">
+                                <i class="bi bi-arrow-left"></i>
+                            </button>
+                            <button class="rounded-circle btn__pass__accounts" 
+                                    :disabled="clientData?.accounts.length < 3 || clientData?.accounts[clientData.accounts.length - 1].id === accountsShowed[1]?.id"
+                                    :class="{btn__pass__accounts__dark: themeDark, btn__pass__accounts__light: !themeDark}"
+                                    @click="toggleAccountsShowed('right')"> 
+                                <i class="bi bi-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>  
+                </main>
+        </div>
+
+        <template  v-if="selectedAccount">
+            <div    class="modal__movement__parent" 
+                    :styled="{visibility: selectedAccount ? 'visible' : 'hidden'}" 
+                    @click="unselectAccount"></div>
+        </template>
+        <article class="modal__movement p-2 text-center" :class="{modal__movement__light : !themeDark, modal__movement__dark : themeDark}" :style="getAnimationMovement()">
+            <div class="d-flex justify-content-between aling-items-center">
+                <h2>{{selectedAccount?.number}}</h2>
+                <span   class="btn rounded-circle "
+                        :class="{'btn-outline-light': themeDark, 'btn-outline-dark' : !themeDark}" 
+                        @click="unselectAccount">X</span>
+            </div>
+            <h4>Movements</h4>
+            <span class="d-flex flex-column text-start p-1 rounded" :class="{movement__card__light: !themeDark, movement__card__dark: themeDark}">
+                <span>{{selectedAccount?.creationDate && formateDateNotYear(selectedAccount.creationDate)}}</span>
+                creacion de cuenta
+            </span>
+        </article>
+    
+    </div>
+</body>
+</html>
