@@ -237,11 +237,10 @@ h1, h2, h3, h4, h5, h6{
 }
 
 .gridLayoutAccounts{
-
     display: flex;
-    flex-wrap: wrap;
+    align-self: center;
+    justify-self: center;
     margin-top: 10px;
-    justify-content: center;
     gap: 20px;
 
 }
@@ -437,11 +436,27 @@ h1, h2, h3, h4, h5, h6{
 }
 
 .card__balance{
-
+    min-width: 220px;
+    max-width: 220px;
     border-radius: 10px;
     padding: 10px;
     box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
 
+}
+
+.container__accounts{
+
+    scroll-behavior: smooth;
+    max-width: 680px;
+    width: 850px;
+    overflow-y: auto;
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
+
+}
+
+.container__accounts::-webkit-scrollbar { 
+    display: none;  /* Safari and Chrome */
 }
 
 .btn__pass__accounts{
@@ -450,12 +465,19 @@ h1, h2, h3, h4, h5, h6{
     box-shadow: none;
     border: none;
     padding: 2px 5px 2px 5px;
+    border-radius: 10px;
 
 }
 
 .btn__pass__accounts:disabled{
 
     background-color: rgb(201, 201, 201);
+
+}
+
+.btn__pass__accounts:active{
+
+    transform: scale(.92);
 
 }
 
@@ -582,6 +604,26 @@ h1, h2, h3, h4, h5, h6{
 
         right: -1000px;
 
+    }
+
+}
+
+@media (max-width: 933px){
+
+    .container__accounts{
+
+        max-width: 450px;
+    
+    }
+
+}
+
+@media (max-width: 470px){
+
+    .container__accounts{
+
+        max-width: 220px;
+    
     }
 
 }

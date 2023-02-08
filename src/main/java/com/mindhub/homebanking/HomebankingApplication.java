@@ -28,26 +28,28 @@ public class HomebankingApplication {
 			Client cli1 = new Client("Melba", "Morel", "melba@mindhub.com");
 			Account account1 = new Account("VIN001", LocalDate.now(), 5000.0);
 			Account account2 = new Account("VIN002", LocalDate.now().plusDays(1), 7500.0);
-			Transaction trans1 = new Transaction(TransactionType.CREDIT, 2000.0, "deposit", LocalDateTime.now());
+
+			Transaction trans1 = new Transaction(TransactionType.CREDIT, 2500.0, "deposit", LocalDateTime.now());
 			Transaction trans2 = new Transaction(TransactionType.DEBIT, 500.0, "extraction", LocalDateTime.now());
 			Transaction trans3 = new Transaction(TransactionType.CREDIT, 6600.0, "deposit", LocalDateTime.now());
-			Transaction trans4 = new Transaction(TransactionType.CREDIT, 1600.0, "extraction", LocalDateTime.now());
-			Transaction trans5 = new Transaction(TransactionType.CREDIT, 2000.0, "deposit", LocalDateTime.now());
-			Transaction trans6 = new Transaction(TransactionType.DEBIT, 500.0, "extraction", LocalDateTime.now());
-			Transaction trans7 = new Transaction(TransactionType.CREDIT, 6600.0, "deposit", LocalDateTime.now());
-			Transaction trans8 = new Transaction(TransactionType.CREDIT, 1600.0, "extraction", LocalDateTime.now());
-			Transaction trans9 = new Transaction(TransactionType.CREDIT, 2000.0, "deposit", LocalDateTime.now());
-			Transaction trans10 = new Transaction(TransactionType.DEBIT, 500.0, "extraction", LocalDateTime.now());
-			Transaction trans11 = new Transaction(TransactionType.CREDIT, 6600.0, "deposit", LocalDateTime.now());
-			Transaction trans12 = new Transaction(TransactionType.CREDIT, 1600.0, "extraction", LocalDateTime.now());
-			Transaction trans13 = new Transaction(TransactionType.CREDIT, 2000.0, "deposit", LocalDateTime.now());
-			Transaction trans14 = new Transaction(TransactionType.CREDIT, 2000.0, "deposit", LocalDateTime.now());
-			Transaction trans15 = new Transaction(TransactionType.DEBIT, 500.0, "extraction", LocalDateTime.now());
-			Transaction trans16 = new Transaction(TransactionType.CREDIT, 6600.0, "deposit", LocalDateTime.now());
-			Transaction trans17 = new Transaction(TransactionType.CREDIT, 1600.0, "extraction", LocalDateTime.now());
-			Transaction trans18 = new Transaction(TransactionType.CREDIT, 2000.0, "deposit", LocalDateTime.now());
-			Transaction trans19 = new Transaction(TransactionType.DEBIT, 500.0, "extraction", LocalDateTime.now());
-			Transaction trans20 = new Transaction(TransactionType.CREDIT, 6600.0, "deposit", LocalDateTime.now());
+			Transaction trans4 = new Transaction(TransactionType.DEBIT, 1500.0, "extraction", LocalDateTime.now());
+			Transaction trans5 = new Transaction(TransactionType.CREDIT, 3000.0, "deposit", LocalDateTime.now());
+			Transaction trans6 = new Transaction(TransactionType.DEBIT, 1500.0, "extraction", LocalDateTime.now());
+			Transaction trans7 = new Transaction(TransactionType.CREDIT, 3600.0, "deposit", LocalDateTime.now());
+			Transaction trans8 = new Transaction(TransactionType.DEBIT, 1000.0, "extraction", LocalDateTime.now());
+			Transaction trans9 = new Transaction(TransactionType.CREDIT, 1500.0, "deposit", LocalDateTime.now());
+			Transaction trans10 = new Transaction(TransactionType.DEBIT, 900.0, "extraction", LocalDateTime.now());
+			Transaction trans11 = new Transaction(TransactionType.CREDIT, 9000.0, "deposit", LocalDateTime.now());
+			Transaction trans12 = new Transaction(TransactionType.DEBIT, 2600.0, "extraction", LocalDateTime.now());
+			Transaction trans13 = new Transaction(TransactionType.CREDIT, 1000.0, "deposit", LocalDateTime.now());
+			Transaction trans14 = new Transaction(TransactionType.DEBIT, 200.0, "extraction", LocalDateTime.now());
+			Transaction trans15 = new Transaction(TransactionType.CREDIT, 5000.0, "deposit", LocalDateTime.now());
+			Transaction trans16 = new Transaction(TransactionType.DEBIT, 6000.0, "extraction", LocalDateTime.now());
+			Transaction trans17 = new Transaction(TransactionType.CREDIT, 2600.0, "deposit", LocalDateTime.now());
+			Transaction trans18 = new Transaction(TransactionType.DEBIT, 1000.0, "extraction", LocalDateTime.now());
+			Transaction trans19 = new Transaction(TransactionType.CREDIT, 800.0, "deposit", LocalDateTime.now());
+			Transaction trans20 = new Transaction(TransactionType.DEBIT, 7600.0, "extraction", LocalDateTime.now());
+
 			account1.addTransaction(trans1);
 			account1.addTransaction(trans2);
 			account2.addTransaction(trans3);
@@ -70,6 +72,7 @@ public class HomebankingApplication {
 			account2.addTransaction(trans20);
 			cli1.addAccount(account1);
 			cli1.addAccount(account2);
+
 			clientRepository.save(cli1);
 			accountRepository.save(account1);
 			accountRepository.save(account2);
@@ -93,6 +96,7 @@ public class HomebankingApplication {
 			transactionRepository.save(trans18);
 			transactionRepository.save(trans19);
 			transactionRepository.save(trans20);
+
 
 		};
 	}

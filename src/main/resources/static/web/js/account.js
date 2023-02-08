@@ -28,7 +28,11 @@ createApp({
             axios.get("http://localhost:8080/api/accounts/"+id)
                     .then(res => {
 
-                        this.accountData = res.data;
+                        let data = res.data;
+
+                        data.transactions.sort((a, b) => a.id - b.id)
+
+                        this.accountData = data;
 
                     })
         },
@@ -65,6 +69,96 @@ createApp({
       
             }
       
+          },
+          formatDateAndTime(dateTime){
+            
+            let array = dateTime.split("T");
+            let date = array[0].split("-").reverse().join("/");
+
+            return date + " " + array[1].split(".")[0];
+
+          },
+          createChart(id){
+
+            let newDataDebit = this.getLastTenMovements(id, "DEBIT");
+      
+            let newDataCredit = this.getLastTenMovements(id, "CREDIT");
+      
+            let options = {
+              chart: {
+                type: 'line',
+                width: '150px',
+                toolbar: {
+                  show: false
+                },
+                animations: {
+                  enabled: false,
+                },
+              },
+              series: [{
+                name: 'Debit',
+                data: newDataDebit
+              },
+              {
+                name: 'Credit',
+                data: newDataCredit
+              }],
+              dataLabels:{
+                distributed: false
+              },
+              xaxis: {
+                categories: ["10", "9", "8", "7", "6", "5", "4", "3", "2", "1"],
+                labels:{
+                  show: false
+                },
+                axisBorder: {
+                  show: false
+                },  
+                axisTicks:{
+                  show: false
+                }
+              },
+              yaxis: {
+                show: false
+              },
+              grid: {
+                show: false
+              },
+              colors: ['rgb(243, 0, 0)', 'rgb(0, 199, 0)'],
+              dataLabels: {
+                style: {
+                  colors: ['#fffff', '#fffff', '#fffff']
+                }
+              },
+              stroke: {
+                show: true,
+                curve: 'smooth',
+                lineCap: 'butt',
+                colors: undefined,
+                width: 2,
+                dashArray: 0,      
+              },
+              tooltip: {
+                theme: "dark"
+              },
+              legend:{
+                show: false
+              }
+            }
+            
+            const elementChart = document.querySelector("#chart"+id);
+      
+            if(elementChart){
+      
+              elementChart.innerHTML = "";
+              
+              const chart = new ApexCharts(elementChart, options);
+            
+              chart.render();
+      
+            }
+      
+          
           },
 
     }

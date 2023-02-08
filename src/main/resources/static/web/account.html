@@ -30,7 +30,7 @@
 
                 <nav class="d-flex flex-column ps-2 pe-2 gap-2 nav__basic colorLink"  :class="{navLight: !themeDark, nav: themeDark}" :style="getAnimationNav()"> 
                     Menu
-                    <a class="d-flex align-items-center gap-1" :class="{actived__section: themeDark, actived__section__light: !themeDark}" href="#"> 
+                    <a class="d-flex align-items-center gap-1" href="./accounts.html"> 
                         <i class="bi bi-house"></i>
                         Home
                     </a>
@@ -87,8 +87,33 @@
                 
             </div>
 
-                <main class="main__account p-2 position-relative" >
-             
+                <main class="main__account p-2 position-relative d-flex flex-column gap-2 align-items-center" style="overflow: auto; height: 90vh;">
+                    
+                    <template v-if="accountData">
+                        <h3>Transactions</h3>
+
+                        <table  class="table table-striped"
+                                :class="{'table-dark': themeDark}"
+                                :style="{color: themeDark ? 'white' : 'black'}"
+                                style="max-width: 600px;"
+                                >
+                            <thead>
+                              <tr>
+                                <th scope="col">Amount</th>
+                                <th scope="col">Date</th>
+                                <th scope="col">Description</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr v-for="transaction of accountData.transactions">
+                                <td :style="{color: transaction.type === 'DEBIT' ? 'rgb(243, 0, 0)' : 'rgb(0, 199, 0)'}">{{transaction.type === "DEBIT" ? "-" : ""}}${{transaction.amount}}</td>
+                                <td>{{formatDateAndTime(transaction.date)}}</td>
+                                <td>{{transaction.description}}</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                    </template>
+                    
                 </main>
         </div>
 
