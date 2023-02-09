@@ -157,7 +157,8 @@
                     class="card__balance"
                     :class="{card__balance__dark: themeDark, card__balance__light: !themeDark}"
                     v-if="clientData"
-                    v-for="account of clientData.accounts"
+                    v-for="(account, index) of clientData.accounts"
+                    :id="'article'+index"
                 >
                     <h3 class="text-center">{{account.number}}</h3>
                 <div :id="'chart'+account.id" class="d-flex justify-content-center align-items-center">
@@ -185,11 +186,11 @@
             <div  class="d-flex gap-2" v-if="clientData?.accounts.length > 3 || isMobileSmall || isTablet && clientData?.accounts.length === 3" >
               <button class="btn__pass__accounts" 
                       @click="handlerCards(false)"
-                      :disabled="counterScroll === 1"
+                      :disabled="counterScroll === 0"
                       :class="{btn__pass__accounts__light : !themeDark,   btn__pass__accounts__dark: themeDark}">Prev</button>
               <button class="btn__pass__accounts" 
                       @click="handlerCards(true)"
-                      :disabled="!isMobile && counterScroll * 3 <= clientData?.accounts.length + 2 || isMobileSmall && counterScroll == clientData?.accounts.length || isTablet && counterScroll == clientData?.accounts.length - 1"
+                      :disabled="!isTablet && !isMobileSmall && counterScroll * 3 <= clientData?.accounts.length + 2 || isMobileSmall && counterScroll == clientData?.accounts.length - 1 || isTablet && counterScroll == clientData?.accounts.length - 2"
                       :class="{btn__pass__accounts__light : !themeDark,   btn__pass__accounts__dark: themeDark}">Next</button>
             </div>
           </div>
