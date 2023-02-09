@@ -28,7 +28,6 @@ public class HomebankingApplication {
 			Client cli1 = new Client("Melba", "Morel", "melba@mindhub.com");
 			Account account1 = new Account("VIN001", LocalDate.now(), 5000.0);
 			Account account2 = new Account("VIN002", LocalDate.now().plusDays(1), 7500.0);
-
 			Transaction trans1 = new Transaction(TransactionType.CREDIT, 2500.0, "deposit", LocalDateTime.now());
 			Transaction trans2 = new Transaction(TransactionType.DEBIT, 500.0, "extraction", LocalDateTime.now());
 			Transaction trans3 = new Transaction(TransactionType.CREDIT, 6600.0, "deposit", LocalDateTime.now());
@@ -72,7 +71,6 @@ public class HomebankingApplication {
 			account2.addTransaction(trans20);
 			cli1.addAccount(account1);
 			cli1.addAccount(account2);
-
 			clientRepository.save(cli1);
 			accountRepository.save(account1);
 			accountRepository.save(account2);

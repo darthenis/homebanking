@@ -150,7 +150,7 @@
                 <span class="fs-6">Balance Total</span>
               </div>
             </div>
-            <div  class="d-flex gap-2 justify-content-center container__accounts position-relative" 
+            <div  class="d-flex gap-2 container__accounts position-relative" 
                   id="container__cards"
                   :class="{'justify-content-center': clientData?.accounts.length < 3}">
                 <article
@@ -160,10 +160,8 @@
                     v-for="account of clientData.accounts"
                 >
                     <h3 class="text-center">{{account.number}}</h3>
-                <div
-                    :id="'chart'+account.id"
-                    class="d-flex justify-content-center align-items-center"
-                >
+                <div :id="'chart'+account.id" class="d-flex justify-content-center align-items-center">
+                  
                 </div>
                 {{createChart(account.id)}}
                 <p class="fs-6">
@@ -184,14 +182,14 @@
                 </span>
                 </article>  
             </div>
-            <div  class="d-flex gap-2" v-if="clientData?.accounts.length > 3" >
+            <div  class="d-flex gap-2" v-if="clientData?.accounts.length > 3 || isMobileSmall || isTablet && clientData?.accounts.length === 3" >
               <button class="btn__pass__accounts" 
                       @click="handlerCards(false)"
                       :disabled="counterScroll === 1"
                       :class="{btn__pass__accounts__light : !themeDark,   btn__pass__accounts__dark: themeDark}">Prev</button>
               <button class="btn__pass__accounts" 
                       @click="handlerCards(true)"
-                      :disabled="counterScroll * 3 >= clientData?.accounts.length + 2"
+                      :disabled="!isMobile && counterScroll * 3 <= clientData?.accounts.length + 2 || isMobileSmall && counterScroll == clientData?.accounts.length || isTablet && counterScroll == clientData?.accounts.length - 1"
                       :class="{btn__pass__accounts__light : !themeDark,   btn__pass__accounts__dark: themeDark}">Next</button>
             </div>
           </div>
