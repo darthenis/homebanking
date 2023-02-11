@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="./assets/favicon.ico" type="image/x-icon">
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -123,11 +124,11 @@
           </div>
         </div>
 
-        <main class="main__account p-2 position-relative">
+        <main class="main__account p-4 position-relative">
           <div
-            v-if="isLoadingData"
-            class="position-absolute top-50 start-50 translate-middle d-flex justify-content-center align-items-center"
-          >
+              v-if="isLoadingData"
+              class="position-absolute top-50 start-50 translate-middle d-flex justify-content-center align-items-center"
+            >
             <div
               class="spinner-border text-dark"
               :class="{'text-dark': !themeDark, 'text-white': themeDark}"
@@ -136,8 +137,8 @@
               <span class="visually-hidden">Loading...</span>
             </div>
           </div>
-          <div
-            class="d-flex flex-column justify-content-center align-items-center gap-2"
+          <section
+            class="d-flex flex-column align-items-center gap-4"
             style="visibility: hidden"
             :style="{'visibility': isLoadingData ? 'hidden' : 'visible'}"
           >
@@ -150,50 +151,71 @@
                 <span class="fs-6">Balance Total</span>
               </div>
             </div>
-            <div  class="d-flex gap-2 container__accounts position-relative" 
+            <div  class="d-flex gap-3 container__accounts position-relative" 
                   id="container__cards"
                   :class="{'justify-content-center': clientData?.accounts.length < 3}">
                 <article
                     class="card__balance"
-                    :class="{card__balance__dark: themeDark, card__balance__light: !themeDark}"
-                    v-if="clientData"
-                    v-for="(account, index) of clientData.accounts"
-                    :id="'article'+index"
+                    v-for="(account, index) of clientData?.accounts"
+                    :class="{card__balance__dark: themeDark, card__balance__light: !themeDark, card__selected: account.selected, gray__filter : !account.selected, 'text-secondary' : !account.selected}"
+                    :id="'article'+account.id"
+                    v-show="checkActivedAccount(account.id)"
+                    @click="selectAccount(account.id)"
                 >
                     <h3 class="text-center">{{account.number}}</h3>
                 <div :id="'chart'+account.id" class="d-flex justify-content-center align-items-center">
                   
                 </div>
-                {{createChart(account.id)}}
+                {{createChart(account.id, account.selected)}}
                 <p class="fs-6">
                     Creation Date: {{account.creationDate.split("-").reverse().join("/")}}
                 </p>
-                <span class="fs-6 d-flex flex-column">
-                    Balance:
-                    <span class="fs-4"> ${{account.balance}} </span>
-    
-                    <a
-                        :href="'http://localhost:8080/web/account.html?id='+ account.id"
-                        class="align-self-end btn"
-                        :class="{'btn-outline-dark': !themeDark, 'btn-outline-light': themeDark}"
-                        role="button"
-                    >
-                        Movements
-                    </a>
+                <span class="fs-6 d-flex align-items-center gap-1">
+                  Balance: <span class="fs-4">${{account.balance}} </span>
+                  
                 </span>
                 </article>  
             </div>
-            <div  class="d-flex gap-2" v-if="clientData?.accounts.length > 3 || isMobileSmall || isTablet && clientData?.accounts.length === 3" >
+            <div class="d-flex gap-4" v-if="clientData?.accounts.length > 3 && !isTablet && !isMobileSmall || clientData?.accounts.length > 2 && isTablet || clientData?.accounts.length > 1 && isMobileSmall" >
+              <button class="btn__pass__accounts"
+                      :class="{btn__pass__accounts__light: !themeDark, btn__pass__accounts__dark: themeDark}"
+                      @click="handlePageAccounts(true)" 
+                      :disabled="num1 <= 0"
+                      >
+                      Prev
+              </button>
               <button class="btn__pass__accounts" 
-                      @click="handlerCards(false)"
-                      :disabled="counterScroll === 0"
-                      :class="{btn__pass__accounts__light : !themeDark,   btn__pass__accounts__dark: themeDark}">Prev</button>
-              <button class="btn__pass__accounts" 
-                      @click="handlerCards(true)"
-                      :disabled="!isTablet && !isMobileSmall && counterScroll * 3 <= clientData?.accounts.length + 2 || isMobileSmall && counterScroll == clientData?.accounts.length - 1 || isTablet && counterScroll == clientData?.accounts.length - 2"
-                      :class="{btn__pass__accounts__light : !themeDark,   btn__pass__accounts__dark: themeDark}">Next</button>
+                      :class="{btn__pass__accounts__light: !themeDark, btn__pass__accounts__dark: themeDark}"
+                      @click="handlePageAccounts(false)" 
+                      :disabled="num2 >= clientData?.accounts.length"
+                      v-if="true">
+                      Next
+              </button>
             </div>
-          </div>
+          </section>
+
+          <section class="d-flex flex-column" style="max-width: 300px">
+            <h3 class="w-100">Loans</h3>
+            <p v-if="!clientData?.loans">Not found loans</p>
+            <table  v-else
+                    class="table table-striped"
+                    :class="{'table-dark': themeDark}">
+              <thead>
+                <tr>
+                  <th scope="col">Loan</th>
+                  <th scope="col">Payment</th>
+                  <th scope="col">Mount</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-if="clientData && clientData.loans.length" v-for="loan of clientData.loans">
+                  <td>{{loan.name}}</td>
+                  <td>{{loan.payment}}</td>
+                  <td>${{loan.amount.toLocaleString()}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
         </main>
       </div>
     </div>

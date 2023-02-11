@@ -12,10 +12,14 @@ createApp({
       numbersAccounts: [],
       balanceTotal: null,
       isLoadingData : false,
-      counterScroll: 0
+      counterScroll: 0,
+      filterAccounts: null,
+      num1: 0,
+      num2: 3
     };
   },
   created() {
+    this.resizeEvent()
     window.addEventListener("resize", this.resizeEvent);
     this.loadData();
   },
@@ -27,9 +31,11 @@ createApp({
 
       this.isLoadingData = true;
 
+
       axios.get('http://localhost:8080/api/clients/1')
             .then(res => {
   
+
               localStorage.setItem("clientName", res.data.firstName + " " + res.data.lastName);
 
               this.isLoadingData = false;
@@ -38,9 +44,25 @@ createApp({
 
               client.accounts.sort((a, b) => a.id - b.id);
 
+              client.accounts = client.accounts.map((account, index) => {
+
+                if(index === 0){
+
+                  return {...account, selected: true}
+
+                } else {
+
+                  return {...account, selected: false}
+
+                }
+
+              })
+
               this.selectedAccount = {...client.accounts[0]}
   
               this.clientData = client;
+
+              this.filterAccounts = this.setInitialPageAccounts(this.clientData.accounts);
   
               this.clientData.accounts = this.clientData.accounts.map(account => {
   
@@ -58,8 +80,85 @@ createApp({
     resizeEvent(){
       this.resizeResetBarTogle();
       this.setIsMobile();
+      if(!this.clientData) return;
+      this.reloadPageAccounts();
+      
     },
+    checkActivedAccount(id){
 
+          return this.filterAccounts.some(filterAcc => filterAcc.id === id)
+
+    },
+    setActivedFirstCard(){
+
+      this.clientData.accounts =  this.clientData.accounts.map((account) => {
+
+          if(account.id == this.filterAccounts[0].id) return {...account, selected: true}
+
+          return {...account, selected : false}
+
+      })
+
+    },
+    setInitialPageAccounts(accounts){
+
+      this.num1 = 0;
+
+      if(this.isTablet){
+
+        this.num2 = 2;
+
+      } else if(this.isMobileSmall){
+
+        this.num2 = 1;
+
+      } else {
+
+        this.num2 = 3;
+
+      }
+
+      return accounts.slice(0, this.num2); 
+
+    },
+    reloadPageAccounts(){
+
+      this.filterAccounts = this.setInitialPageAccounts(this.clientData.accounts)
+
+      this.setActivedFirstCard()
+
+    },
+    handlePageAccounts(isPrev){
+
+      let numOfElements = 3;
+
+      if(this.isTablet){
+      
+        numOfElements = 2;
+
+      } else if(this.isMobileSmall){
+
+        numOfElements = 1;
+
+      }
+
+      if(isPrev){
+
+        this.num1 -= numOfElements
+        this.num2 -= numOfElements
+
+      } else {
+
+        this.num1 += numOfElements
+        this.num2 += numOfElements
+
+      }
+     
+      this.filterAccounts = this.clientData.accounts.slice(this.num1, this.num2); 
+
+      this.setActivedFirstCard();
+      
+    },
     setIsMobile(){
 
       if(window.screen.width <= 631){
@@ -82,7 +181,7 @@ createApp({
 
       }
 
-      if(window.screen.width <= 933 && window.screen.width >= 470){
+      if(window.screen.width <= 933 && window.screen.width > 470){
 
         this.isTablet = true;
 
@@ -136,65 +235,41 @@ createApp({
 
     getLastTenMovements(id, type){
 
-      const transactions = this.clientData.accounts.find(acc => acc.id === id).transactions.sort((a, b) => a.id - b.id);
+      const transactions = this.clientData.accounts.find(acc => acc.id === id).transactions;
+
+      transactions.sort((a, b) => b.id - a.id);
 
       let newData = [];
 
-      let count = 0;
+      let typeTransactions = transactions.filter(transaction => transaction.type === type);
 
-      for(let i = transactions.length - 1; i >= 0; i--){
 
-          if(transactions[i].type === type){
+      if(typeTransactions.length < 5){
 
-            newData.push(transactions[i].amount);
+        for(let transaction of typeTransactions){
 
-            count++
+          newData.push(transaction.amount);
 
-          }
+        }
 
-          if(count === 5){
+        return newData;
 
-            return newData;
+      } else {
 
-          }
+        for(let i = typeTransactions.length - 1; i >= typeTransactions.length - 5; i--){
+
+            newData.push(typeTransactions[i].amount);
+
+        }
 
       }
 
-      return newData.reverse();
+      return newData;
+
    
     },
 
-    handlerCards(isNext){
-
-      if(isNext){
-
-        this.counterScroll += 1;
-
-        const article = document.getElementById('article'+ (this.counterScroll));
-
-        this.scrollTo(article)
-
-    
-      } else {
-
-        this.counterScroll -= 1;
-
-        const article = document.getElementById('article'+ (this.counterScroll));
-
-        this.scrollTo(article)
-
-       
-
-      }
-
-    },
-    
-    scrollTo(element){
-
-      element.parentNode.scrollLeft = element.offsetLeft;
-    },
-
-    createChart(id){
+    createChart(id, selected){
 
       let newDataDebit = this.getLastTenMovements(id, "DEBIT");
 
@@ -223,7 +298,7 @@ createApp({
           distributed: false
         },
         xaxis: {
-          categories: ["10", "9", "8", "7", "6", "5", "4", "3", "2", "1"],
+          categories: ["5", "4", "3", "2", "1"],
           labels:{
             show: false
           },
@@ -255,6 +330,7 @@ createApp({
           dashArray: 0,      
         },
         tooltip: {
+          enabled: selected,
           theme: "dark"
         },
         legend:{
@@ -277,16 +353,25 @@ createApp({
     
     },
 
-    createCarrousel(){
+    reloadChart(){
 
-      new Splide( '.splide',{
-        type: "slice",
-        perPage: 3,
-        pagination: false,
-        width: "70vw",
-        arrows: { prev: document.getElementById("btn__prev"), next: document.getElementById("btn__mext") }
+      const account = this.clientData.accounts.find(account => account.selected);
 
-      }).mount();
+
+      this.createChart(account)
+
+    },
+
+    selectAccount(id){
+
+      this.clientData.accounts = this.clientData.accounts.map(account => {
+
+              if(account.id === id) return {...account, selected : true}
+
+              return {...account, selected : false}
+
+      })
+
 
     },
 
@@ -306,10 +391,14 @@ createApp({
 
     }
   },
+  selected : {
+
+
+
+  },
   mounted(){
 
     this.resizeEvent();
-
-
   }
-}).mount("#app");
+}).mount('#app')
+

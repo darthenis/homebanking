@@ -30,7 +30,7 @@ createApp({
 
                         let data = res.data;
 
-                        data.transactions.sort((a, b) => a.id - b.id)
+                        data.transactions.sort((a, b) => b.id - a.id)
 
                         this.accountData = data;
 

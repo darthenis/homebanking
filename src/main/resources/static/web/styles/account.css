@@ -231,8 +231,10 @@ h1, h2, h3, h4, h5, h6{
 
 
 .main__account{
-
+    gap: 30px;
     grid-column: 2/-1;
+    display: grid;
+    grid-template-columns: 2.5fr 1fr;
 
 }
 
@@ -262,9 +264,10 @@ h1, h2, h3, h4, h5, h6{
 }
 
 .actived__section{
-
-    background-color: #ffffff;
-    color: black !important;
+    background: #2C3E50;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #4CA1AF, #51779c);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #4CA1AF, #326aa1); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    color: rgb(255, 255, 255) !important;
     border-radius: 10px;
 }
 
@@ -321,6 +324,17 @@ h1, h2, h3, h4, h5, h6{
     
 }
 
+@media (max-width: 1231px){
+
+    .main__account{
+
+        grid-template-columns: 1fr;
+        justify-items: center;
+   
+    }
+
+}
+
 @media (max-width: 950px){
 
     .gridLayout{
@@ -328,6 +342,7 @@ h1, h2, h3, h4, h5, h6{
         grid-template-columns: 25vw 75vw;
 
     }
+
 
 }
 
@@ -393,8 +408,9 @@ h1, h2, h3, h4, h5, h6{
     }
     
     .main__account{
-    
+        width: 100vw;
         grid-column: 1;
+        align-self: center;
     
     }
 
@@ -436,27 +452,78 @@ h1, h2, h3, h4, h5, h6{
 }
 
 .card__balance{
-    min-width: 220px;
-    max-width: 220px;
+
     border-radius: 10px;
     padding: 10px;
-    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+    transition: .5s;
+    animation-name: vanish;
+    animation-duration: .2s;
+    font-size: 12px;
+    border: 2px solid transparent;
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+
+}
+
+.card__balance:hover{
+
+    border: 2px solid #4CA1AF;
+
+}
+
+.gray__filter{
+
+    -webkit-filter: grayscale(1);
+    -moz-filter: grayscale(1);
+    -ms-filter: grayscale(1);
+    -o-filter: grayscale(1);
+    filter: gray; /* IE 6-9 */
+
+}
+
+
+@keyframes vanish {
+
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+    
+}
+
+.card__selected{
+  
+    background: #2C3E50;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #4CA1AF, #2C3E50);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #4CA1AF, #2C3E50); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    box-shadow: 0px 6px 15px 4px rgba(0,0,0,0.75);
+    -webkit-box-shadow: 0px 6px 15px 4px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 6px 15px 4px rgba(0,0,0,0.75); 
+    border: 2px solid #131212;
+    
+}
+
+.card__selected:hover{
+
+    border: 2px solid #131212;
 
 }
 
 .container__accounts{
 
-    scroll-behavior: smooth;
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 20px;
     max-width: 680px;
-    width: 850px;
-    overflow-y: auto;
-    -ms-overflow-style: none;  /* Internet Explorer 10+ */
-    scrollbar-width: none;  /* Firefox */
 
-}
-
-.container__accounts::-webkit-scrollbar { 
-    display: none;  /* Safari and Chrome */
 }
 
 .btn__pass__accounts{
@@ -464,18 +531,19 @@ h1, h2, h3, h4, h5, h6{
     font-weight: bold;
     box-shadow: none;
     border: none;
-    padding: 2px 5px 2px 5px;
+    padding: 4px 10px 4px 10px;
     border-radius: 10px;
 
 }
 
 .btn__pass__accounts:disabled{
 
-    background-color: rgb(201, 201, 201);
+    background-color: rgb(100, 100, 100);
+    color: rgb(48, 47, 47);
 
 }
 
-.btn__pass__accounts:active{
+.btn__pass__accounts:active:enabled{
 
     transform: scale(.92);
 
@@ -488,10 +556,28 @@ h1, h2, h3, h4, h5, h6{
     
 }
 
+.btn__pass__accounts__dark:hover:enabled{
+    
+    background: #2C3E50;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #4CA1AF, #51779c);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #4CA1AF, #326aa1); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    color: white;
+
+    
+}
+
 
 .btn__pass__accounts__light{
 
     background-color: rgb(53, 53, 53);
+    color: rgb(255, 255, 255);
+
+}
+
+.btn__pass__accounts__light:hover{
+
+
+    background-color: rgb(121, 121, 121);
     color: rgb(255, 255, 255);
 
 }
@@ -502,6 +588,9 @@ h1, h2, h3, h4, h5, h6{
     width: 250px; 
     background-color: #2a2c32;
     box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+    transition: 1s;
+    animation-name: vanish;
+    animation-duration: .5s;
 }
 
 .balance__total__light{
@@ -509,6 +598,9 @@ h1, h2, h3, h4, h5, h6{
     width: 250px; 
     background-color: #ececec;
     box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+    transition: 1s;
+    animation-name: vanish;
+    animation-duration: .5s;
 
 }
 
@@ -576,6 +668,14 @@ h1, h2, h3, h4, h5, h6{
 
 }
 
+.table{
+
+    transition: 1s;
+    animation-name: vanish;
+    animation-duration: .5s;
+
+}
+
 @keyframes modal__movement__slide{
 
     from{
@@ -622,9 +722,8 @@ h1, h2, h3, h4, h5, h6{
 
     .container__accounts{
 
-        max-width: 220px;
+        max-width: 250px;
         justify-content: flex-start !important;
-        overflow: scroll;
     
     }
 
