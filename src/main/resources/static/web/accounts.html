@@ -157,7 +157,11 @@
                 <article
                     class="card__balance"
                     v-for="(account, index) of clientData?.accounts"
-                    :class="{card__balance__dark: themeDark, card__balance__light: !themeDark, card__selected: account.selected, gray__filter : !account.selected, 'text-secondary' : !account.selected}"
+                    :class="{ card__balance__dark: themeDark, 
+                              card__balance__light: !themeDark, 
+                              card__selected__dark: account.selected && themeDark,
+                              card__selected__light: account.selected && !themeDark,  
+                              gray__filter : !account.selected, 'text-secondary' : !account.selected}"
                     :id="'article'+account.id"
                     v-show="checkActivedAccount(account.id)"
                     @click="selectAccount(account.id)"
@@ -168,7 +172,7 @@
                 </div>
                 {{createChart(account.id, account.selected)}}
                 <p class="fs-6">
-                    Creation Date: {{account.creationDate.split("-").reverse().join("/")}}
+                    Active since: {{account.creationDate.split("-").reverse().join("/")}}
                 </p>
                 <span class="fs-6 d-flex align-items-center gap-1">
                   Balance: <span class="fs-4">${{account.balance}} </span>
@@ -192,10 +196,37 @@
                       Next
               </button>
             </div>
+
+            <article v-if="clientData">
+              <div class="d-flex justify-content-between align-items-center flex-wrap">
+                <h5>Last Transactions</h5>
+                <a :href="'http://localhost:8080/web/account.html?id='+getIdFromSelectedAccount()">View all</a>
+              </div>
+          
+              <p v-if="!getSelectedTransactions().length">Not found transactions</p>
+              <table  v-else
+                      class="table table-striped"
+                      :class="{'table-dark': themeDark}">
+                <thead>
+                  <tr>
+                    <th scope="col">Amount</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-if="clientData" v-for="transaction of getSelectedTransactions()">
+                    <td :style="{color: transaction.type === 'DEBIT' ? 'rgb(243, 0, 0)' : 'rgb(0, 199, 0)'}">{{transaction.type === "DEBIT" ? "-" : "+"}}${{transaction.amount}}</td>
+                    <td>{{formatDateAndTime(transaction.date)}}</td>
+                    <td>{{transaction.description}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </article>
           </section>
 
-          <section class="d-flex flex-column" style="max-width: 300px">
-            <h3 class="w-100">Loans</h3>
+          <section v-if="clientData" class="d-flex flex-column" style="max-width: 300px">
+            <h5 class="w-100">Loans</h5>
             <p v-if="!clientData?.loans">Not found loans</p>
             <table  v-else
                     class="table table-striped"
@@ -216,6 +247,7 @@
               </tbody>
             </table>
           </section>
+
         </main>
       </div>
     </div>

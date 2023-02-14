@@ -9,7 +9,8 @@ createApp({
                 isLoadingData: true,
                 themeDark: localStorage.getItem('themeBH') === "dark" ? true : false || false,
                 activeBar: null,
-                clientName: localStorage.getItem("clientName")
+                clientName: localStorage.getItem("clientName"),
+                isLoadingData: false
             }
 
     },
@@ -24,9 +25,11 @@ createApp({
         
         },
         loadAccount(id){
-
+            this.isLoadingData = true;
             axios.get("http://localhost:8080/api/accounts/"+id)
                     .then(res => {
+
+                        this.isLoadingData = false
 
                         let data = res.data;
 

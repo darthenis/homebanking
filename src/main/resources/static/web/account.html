@@ -17,7 +17,6 @@
 </head>
 <body>
     <div id="app" >
-        {{reLoadData}}
         <div class="gridLayout" :class="{ backgroundDark: themeDark, backgroundLight: !themeDark }">
             <div class="nav__account" :class="{navList: !themeDark, border__right : themeDark && !isMobile, border__right__light: !themeDark && !isMobile}">
                 <header class="p-4 header h-100">
@@ -89,7 +88,18 @@
             </div>
 
                 <main class="main__account p-2 position-relative d-flex flex-column gap-2 align-items-center" style="overflow: auto; height: 90vh;">
-                    
+                    <div
+                        v-if="isLoadingData"
+                            class="position-absolute top-50 start-50 translate-middle d-flex justify-content-center align-items-center"
+                        >
+                        <div
+                            class="spinner-border text-dark"
+                            :class="{'text-dark': !themeDark, 'text-white': themeDark}"
+                            role="status"
+                        >
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
                     <template v-if="accountData">
                         <h3>Transactions</h3>
 
@@ -107,7 +117,7 @@
                             </thead>
                             <tbody>
                               <tr v-for="transaction of accountData.transactions">
-                                <td :style="{color: transaction.type === 'DEBIT' ? 'rgb(243, 0, 0)' : 'rgb(0, 199, 0)'}">{{transaction.type === "DEBIT" ? "-" : ""}}${{transaction.amount}}</td>
+                                <td :style="{color: transaction.type === 'DEBIT' ? 'rgb(243, 0, 0)' : 'rgb(0, 199, 0)'}">{{transaction.type === "DEBIT" ? "-" : "+"}}${{transaction.amount}}</td>
                                 <td>{{formatDateAndTime(transaction.date)}}</td>
                                 <td>{{transaction.description}}</td>
                               </tr>

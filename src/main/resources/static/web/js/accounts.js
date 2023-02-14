@@ -9,10 +9,8 @@ createApp({
       isTablet: false,
       activeBar: null,
       themeDark: localStorage.getItem('themeBH') === "dark" ? true : false || false,
-      numbersAccounts: [],
       balanceTotal: null,
       isLoadingData : false,
-      counterScroll: 0,
       filterAccounts: null,
       num1: 0,
       num2: 3
@@ -70,8 +68,6 @@ createApp({
   
               });
   
-              this.numbersAccounts = res.data.accounts.map(account => account.number)
-  
               this.balanceTotal = this.clientData.accounts.reduce((sum, account) => sum += account.balance, 0)
   
             })
@@ -89,6 +85,30 @@ createApp({
           return this.filterAccounts.some(filterAcc => filterAcc.id === id)
 
     },
+    getIdFromSelectedAccount(){
+
+      let account = this.clientData.accounts.find(account => account.selected)
+
+      return account.id;
+
+
+    },
+    getSelectedTransactions(){
+
+      let account = this.clientData.accounts.find(account => account.selected)
+
+      return [...account.transactions].splice(0, 5);
+
+
+    },
+    formatDateAndTime(dateTime){
+            
+      let array = dateTime.split("T");
+      let date = array[0].split("-").reverse().join("/");
+
+      return date + " " + array[1].split(".")[0];
+
+    },
     setActivedFirstCard(){
 
       this.clientData.accounts =  this.clientData.accounts.map((account) => {
@@ -102,13 +122,21 @@ createApp({
     },
     setInitialPageAccounts(accounts){
 
-      this.num1 = 0;
+      let screenWidth = window.screen.width;
 
-      if(this.isTablet){
+      if(screenWidth < 933 && screenWidth > 648){
 
         this.num2 = 2;
 
-      } else if(this.isMobileSmall){
+      } else if( screenWidth < 649 && screenWidth > 630){
+
+        this.num2 = 1;
+
+      } else if(screenWidth < 631 && screenWidth > 485){
+
+          this.num2 = 2;
+
+      }else if(screenWidth < 486){
 
         this.num2 = 1;
 
@@ -132,7 +160,7 @@ createApp({
 
       let numOfElements = 3;
 
-      if(this.isTablet){
+      if(this.isTablet && !this.ismobile){
       
         numOfElements = 2;
 
@@ -161,7 +189,7 @@ createApp({
     },
     setIsMobile(){
 
-      if(window.screen.width <= 631){
+      if(window.screen.width <= 646){
 
         this.isMobile = true;
 
@@ -171,7 +199,7 @@ createApp({
 
       }
 
-      if(window.screen.width <= 470){
+      if(window.screen.width <= 485){
 
         this.isMobileSmall = true;
 
@@ -181,7 +209,7 @@ createApp({
 
       }
 
-      if(window.screen.width <= 933 && window.screen.width > 470){
+      if(window.screen.width <= 933 && window.screen.width > 485){
 
         this.isTablet = true;
 
@@ -242,7 +270,6 @@ createApp({
       let newData = [];
 
       let typeTransactions = transactions.filter(transaction => transaction.type === type);
-
 
       if(typeTransactions.length < 5){
 
@@ -357,7 +384,6 @@ createApp({
 
       const account = this.clientData.accounts.find(account => account.selected);
 
-
       this.createChart(account)
 
     },
@@ -391,14 +417,10 @@ createApp({
 
     }
   },
-  selected : {
-
-
-
-  },
   mounted(){
 
     this.resizeEvent();
+
   }
 }).mount('#app')
 

@@ -234,9 +234,13 @@ h1, h2, h3, h4, h5, h6{
     gap: 30px;
     grid-column: 2/-1;
     display: grid;
-    grid-template-columns: 2.5fr 1fr;
+    grid-template-columns: 1fr 1fr;
+    overflow: auto;
+    height: 85vh;
 
 }
+
+
 
 .gridLayoutAccounts{
     display: flex;
@@ -273,7 +277,7 @@ h1, h2, h3, h4, h5, h6{
 
 .actived__section__light{
 
-    background-color: #1f2128;
+    background-color: #2C3E50;
     color: white !important;
     border-radius: 10px;
 
@@ -472,7 +476,7 @@ h1, h2, h3, h4, h5, h6{
 
 .card__balance:hover{
 
-    border: 2px solid #4CA1AF;
+    border: 2px solid #333333;
 
 }
 
@@ -499,7 +503,7 @@ h1, h2, h3, h4, h5, h6{
     
 }
 
-.card__selected{
+.card__selected__dark{
   
     background: #2C3E50;  /* fallback for old browsers */
     background: -webkit-linear-gradient(to right, #4CA1AF, #2C3E50);  /* Chrome 10-25, Safari 5.1-6 */
@@ -511,10 +515,15 @@ h1, h2, h3, h4, h5, h6{
     
 }
 
-.card__selected:hover{
-
-    border: 2px solid #131212;
-
+.card__selected__light{
+  
+    background: #2C3E50;  /* fallback for old browsers */
+    box-shadow: 0px 6px 15px 4px rgba(0,0,0,0.75);
+    -webkit-box-shadow: 0px 6px 15px 4px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 6px 15px 4px rgba(0,0,0,0.75); 
+    border: 2px solid #2C3E50;
+    color: white;
+    
 }
 
 .container__accounts{
@@ -704,16 +713,6 @@ h1, h2, h3, h4, h5, h6{
 
         right: -1000px;
 
-    }
-
-}
-
-@media (max-width: 933px){
-
-    .container__accounts{
-
-        max-width: 450px;
-    
     }
 
 }
