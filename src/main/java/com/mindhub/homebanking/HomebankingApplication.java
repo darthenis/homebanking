@@ -108,8 +108,8 @@ public class HomebankingApplication {
 
 			cli1.addAccount(account1);
 			cli1.addAccount(account2);
-			cli2.addAccount(account3);
-			cli2.addAccount(account4);
+			cli1.addAccount(account3);
+			cli1.addAccount(account4);
 
 			clientRepository.save(cli1);
 			clientRepository.save(cli2);

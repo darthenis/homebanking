@@ -21,9 +21,6 @@ createApp({
     window.addEventListener("resize", this.resizeEvent);
     this.loadData();
   },
-  destroyed() {
-    window.removeEventListener("resize", this.resizeEvent);
-  },
   methods:{
     loadData(){
 
@@ -32,11 +29,10 @@ createApp({
 
       axios.get('http://localhost:8080/api/clients/1')
             .then(res => {
-  
-
-              localStorage.setItem("clientName", res.data.firstName + " " + res.data.lastName);
 
               this.isLoadingData = false;
+
+              localStorage.setItem("clientName", res.data.firstName + " " + res.data.lastName);
 
               let client = res.data;
 
@@ -80,11 +76,6 @@ createApp({
       this.reloadPageAccounts();
       
     },
-    checkActivedAccount(id){
-
-          return this.filterAccounts.some(filterAcc => filterAcc.id === id)
-
-    },
     getIdFromSelectedAccount(){
 
       let account = this.clientData.accounts.find(account => account.selected)
@@ -120,11 +111,16 @@ createApp({
       })
 
     },
+    checkActivedAccount(id){
+
+      return this.filterAccounts.some(filterAcc => filterAcc.id === id)
+
+    },
     setInitialPageAccounts(accounts){
 
       let screenWidth = window.screen.width;
 
-      if(screenWidth < 933 && screenWidth > 648){
+      if(screenWidth < 933 && screenWidth > 648 || screenWidth < 1520 && screenWidth > 1231){
 
         this.num2 = 2;
 
@@ -158,15 +154,29 @@ createApp({
     },
     handlePageAccounts(isPrev){
 
+      let screenWidth = window.screen.width;
+
       let numOfElements = 3;
 
-      if(this.isTablet && !this.ismobile){
-      
+      if(screenWidth < 933 && screenWidth > 648 || screenWidth < 1520 && screenWidth > 1231){
+
         numOfElements = 2;
 
-      } else if(this.isMobileSmall){
+      } else if( screenWidth < 649 && screenWidth > 630){
 
         numOfElements = 1;
+
+      } else if(screenWidth < 631 && screenWidth > 485){
+
+        numOfElements = 2;
+
+      }else if(screenWidth < 486){
+
+        numOfElements = 1;
+
+      } else {
+
+        numOfElements = 3;
 
       }
 
