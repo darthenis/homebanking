@@ -200,7 +200,8 @@
             <article v-if="clientData">
               <div class="d-flex justify-content-between align-items-center flex-wrap">
                 <h5>Last Transactions</h5>
-                <a :href="'http://localhost:8080/web/account.html?id='+getIdFromSelectedAccount()">View all</a>
+                <a  class="text-white"
+                    :href="'http://localhost:8080/web/account.html?id='+getIdFromSelectedAccount()">View all</a>
               </div>
           
               <p v-if="!getSelectedTransactions().length">Not found transactions</p>

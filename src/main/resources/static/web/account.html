@@ -18,6 +18,7 @@
 <body>
     <div id="app" >
         <div class="gridLayout" :class="{ backgroundDark: themeDark, backgroundLight: !themeDark }">
+           
             <div class="nav__account" :class="{navList: !themeDark, border__right : themeDark && !isMobile, border__right__light: !themeDark && !isMobile}">
                 <header class="p-4 header h-100">
                     <button class="toggleBar" @click="activeBar = !activeBar" >
@@ -30,7 +31,9 @@
 
                 <nav class="d-flex flex-column ps-2 pe-2 gap-2 nav__basic colorLink"  :class="{navLight: !themeDark, nav: themeDark}" :style="getAnimationNav()"> 
                     Menu
-                    <a class="d-flex align-items-center gap-1" href="./accounts.html"> 
+                    <a  class="d-flex align-items-center gap-1" 
+                        href="./accounts.html"
+                        :class="{actived__section: themeDark, actived__section__light: !themeDark}"> 
                         <i class="bi bi-house"></i>
                         Home
                     </a>
@@ -87,7 +90,13 @@
                 
             </div>
 
-                <main class="main__account p-2 position-relative d-flex flex-column gap-2 align-items-center" style="overflow: auto; height: 90vh;">
+                <main class="main__account p-2 position-relative d-flex flex-column gap-2 align-items-center" style="overflow: auto; height: 85vh;">
+                    
+                    <a  href="http://localhost:8080/web/accounts.html"
+                        class="position-absolute top-0 start-0 text-white m-2">
+                        back
+                    </a>
+                    
                     <div
                         v-if="isLoadingData"
                             class="position-absolute top-50 start-50 translate-middle d-flex justify-content-center align-items-center"
