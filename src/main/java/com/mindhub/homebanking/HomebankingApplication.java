@@ -10,7 +10,9 @@ import org.springframework.context.annotation.Bean;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @SpringBootApplication
 public class HomebankingApplication {
@@ -24,7 +26,8 @@ public class HomebankingApplication {
 									  AccountRepository accountRepository,
 									  TransactionRepository transactionRepository,
 									  LoanRepository loanRepository,
-									  ClientLoanRepository clientLoanRepository) {
+									  ClientLoanRepository clientLoanRepository,
+									  CardRepository cardRepository) {
 		return (args) -> {
 
 			Loan loan1 = new Loan("Mortgage", 500000.0, List.of(12,24,36,48,60));
@@ -37,6 +40,72 @@ public class HomebankingApplication {
 
 			Client cli1 = new Client("Melba", "Morel", "melba@mindhub.com");
 			Client cli2 = new Client("Uriel", "Montero", "uriel@mindhub.com");
+
+			Set<String> numbersCard = new HashSet<>();
+
+			Set<Card> cards = new HashSet<>();
+
+			do{
+
+				int randomValue1 =  (int)Math.floor(Math.random() * (9999 + 1));
+				int randomValue2 =  (int)Math.floor(Math.random() * (9999 + 1));
+				int randomValue3 =  (int)Math.floor(Math.random() * (9999 + 1));
+				int randomValue4 =  (int)Math.floor(Math.random() * (9999 + 1));
+
+				numbersCard.add(String.format("%04d", randomValue1) + " " + String.format("%04d", randomValue2) + " " + String.format("%04d", randomValue3) + " " + String.format("%04d", randomValue4));
+
+			}while(numbersCard.size() <= 3);
+
+			byte indexAux = 0;
+
+			for(String number:numbersCard){
+
+				short randomCvv = (short)Math.floor(Math.random() * (999 - 001 + 1) + 001);
+
+				CardType cardType;
+
+				CardColor cardColor;
+
+				String nameComplete;
+
+				if(indexAux == 0){
+
+					cardColor = CardColor.GOLD;
+					cardType = CardType.DEBIT;
+					nameComplete = cli1.getFirstName() +" "+ cli1.getLastName();
+
+				}else if(indexAux == 1){
+
+					cardColor = CardColor.SILVER;
+					cardType = CardType.CREDIT;
+					nameComplete = cli1.getFirstName() +" "+ cli1.getLastName();
+
+				}else{
+
+					cardColor = CardColor.TITANIUM;
+					cardType = CardType.CREDIT;
+					nameComplete = cli2.getFirstName() +" "+ cli2.getLastName();
+
+				}
+
+				Card card = new Card(cardType, cardColor, nameComplete, number, randomCvv, LocalDate.now(), LocalDate.now().plusYears(5));
+
+				if(indexAux < 2){
+
+					cli1.addCard(card);
+
+				} else {
+
+					cli2.addCard(card);
+
+				}
+
+				cards.add(card);
+
+				indexAux++;
+			}
+
+
 
 			Account account1 = new Account("VIN001", LocalDate.now(), 5000.0);
 			Account account2 = new Account("VIN002", LocalDate.now().plusDays(1), 7500.0);
@@ -63,7 +132,7 @@ public class HomebankingApplication {
 
 			for(int i = 1; i <= 40; i++){
 
-				double randomValue =  Math.floor(Math.random() * (20000 - 500 + 1) + 500);
+				double randomValue =  Math.floor(Math.random() * (9999 - 1000 + 1) + 1000);
 
 				String description;
 
@@ -105,7 +174,6 @@ public class HomebankingApplication {
 
 			}
 
-
 			cli1.addAccount(account1);
 			cli1.addAccount(account2);
 			cli2.addAccount(account3);
@@ -123,6 +191,12 @@ public class HomebankingApplication {
 			for(Transaction trans : transactions){
 
 				transactionRepository.save(trans);
+
+			}
+
+			for(Card card : cards){
+
+				cardRepository.save(card);
 
 			}
 

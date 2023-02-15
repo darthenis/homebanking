@@ -228,7 +228,7 @@
 
           <section v-if="clientData" class="d-flex flex-column" style="max-width: 300px">
             <h5 class="w-100">Loans</h5>
-            <p v-if="!clientData?.loans">Not found loans</p>
+            <p v-if="!clientData?.loans.length">Not found loans</p>
             <table  v-else
                     class="table table-striped"
                     :class="{'table-dark': themeDark}">
