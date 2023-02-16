@@ -48,7 +48,7 @@
               <div :style="getAnimationBar(2)"></div>
               <div :style="getAnimationBar(3)"></div>
             </button>
-            <h3 class="title__icon">HB</h3>
+            <h1 class="title__icon">HB</h1>
           </header>
 
           <nav
@@ -103,7 +103,7 @@
           class="p-4 container__header"
           :class="{headerLight: !themeDark, border__bottom: themeDark, border__bottom__light: !themeDark}"
         >
-          <h1>Home</h1>
+          <h4>Cards</h4>
 
           <div class="d-flex justify-content-around gap-4 align-items-center">
             <template v-if="clientData"
@@ -126,7 +126,7 @@
           </div>
         </div>
 
-        <main class="d-flex flex-column align-items-center gap-4 p-4 position-relative">
+        <main class="d-flex flex-column align-items-center gap-4 p-4 position-relative" style="max-width: 80vw; justify-self:center">
 
           <div class="d-flex gap-3" style="height: 30px; width: 300px">
 
@@ -178,10 +178,11 @@
             
           </article>
 
-          <p v-else>Not owned cards</p>
+          <p v-else>Not owned cards for {{cardType + " and " + cardColor}}</p>
 
         </main>
       </div>
     </div>
   </body>
 </html>
+
