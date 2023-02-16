@@ -8,7 +8,8 @@ createApp({
             filterCards : [],
             themeDark: localStorage.getItem('themeBH') === "dark" ? true : false || false,
             cardType : "Debit",
-            cardColor: "Silver"
+            cardColor: "Silver",
+            activeBar: null
 
 
         }
