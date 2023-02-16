@@ -54,13 +54,13 @@ public class HomebankingApplication {
 
 				numbersCard.add(String.format("%04d", randomValue1) + " " + String.format("%04d", randomValue2) + " " + String.format("%04d", randomValue3) + " " + String.format("%04d", randomValue4));
 
-			}while(numbersCard.size() <= 3);
+			}while(numbersCard.size() <= 2);
 
 			byte indexAux = 0;
 
 			for(String number:numbersCard){
 
-				short randomCvv = (short)Math.floor(Math.random() * (999 - 001 + 1) + 001);
+				String randomCvv = String.format("%03d", (int)Math.floor(Math.random() * (999 + 1)));
 
 				CardType cardType;
 

@@ -94,6 +94,10 @@ public class Client {
 
     public Set<ClientLoan> getClientLoans() { return clientLoans; }
 
+    public Set<Card> getCards() {
+        return cards;
+    }
+
     @Override
     public String toString() {
         return "Client{" +

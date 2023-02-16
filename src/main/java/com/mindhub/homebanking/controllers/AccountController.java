@@ -17,17 +17,17 @@ import static java.util.stream.Collectors.toList;
 public class AccountController {
 
     @Autowired
-    AccountRepository repo;
+    AccountRepository accountRepository;
 
     @RequestMapping("/accounts")
-    public List<AccountDTO> getClients() {
-        return repo.findAll().stream().map(AccountDTO::new).collect(toList());
+    public List<AccountDTO> getAccounts() {
+        return accountRepository.findAll().stream().map(AccountDTO::new).collect(toList());
     }
 
     @RequestMapping("accounts/{id}")
-    public AccountDTO getPet(@PathVariable Long id){
+    public AccountDTO getAccount(@PathVariable Long id){
 
-        return repo.findById(id).map(AccountDTO::new).orElse(null);
+        return accountRepository.findById(id).map(AccountDTO::new).orElse(null);
 
     }
 

@@ -15,6 +15,8 @@ createApp({
 
     },
     created(){
+        this.resizeEvent()
+        window.addEventListener("resize", this.resizeEvent);
         this.loadAccount(this.getParamFromUrl("id"));
 
     },
@@ -39,7 +41,44 @@ createApp({
 
                     })
         },
-        
+        resizeEvent(){
+          this.resizeResetBarTogle();
+          this.setIsMobile();
+          
+        },
+        setIsMobile(){
+
+          if(window.screen.width <= 646){
+    
+            this.isMobile = true;
+    
+          } else {
+    
+            this.isMobile = false;
+    
+          }
+    
+          if(window.screen.width <= 485){
+    
+            this.isMobileSmall = true;
+    
+          } else {
+    
+            this.isMobileSmall = false;
+    
+          }
+    
+          if(window.screen.width <= 933 && window.screen.width > 485){
+    
+            this.isTablet = true;
+    
+          } else {
+    
+            this.isTablet = false;
+    
+          }
+    
+        },
         toggleHandle(){
 
           this.themeDark = !this.themeDark;
@@ -72,97 +111,20 @@ createApp({
       
             }
       
-          },
-          formatDateAndTime(dateTime){
+        },
+        resizeResetBarTogle(){
+
+          this.activeBar = null;
+    
+        },
+        formatDateAndTime(dateTime){
             
             let array = dateTime.split("T");
             let date = array[0].split("-").reverse().join("/");
 
             return date + " " + array[1].split(".")[0];
 
-          },
-          createChart(id){
-
-            let newDataDebit = this.getLastTenMovements(id, "DEBIT");
-      
-            let newDataCredit = this.getLastTenMovements(id, "CREDIT");
-      
-            let options = {
-              chart: {
-                type: 'line',
-                width: '150px',
-                toolbar: {
-                  show: false
-                },
-                animations: {
-                  enabled: false,
-                },
-              },
-              series: [{
-                name: 'Debit',
-                data: newDataDebit
-              },
-              {
-                name: 'Credit',
-                data: newDataCredit
-              }],
-              dataLabels:{
-                distributed: false
-              },
-              xaxis: {
-                categories: ["10", "9", "8", "7", "6", "5", "4", "3", "2", "1"],
-                labels:{
-                  show: false
-                },
-                axisBorder: {
-                  show: false
-                },  
-                axisTicks:{
-                  show: false
-                }
-              },
-              yaxis: {
-                show: false
-              },
-              grid: {
-                show: false
-              },
-              colors: ['rgb(243, 0, 0)', 'rgb(0, 199, 0)'],
-              dataLabels: {
-                style: {
-                  colors: ['#fffff', '#fffff', '#fffff']
-                }
-              },
-              stroke: {
-                show: true,
-                curve: 'smooth',
-                lineCap: 'butt',
-                colors: undefined,
-                width: 2,
-                dashArray: 0,      
-              },
-              tooltip: {
-                theme: "dark"
-              },
-              legend:{
-                show: false
-              }
-            }
-            
-            const elementChart = document.querySelector("#chart"+id);
-      
-            if(elementChart){
-      
-              elementChart.innerHTML = "";
-              
-              const chart = new ApexCharts(elementChart, options);
-            
-              chart.render();
-      
-            }
-      
-          
-          },
+        },
 
     }
 
