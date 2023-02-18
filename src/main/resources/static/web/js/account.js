@@ -79,6 +79,11 @@ createApp({
           }
     
         },
+        logout(){
+
+          axios.post('/api/logout').then(response => window.location.href = '/web/index.html')
+    
+        },
         toggleHandle(){
 
           this.themeDark = !this.themeDark;

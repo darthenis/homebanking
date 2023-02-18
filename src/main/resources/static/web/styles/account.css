@@ -1,5 +1,6 @@
 
 @import url('https://fonts.googleapis.com/css?family=Space+Mono:400,400i,700,700i');
+@import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@300&family=Open+Sans&display=swap');
 
 
 *{
@@ -13,6 +14,7 @@ html, body, #app {
 
     min-height: 100vh;
     width: 100%;
+    font-family: 'Open Sans', sans-serif;
 
 
 }
@@ -64,6 +66,7 @@ h1, h2, h3, h4, h5, h6{
 .border__bottom{
 
     border-bottom: solid 1px  rgba(85, 85, 85, 0.5);
+    background-color: #1f2128;
 
 }
 
@@ -83,8 +86,12 @@ h1, h2, h3, h4, h5, h6{
 .nav__account{
     display: grid;
     grid-template-rows: 70px 1fr;
-    height: 100%;
+    height: fit-content;
+    min-height: 100vh;
     grid-row: 1/-1;
+    position: sticky;
+    top: 0px;
+    z-index: 100;
 }
 
 .header{
@@ -100,6 +107,9 @@ h1, h2, h3, h4, h5, h6{
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: sticky;
+    top: 0px;
+    z-index: 1000;
 
 }
 
@@ -237,8 +247,7 @@ h1, h2, h3, h4, h5, h6{
     grid-column: 2/-1;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    overflow: auto;
-    height: 85vh;
+    grid-template-rows: 400px 300px;
 
 }
 
@@ -366,7 +375,7 @@ h1, h2, h3, h4, h5, h6{
     .gridLayout{
 
         grid-template-columns: 1fr;
-        grid-template-rows: 50px 80px 1fr;
+        grid-template-rows: 70px 80px 1fr;
         justify-content: space-between;
 
 
@@ -380,8 +389,8 @@ h1, h2, h3, h4, h5, h6{
 
     .nav__account{
 
-        display: inline-block;
         grid-row: auto;
+        z-index: 10000;
 
     }
 
@@ -410,6 +419,12 @@ h1, h2, h3, h4, h5, h6{
         background-color: #1f2128;
         color: white;
 
+
+    }
+
+    .container__header{
+
+        position: relative;
 
     }
     
@@ -534,6 +549,46 @@ h1, h2, h3, h4, h5, h6{
     flex-wrap: wrap;
     column-gap: 20px;
     max-width: 680px;
+
+}
+
+.btn__logout{
+
+    box-shadow: none;
+    border: none;
+    border-radius: 10px;
+    background-color: transparent;
+
+}
+
+.btn__logout:active:enabled{
+
+    transform: scale(.92);
+
+}
+
+.btn__logout__dark{
+
+    color: white;
+    
+}
+
+.btn__logout__dark:hover:enabled{
+    
+    color: #326aa1;
+
+}
+
+
+.btn__logout__light{
+
+    color: black;
+
+}
+
+.btn__logout__light:hover{
+
+    color: rgb(42, 70, 160);
 
 }
 

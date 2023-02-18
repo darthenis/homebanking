@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login || HB</title>
+    <link rel="shortcut icon" href="./assets/favicon.ico" type="image/x-icon">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <link rel="stylesheet" href="./styles/index.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js" defer></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js" defer></script>
+    <script src="./js/index.js" defer></script>
+</head>
+<body>
+    <div id="app">
+        <main class="d-flex flex-column justify-content-center align-items-center h-100 background__dark">
+           <template v-if="isSignInFormActived">
+                <form class="login__container p-2 rounded-4 d-flex flex-column align-items-center shadow">
+                    <h3 class="text-center">Login</h3>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input v-model="signIn.email" type="email" class="form-control" id="email" placeholder="name@example.com">
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <div class="d-flex position-relative">
+                            <input v-model="signIn.password" class="form-control" id="password" :type="typePassword">
+                            <span class="position-absolute text-dark" style="top: 7px; right: 5px" @click="handleViewPassword" >
+                                <i v-if="typePassword === 'password'" class="bi bi-eye"></i>
+                                <i v-if="typePassword === 'text'" class="bi bi-eye-slash"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <button type="button" :disabled="isLoading" class="btn btn-light" @click="login(signIn.email, signIn.password)">Sign in</button>
+                    
+                    <p class="mt-2">Don't have an account?
+                        <span class="text-decoration-underline"
+                                style="cursor: pointer"
+                                @click="handleFormActive">
+                                Register
+                        </span>
+                    </p>
+                    
+                </form>
+            </template>
+
+            <template v-if="!isSignInFormActived">
+                <form class="login__container p-2 rounded-4 d-flex flex-column align-items-center shadow">
+                    <h3 class="text-center">Register</h3>
+                        <div   div class="mb-3">
+                            <label for="name" class="form-label">First Name</label>
+                            <input v-model="signUp.firstName" type="text" class="form-control" id="name">
+                        </div>
+                        <div   div class="mb-3">
+                            <label for="lastName" class="form-label">Last Name</label>
+                            <input v-model="signUp.lastName" type="text" class="form-control" id="lastName">
+                        </div>
+                        <div   div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input v-model="signUp.email" type="email" class="form-control" id="email" placeholder="name@example.com">
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input v-model="signUp.password" class="form-control" id="password" :type="typePassword">
+                        </div>
+                        <button type="button" :disabled="isLoading" class="btn btn-light" @click="register">Sign up</button>
+                        
+                        <p class="mt-2">Do you have an account?
+                            <span class="text-decoration-underline"
+                                    style="cursor: pointer"
+                                    @click="handleFormActive">
+                                    Sign in
+                            </span>
+                        </p>
+                </form>
+            </template>
+        </main>
+    </div>
+</body>
+</html>

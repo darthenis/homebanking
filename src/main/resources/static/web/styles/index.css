@@ -1,0 +1,35 @@
+@import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@300&display=swap');
+
+*{
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+html, body, #app{
+
+    width: 100%;
+    height: 100%;
+    font-family: 'Exo 2', sans-serif;
+
+}
+
+.background__dark{
+
+    background-color: #1f2128;
+
+}
+
+
+.login__container{
+    width: 400px;
+    background: #2C3E50;  /* fallback for old browsers */
+    color: white;
+
+}
+
+.login__container > div {
+
+    width: 350px;
+
+}

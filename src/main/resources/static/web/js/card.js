@@ -139,7 +139,12 @@ createApp({
 
             return auxDate.join("/");
 
-          }
+          },
+          logout(){
+
+            axios.post('/api/logout').then(response => window.location.href = '/web/index.html')
+      
+          },
 
     },
     computed : {

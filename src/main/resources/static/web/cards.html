@@ -112,6 +112,11 @@
             >
             <i @click="toggleHandle" class="bi bi-moon" v-if="!themeDark"></i>
             <i @click="toggleHandle" class="bi bi-sun" v-else></i>
+            <button class="p-1 rounded-4 btn__logout"
+              :class="{btn__logout__light: !themeDark, btn__logout__dark: themeDark}"
+              @click="logout">
+              Sign out
+            </button>
             <div class="position-relative">
               <i class="bi bi-bell"></i>
               <span

@@ -29,7 +29,7 @@
       defer
     ></script>
     <script src="./js/accounts.js" defer></script>
-    <title>accounts</title>
+    <title>Accounts || HB</title>
   </head>
   <body>
     <div id="app">
@@ -47,7 +47,7 @@
               <div :style="getAnimationBar(2)"></div>
               <div :style="getAnimationBar(3)"></div>
             </button>
-            <h3 class="title__icon">HB</h3>
+            <h1 class="title__icon">HB</h1>
           </header>
 
           <nav
@@ -98,10 +98,10 @@
           </nav>
         </div>
         <div
-          class="p-4 container__header"
-          :class="{headerLight: !themeDark, border__bottom: themeDark, border__bottom__light: !themeDark}"
+          class="p-4 container__header position-sticky"
+          :class="{border__bottom: themeDark, border__bottom__light: !themeDark}"
         >
-          <h1>Home</h1>
+          <h4>Home</h4>
 
           <div class="d-flex justify-content-around gap-4 align-items-center">
             <template v-if="clientData"
@@ -110,6 +110,11 @@
             >
             <i @click="toggleHandle" class="bi bi-moon" v-if="!themeDark"></i>
             <i @click="toggleHandle" class="bi bi-sun" v-else></i>
+            <button class="p-1 rounded-4 btn__logout"
+                    :class="{btn__logout__light: !themeDark, btn__logout__dark: themeDark}"
+                    @click="logout">
+                    Sign out
+            </button>
             <div class="position-relative">
               <i class="bi bi-bell"></i>
               <span
@@ -196,37 +201,37 @@
                       Next
               </button>
             </div>
-
-            <article v-if="clientData">
-              <div class="d-flex justify-content-between align-items-center flex-wrap">
-                <h5>Last Transactions</h5>
-                <a  class="text-white"
-                    :href="'http://localhost:8080/web/account.html?id='+getIdFromSelectedAccount()">View all</a>
-              </div>
-          
-              <p v-if="!getSelectedTransactions().length">Not found transactions</p>
-              <table  v-else
-                      class="table table-striped"
-                      :class="{'table-dark': themeDark}">
-                <thead>
-                  <tr>
-                    <th scope="col">Amount</th>
-                    <th scope="col">Date</th>
-                    <th scope="col">Description</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-if="clientData" v-for="transaction of getSelectedTransactions()">
-                    <td :style="{color: transaction.type === 'DEBIT' ? 'rgb(243, 0, 0)' : 'rgb(0, 199, 0)'}">{{transaction.type === "DEBIT" ? "-" : "+"}}${{transaction.amount}}</td>
-                    <td>{{formatDateAndTime(transaction.date)}}</td>
-                    <td>{{transaction.description}}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </article>
           </section>
 
-          <section v-if="clientData" class="d-flex flex-column" style="max-width: 300px">
+          <section v-if="clientData" class="align-self-center" style="max-width: 500px"> 
+            <div class="d-flex justify-content-between align-items-center flex-wrap">
+              <h5>Last Transactions</h5>
+              <a  class="text-white"
+                  :href="'/web/account.html?id='+getIdFromSelectedAccount()">View all</a>
+            </div>
+        
+            <p v-if="!getSelectedTransactions().length">Not found transactions</p>
+            <table  v-else
+                    class="table table-striped"
+                    :class="{'table-dark': themeDark}">
+              <thead>
+                <tr>
+                  <th scope="col">Amount</th>
+                  <th scope="col">Date</th>
+                  <th scope="col">Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-if="clientData" v-for="transaction of getSelectedTransactions()">
+                  <td :style="{color: transaction.type === 'DEBIT' ? 'rgb(243, 0, 0)' : 'rgb(0, 199, 0)'}">{{transaction.type === "DEBIT" ? "-" : "+"}}${{transaction.amount}}</td>
+                  <td>{{formatDateAndTime(transaction.date)}}</td>
+                  <td>{{transaction.description}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+
+          <section v-if="clientData" class="d-flex flex-column" style="width: 100%; justify-self: center;">
             <h5 class="w-100">Loans</h5>
             <p v-if="!clientData?.loans.length">Not found loans</p>
             <table  v-else
@@ -248,6 +253,7 @@
               </tbody>
             </table>
           </section>
+        
 
         </main>
       </div>

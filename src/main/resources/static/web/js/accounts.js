@@ -27,7 +27,7 @@ createApp({
       this.isLoadingData = true;
 
 
-      axios.get('http://localhost:8080/api/clients/1')
+      axios.get('http://localhost:8080/api/clients/current')
             .then(res => {
 
               this.isLoadingData = false;
@@ -69,6 +69,11 @@ createApp({
             })
 
     },
+    logout(){
+
+      axios.post('/api/logout').then(response => window.location.href = '/web/index.html')
+
+    },
     resizeEvent(){
       this.resizeResetBarTogle();
       this.setIsMobile();
@@ -81,7 +86,6 @@ createApp({
       let account = this.clientData.accounts.find(account => account.selected)
 
       return account.id;
-
 
     },
     getSelectedTransactions(){
