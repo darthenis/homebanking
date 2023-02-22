@@ -18,67 +18,136 @@
 </head>
 <body>
     <div id="app">
-        <main class="d-flex flex-column justify-content-center align-items-center h-100 background__dark">
-           <template v-if="isSignInFormActived">
-                <form class="login__container p-2 rounded-4 d-flex flex-column align-items-center shadow">
-                    <h3 class="text-center">Login</h3>
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Email</label>
-                        <input v-model="signIn.email" type="email" class="form-control" id="email" placeholder="name@example.com">
-                    </div>
-                    <div class="mb-3">
-                        <label for="password" class="form-label">Password</label>
-                        <div class="d-flex position-relative">
-                            <input v-model="signIn.password" class="form-control" id="password" :type="typePassword">
-                            <span class="position-absolute text-dark" style="top: 7px; right: 5px" @click="handleViewPassword" >
-                                <i v-if="typePassword === 'password'" class="bi bi-eye"></i>
-                                <i v-if="typePassword === 'text'" class="bi bi-eye-slash"></i>
-                            </span>
-                        </div>
-                    </div>
-                    <button type="button" :disabled="isLoading" class="btn btn-light" @click="login(signIn.email, signIn.password)">Sign in</button>
-                    
-                    <p class="mt-2">Don't have an account?
-                        <span class="text-decoration-underline"
-                                style="cursor: pointer"
-                                @click="handleFormActive">
-                                Register
-                        </span>
-                    </p>
-                    
-                </form>
-            </template>
+        {{validating}}
+        <main class="layout__login background__dark">
 
-            <template v-if="!isSignInFormActived">
-                <form class="login__container p-2 rounded-4 d-flex flex-column align-items-center shadow">
-                    <h3 class="text-center">Register</h3>
-                        <div   div class="mb-3">
-                            <label for="name" class="form-label">First Name</label>
-                            <input v-model="signUp.firstName" type="text" class="form-control" id="name">
-                        </div>
-                        <div   div class="mb-3">
-                            <label for="lastName" class="form-label">Last Name</label>
-                            <input v-model="signUp.lastName" type="text" class="form-control" id="lastName">
-                        </div>
-                        <div   div class="mb-3">
-                            <label for="email" class="form-label">Email</label>
-                            <input v-model="signUp.email" type="email" class="form-control" id="email" placeholder="name@example.com">
-                        </div>
-                        <div class="mb-3">
-                            <label for="password" class="form-label">Password</label>
-                            <input v-model="signUp.password" class="form-control" id="password" :type="typePassword">
-                        </div>
-                        <button type="button" :disabled="isLoading" class="btn btn-light" @click="register">Sign up</button>
-                        
-                        <p class="mt-2">Do you have an account?
-                            <span class="text-decoration-underline"
-                                    style="cursor: pointer"
-                                    @click="handleFormActive">
-                                    Sign in
-                            </span>
-                        </p>
-                </form>
-            </template>
+            <section class="container__img position-relative">
+                <div class="position-absolute top-0 phrase__login">  
+                    <p class="d-flex flex-column text-end me-1">We keep your money safe. Just enjoy.</p>
+                    
+                </div>
+              
+                <img class="img__login" src="./assets/travel.jpg" alt="woman_traveling">
+            </section>
+
+            <section class="position-relative w-100 h-100 d-flex align-items-center flex-column justify-content-center">
+                <div class="circle"></div>
+
+                <div class="container__form__title">
+                    <h1 class="text-white text-end title__index">HB banking</h1>
+                    <template v-if="isSignInFormActived" >
+                        <form      autocomplete="off"
+                                class="login__container p-2 rounded-4 shadow"
+                                :class="{animation__slide : firstRender}">
+                            <h3 class="text-center">Login</h3>
+                            <div class="mt-2">
+                                <label for="asdd" class="form-label">Email</label>
+                                <input v-model="signIn.email" readonly onfocus="this.removeAttribute('readonly');" type="email" name="asd" class="form-control" id="asdd" placeholder="name@example.com">
+                            </div>
+                            <div class="mt-4">
+                                <label for="pass" class="form-label">Password</label>
+                                <div class="d-flex position-relative">
+                                    <input  v-model="signIn.password" 
+                                            class="form-control" 
+                                            id="pass" 
+                                            :type="typePassword"
+                                            >
+                                    <span class="position-absolute text-dark" style="top: 7px; right: 5px" @click="handleViewPassword" >
+                                        <i v-if="typePassword === 'password'" class="bi bi-eye"></i>
+                                        <i v-if="typePassword === 'text'" class="bi bi-eye-slash"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-column mt-4">
+                                <button type="button" 
+                                        :disabled="isLoading || !signIn.email || !signIn.password" 
+                                        class="btn button__bg" 
+                                        @click="login(signIn.email, signIn.password)">Sign in</button>
+                            
+                                <p class="mt-2">Don't have an account?
+                                    <span class="text-decoration-underline"
+                                            style="cursor: pointer"
+                                            @click="handleFormActive">
+                                            Register
+                                    </span>
+                                </p>
+                            </div>
+                        </form>
+                    </template>
+                    
+                    <template v-if="!isSignInFormActived">
+                        <form   
+                                autocomplete="off" 
+                                class="login__container p-2 rounded-4 d-flex flex-column align-items-center shadow">
+                            <h3 class="text-center">Join us</h3>
+                                <div class="d-flex flex-column flex-sm-row gap-2">
+                                    <div class="mt-2">
+                                        <label for="name" class="form-label">First Name</label>
+                                        <input v-model="signUp.firstName" type="text" class="form-control" id="name">
+                                        <p class="error__text">{{signUp.errors.firstName}}</p>
+                                    </div>
+                                    <div class="mt-2">
+                                        <label for="lastName" class="form-label">Last Name</label>
+                                        <input v-model="signUp.lastName" type="text" class="form-control" id="lastName">
+                                        <p class="error__text">{{signUp.errors.lastName}}</p>
+                                    </div>
+                                </div>
+                                <div class="d-flex flex-column flex-sm-row gap-2">
+                                    <div class="mt-2">
+                                        <label for="email" class="form-label">Email</label>
+                                        <input v-model="signUp.email"  autocomplete="new-email" type="text" class="form-control" id="email1" placeholder="name@example.com">
+                                        <p class="error__text">{{signUp.errors.email}}</p>
+                                    </div class="mt-2">
+                                    <div class="mt-2">
+                                        <label for="email" class="form-label">Confirm email</label>
+                                        <input  v-model="signUp.confirmEmail" 
+                                                type="text" 
+                                                class="form-control" 
+                                                id="email2" 
+                                                placeholder="name@example.com"
+                                                autocomplete="new-email"
+                                                >
+                                        <p class="error__text">{{signUp.errors.confirmEmail}}</p>
+                                    </div class="mt-2">
+                                </div>
+                                <div class="d-flex flex-column flex-sm-row gap-2">
+                                    <div class="mt-2">
+                                        <label for="password" class="form-label">Password</label>
+                                        <input  v-model="signUp.password" 
+                                                class="form-control" 
+                                                id="password1" 
+                                                :type="typePassword"
+                                                autocomplete="new-password">
+                                        <p class="error__text">{{signUp.errors.password}}</p>
+                                    </div>
+                                    <div class="mt-2">
+                                        <label for="password" class="form-label">Confirm password</label>
+                                        <input  v-model="signUp.confirmPassword" 
+                                                class="form-control" 
+                                                id="password2" 
+                                                :type="typePassword"
+                                                autocomplete="new-password">
+                                        <p class="error__text">{{signUp.errors.confirmPassword}}</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="d-flex flex-column mt-4">
+                                    <button type="button" :disabled="isLoading" class="btn  button__bg" @click="register">Sign up</button>
+                                
+                                    <p class="mt-2">Do you have an account?
+                                        <span class="text-decoration-underline"
+                                                style="cursor: pointer"
+                                                @click="handleFormActive">
+                                                Sign in
+                                        </span>
+                                    </p>
+                                </div>
+                        </form>
+                    </template>
+                       
+                </div>
+            </section>
+        
         </main>
     </div>
 </body>

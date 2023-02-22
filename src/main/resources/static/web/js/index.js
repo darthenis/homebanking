@@ -11,11 +11,22 @@ createApp({
                 firstName: "",
                 lastName: "",
                 email : "",
-                password:  ""
+                confirmEmail : "",
+                password:  "",
+                confirmPassword: "",
+                errors: {
+                    firstName: "",
+                    lastName: "",
+                    email: "",
+                    confirmEmail: "",
+                    password: "",
+                    confirmPassword: ""
+                }
             },
             isLoading : false,
             typePassword : "password",
-            isSignInFormActived : true
+            isSignInFormActived : true,
+            firstRender : true
         }
     },
     methods: {
@@ -44,28 +55,34 @@ createApp({
                     })
         },
         register(){
+            
+            this.handleValidator(true);
 
-            this.isLoading = true;
-            axios.post('/api/clients',`firstName=${this.signUp.firstName}&lastName=${this.signUp.lastName}&email=${this.signUp.email}&password=${this.signUp.password}`,
-                        {headers:{'content-type':'application/x-www-form-urlencoded'}})
-                    .then(res => {
+            if(!Object.values(this.signUp.errors).some(error => error !== "")){
 
-                        this.login(this.signUp.email, this.signUp.password)
+                this.isLoading = true;
+                axios.post('/api/clients',`firstName=${this.signUp.firstName}&lastName=${this.signUp.lastName}&email=${this.signUp.email}&password=${this.signUp.password}`,
+                            {headers:{'content-type':'application/x-www-form-urlencoded'}})
+                        .then(res => {
 
-                    })
-                    .catch(err => {
-                        this.isLoading = false;
-                        this.clearForm();
-                        Toastify({
-                            text: err.response.data,
-                            className: "info",
-                            position: "center",
-                            duration: 3000,
-                            style: {
-                            background: "#9b1d1d",
-                            }
-                        }).showToast();
-                    })
+                            this.login(this.signUp.email, this.signUp.password)
+
+                        })
+                        .catch(err => {
+                            this.isLoading = false;
+                            this.clearForm();
+                            Toastify({
+                                text: err.response.data,
+                                className: "info",
+                                position: "center",
+                                duration: 3000,
+                                style: {
+                                background: "#9b1d1d",
+                                }
+                            }).showToast();
+                        })
+
+            }
 
         },
         clearForm(){
@@ -90,7 +107,56 @@ createApp({
 
             this.isSignInFormActived = !this.isSignInFormActived;
 
+            this.firstRender = false;
+
+        },
+        handleValidator(isSending){
+
+            for(let [key] of Object.entries(this.signUp.errors)){
+
+                if (isSending && !this.signUp[key]) this.signUp.errors[key] = "*required field";
+
+                else if(this.signUp[key]) this.signUp.errors[key] = "";
+
+                if(this.signUp[key] || key === "confirmEmail" && this.signUp.email || key === "confirmPassword" && this.signUp.password){
+
+                    if(!/^[A-Za-zÁÉÍÓÚáéíóúñÑ ]+$/g.test(this.signUp[key]) && 
+                        (   key === "firstName" || 
+                            key === "lastName" )) this.signUp.errors[key] = "*only letters";
+    
+                    else if(key === "email" && 
+                    !/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(this.signUp[key])) {
+                        
+                        this.signUp.errors.email = "*format email valid";
+                    
+                    } else if(key === "confirmEmail" && this.signUp[key] !== this.signUp.email){
+
+                        this.signUp.errors.confirmEmail = "*the emails must match";
+
+                    } else if(key === "confirmPassword" && this.signUp[key] !== this.signUp.password){
+
+                        this.signUp.errors.confirmPassword = "*the passwords must match";
+
+                    }
+
+                } else if(this.signUp.errors[key] !== "*required field" && (key !== "confirmEmail" || key !== "confirmPassword")){
+
+                    this.signUp.errors[key] = "";
+
+                }
+
+            }
+
         }
+    },
+    computed: {
+
+        validating(){
+
+            this.handleValidator(false);
+
+        }
+
     }
 
 }).mount('#app')

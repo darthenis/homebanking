@@ -19,12 +19,14 @@ import java.util.Set;
 @SpringBootApplication
 public class HomebankingApplication {
 
+
+	@Autowired
+	PasswordEncoder passwordEncoder;
+
 	public static void main(String[] args) {
 		SpringApplication.run(HomebankingApplication.class, args);
 	}
 
-	@Autowired
-	PasswordEncoder passwordEncoder;
 
 	@Bean
 	public CommandLineRunner initData(ClientRepository clientRepository,
