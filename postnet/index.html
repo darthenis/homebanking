@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <link rel="stylesheet" href="./index.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.2.47/dist/vue.global.min.js" defer></script>
+    <script src="./index.js" defer></script>
+    <title>PostNet</title>
+</head>
+<body>
+    <div id="app">
+
+        <section class="d-flex flex-column justify-content-center align-items-center container" style="min-height: 100vh;">
+            <article class="d-flex flex-column container__form bg-color p-4 rounded text-light shadow">
+                <h2 class="text-center">PostNet</h2>
+                <form class="d-flex flex-column" style="max-width: 600px">
+                    <div class="d-flex gap-2">
+                        <div>
+                            <div class="mb-3">
+                                <label for="number" class="form-label m-0">Card number
+                                    <div class="position-relative mt-2">
+                                        <input id="number" class="form-control" :class="{inputNumberStart: !data.number.length, inputNumber: data.number.length}" type="text" @keyup="setCurrency" style="opacity: 0;"/>
+                                        <div class="box form-control position-absolute top-0 w-100 fs-6" style="background-color: white; color: black ">{{data.number || 'xxxx xxxx xxxx xxxx '}}</div>
+                                    </div>
+                                </label>
+                            </div>
+                            <div class="mb-3">
+                                <label for="cvv" class="form-label m-0">CVV 
+                                    <div class="position-relative mt-2">
+                                        <input id="cvv" class="form-control" :class="{inputNumberStart: !data.cvv.length, inputNumber: data.cvv.length}" type="text" @keyup="setCvv" style="opacity: 0;"/>
+                                        <div class="box form-control position-absolute top-0 w-100 fs-6" style="background-color: white; color: black ">{{data.cvv || 'xxx'}}</div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="mb-3">
+                                <label class="form-label" for="amount">Amount</label>
+                                <input v-model="data.amount" class="form-control" type="text" id="amount" placeholder="0.00" onkeyup="this.value=this.value.replace(/[^\d]/,'')">
+                            </div>
+                            <div>
+                                <label class="form-label" for="description">Description</label>
+                                <input v-model="data.description" class="form-control"type="text" id="description" placeholder="Short description">
+                            </div>
+                        </div>
+                    </div>
+            
+                    <button class="btn text-light"
+                    style="background-color: #e9605a;" 
+                    @click.prevent="handlerPay">
+                    <div class="spinner-border spinner-border-sm text-light" role="status" v-if="isLoading">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <span v-if="!isLoading">
+                        Pay
+                    </span>
+            </button>
+                </form>
+            </article>
+        </section>
+        <template v-if="modalMessage.message">
+            <div class="position-absolute start-50 p-4 mt-2 rounded"
+                  style="top: 10px; z-index: 100000000; color: white;"
+                  :style="{backgroundColor: modalMessage.isError ? 'red' : 'rgb(43, 75, 146)'}">
+    
+                  {{modalMessage.message}}
+    
+            </div>
+          </template>
+    </div>
+</body>
+</html>

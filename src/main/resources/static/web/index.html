@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login || HB</title>
+    <link rel="shortcut icon" href="./assets/favicon.ico" type="image/x-icon">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <link rel="stylesheet" href="./styles/index.css">
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js" defer></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.2.47/dist/vue.global.min.js" defer></script>
+    <script src="./js/index.js" defer></script>
+</head>
+<body>
+    <div id="app">
+        {{validating}}
+        <main class="w-100 background__dark layout__login" style="height: fit-content">
+
+            <header class="w-100 d-flex justify-content-between align-items-center" style="height: 70px; z-index: 100;">
+                <div    
+                        class="title__icon d-flex justify-content-center align-items-end gap-1 text-white m-4"
+                        @click="loadIndex">
+                    
+                    <img src="./assets/new_logo.png" alt="logo"     >
+                    <h1>Huborange</h1>
+                
+                </div>
+                <div>
+                    <button v-if="!activeLogin && !isMobileSmall" class="btn m-2 text-light" @click="activeLogin = true" style="background-color: #e9605a;">Sign in</button>
+                    <button v-if="!activeLogin && !isMobileSmall" class="btn m-2 text-light" @click="activeRegister" style="background-color: #e9605a;">Sign up</button>
+                </div>
+                
+            </header>
+            
+            <template v-if="!activeLogin && !confirmEmail">
+
+
+
+                <section  class="container d-flex flex-column justify-content-center align-items-center">
+
+                    <div v-if="isMobileSmall">
+                        <button v-if="!activeLogin" class="btn m-2 text-light" @click="activeLogin = true" style="background-color: #e9605a;">Sign in</button>
+                        <button v-if="!activeLogin" class="btn text-light" @click="activeRegister" style="background-color: #e9605a;">Sign up</button>
+                    </div>
+
+                    <article class="d-flex align-items-center justify-content-between flex-column-reverse flex-md-row flex-md-row">
+                        <div class="d-flex flex-column justify-content-between align-items-end">
+                            <p class="text__index"> <span class="text__index__highlight"><span class="text-shadow" style="color:#fe7d72;">Welcome</span> <br/>to our online banking platform!</span>
+                                <br/>
+                                <br/>  
+                                With our user-friendly interface and advanced security measures, managing your finances has never been easier. 
+                                Enjoy features such as mobile banking, bill payments, and instant money transfers all in one convenient location. 
+                            </p>
+                            <a class="btn text-light mt-5"  style="background-color: #e9605a; width: fit-content;" href="#sec1">Read more</a>
+                        </div>
+                        
+                        <img src="./assets/indexImage.png" style="width: 50vw; min-width: 300px;">
+                    </article>
+
+                </section>
+                
+            
+                <section id="sec1" class="position-relative container d-flex flex-column justify-content-center">
+                    <article class="d-flex align-items-center justify-content-between flex-column flex-md-row">
+                        
+                        <img src="./assets/worldIndex.png" alt="woman_traveling" style="width: 50vw; min-width: 300px;">
+                  
+                        <p class="text__index"> <span class="text-shadow text__index__highlight" style="color:#fe7d72; font-size: 30px;"> World plataform</span>
+                                                <br/>
+                                                <br/>
+                                                The World Bank Platform is a powerful tool designed to help people and communities all over the world access the resources they need to thrive. Whether you're a small business owner looking to expand your operations, a community organization seeking funding for a new project, or an individual looking to improve your financial literacy, the World Bank Platform has something to offer.
+
+</p>
+                       
+                    </article>
+
+                    <article class="d-flex align-items-center justify-content-between flex-column-reverse flex-md-row">
+                        <p class="text__index"> <span class="text-shadow text__index__highlight" style="color:#fe7d72; font-size: 30px;"> Assistance service</span>
+                                                <br/>
+                                                <br/>At our banking platform, we understand that our customers need assistance at any time of the day or night. That's why we offer 24/7 customer service, every day of the week.</p>
+                        <img src="./assets/24hrs.png" alt="woman_traveling" style="width: 50vw; min-width: 300px;">
+                  
+                    </article>
+
+                    <article class="d-flex align-items-center justify-content-between flex-column flex-md-row">
+                        <img src="./assets/shop.png" alt="woman_traveling" style="width: 50vw; min-width: 300px;">
+
+                        <p class="text__index"> <span class="text-shadow text__index__highlight" style="color:#fe7d72; font-size: 30px;"> Cards service</span>
+                                                <br/>
+                                                <br/>   With our banking platform's credit and debit cards, you can shop at any business that accepts Visa worldwide. 
+                                                        Whether you're traveling abroad or shopping locally, our cards provide you with the convenience and flexibility to make purchases anywhere.</p>
+                        
+                  
+                    </article>
+
+                    <article class="d-flex align-items-center justify-content-between flex-column-reverse flex-md-row">
+                      
+
+                        <p class="text__index"> <span class="text-shadow text__index__highlight" style="color:#fe7d72; font-size: 30px;"> Responsive design</span>
+                                                <br/>
+                                                <br/>Our banking platform is designed to be responsive, providing you with an optimal experience no matter what 
+                                                device you're using. Whether you're accessing our platform from your desktop, laptop, tablet, or smartphone, you'll 
+                                                enjoy the same user-friendly interface and functionality.</p>
+                        
+                                                <img src="./assets/devicesResponsive.png" alt="woman_traveling" style="width: 50vw; min-width: 300px;">
+                    </article>
+                    
+                </section>
+            
+                <footer class="footer d-flex justify-content-around align-items-center text-white p-3 ">
+
+                    <ul class="m-0 ul_normalize" >
+                        <li class="text__footer">Developer</li>
+                        <li>Emiliano Acevedo</li>
+                        <li>Buenos Aires, Argentina</li>
+                       
+                    </ul>
+
+                    <ul class="m-0 ul_normalize">
+                        <li class="text__footer">Institute</li>
+                        <li>Mindhub</li>
+                        <li>Cohort 41</li>
+                    </ul>
+
+                    <ul class="m-0 ul_normalize">
+                        <li class="text__footer">Links</li>
+                        <li>
+                            <a href="https://www.linkedin.com/in/emiliano-acevedo-a8263419a/">
+                               Linkedin
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://github.com/darthenis">Github</a>
+                        </li>
+                    </ul>
+
+                </footer>
+            </template>
+          
+            <template v-else>
+            <section class="position-relative w-100  d-flex align-items-center justify-content-center" style="height: fit-content">
+
+                <img v-if="!isMobile" src="./assets/loginImage.png" alt="login" style="width: 40vw;">
+
+                <div class="container__form__title">
+                    <template v-if="isSignInFormActived && !confirmEmail" >
+                        <form   autocomplete="off"
+                                class="login__container p-2 pe-4 ps-4 rounded-4 shadow">
+                            <h3 class="text-center">Login</h3>
+                            <div class="mt-2">
+                                <label for="asdd" class="form-label">Email</label>
+                                <input v-model="signIn.email" readonly onfocus="this.removeAttribute('readonly');" type="email" name="asd" class="form-control" id="asdd" placeholder="name@example.com">
+                            </div>
+                            <div class="mt-4">
+                                <label for="pass" class="form-label">Password</label>
+                                <div class="d-flex position-relative">
+                                    <input  v-model="signIn.password" 
+                                            class="form-control" 
+                                            id="pass" 
+                                            :type="typePassword"
+                                            >
+                                    <span class="position-absolute text-dark" style="top: 7px; right: 5px" @click="handleViewPassword" >
+                                        <i v-if="typePassword === 'password'" class="bi bi-eye"></i>
+                                        <i v-if="typePassword === 'text'" class="bi bi-eye-slash"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-column mt-4">
+                                <button class="btn text-light"
+                                        style="background-color: #e9605a;" 
+                                        @click.prevent="login(signIn.email, signIn.password)">
+                                        <div class="spinner-border spinner-border-sm text-light" role="status" v-if="isLoading">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                        <span v-if="!isLoading">
+                                            Sign in
+                                        </span>
+                                </button>
+                            
+                                <p class="mt-2">Don't have an account?
+                                    <span class="text-decoration-underline"
+                                            style="cursor: pointer"
+                                            @click="handleFormActive">
+                                            Register
+                                    </span>
+                                </p>
+                            </div>
+                        </form>
+                    </template>
+
+                    <template v-if="confirmEmail" >
+                        <div    class="login__container p-2 rounded-4 shadow d-flex flex-column justify-content-between"
+                                style="min-height: 300px">
+                            <h3 class="text-center mt-2">Confirm Email</h3>
+                                <div v-if="!activingEmail && emailActived == null">
+                                    <lottie-player  src="./assets/sendEmail.json"  
+                                                    background="transparent"  
+                                                    speed="1"  
+                                                    style="width: 100%; height: 100px;"  
+                                                    autoplay></lottie-player>
+                                    <p class="text-center">We sent you a link at your email to confirm.</p>
+                                </div>
+                                <div  v-if="activingEmail" >
+                                    <p class="fs-6 text-center">Confirming, <br/> please wait a moment</p>
+                                    <lottie-player  src="./assets/loading.json"  
+                                    background="transparent"  
+                                    speed="1"  
+                                    style="width: 100%; height: 100px;"  
+                                    autoplay loop></lottie-player>
+                                </div>
+                                
+                                <div    class="d-flex flex-column"
+                                        v-if="!emailActived && emailActived !== null && !activeResendEmailForm">
+                                    <p v-if="emailAlreadyActive">The email is already confirmed</p>
+                                    <p  v-if="!resendingEmail && resendingEmail !== null && !emailAlreadyActive"
+                                        class="text-center mb-2">
+                                        Email resent <br/>
+                                        If you have a account with that email you will receive the link to confirm, please now check your email. If you do not receive the email within the next 5 minutes try again or maybe you don't have a account</p>
+                                    <p v-if="resendingEmail == null" class="text-center mb-2" style="color:#ff938e ">Link invalid or expired.</p>
+                                    <p v-if="resendingEmail === null">Try resend the link to your email</p>
+                                    <button class="btn text-light mt-2"
+                                            style="background-color: #e9605a;" 
+                                            @click="activeResendForm">
+                                            Resend email
+                                    </button>
+                                </div>
+
+                                <form   v-if="activeResendEmailForm" @submit.prevent="resendEmailHandler"
+                                        class="d-flex flex-column justify-content-between">
+                                    <p>introduce the account's email to resend activation token</p>
+                                    <div class="mt-2">
+                                        <label for="email" class="form-label">Email</label>
+                                        <input v-model="emailToResend" readonly onfocus="this.removeAttribute('readonly');" type="email" name="email" class="form-control" id="asdd" placeholder="name@example.com">
+                                    </div>
+                                    <button class="btn text-light mt-2"
+                                            style="background-color: #e9605a;" type="submit">
+                                        <div    class="spinner-border spinner-border-sm text-light" 
+                                                role="status" 
+                                                v-if="isLoading">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                        <span v-if="!isLoading">
+                                            Resend link
+                                        </span>
+                                    </button>
+                                </form>
+
+                                <p v-if="emailActived">Registration completed, email confirmed.</p>
+                                <p v-if="emailActived">You will redirect to home page in {{secondsCounter}} seconds or click <a href="/web/accounts.html">Here</a></p>
+                               
+                                <button class="btn btn-link text-light" @click="backToLogin">Sign in</button>
+    
+                        </div>
+                    </template>
+                    
+                    <template v-if="!isSignInFormActived && !confirmEmail">
+                        <form   
+                                autocomplete="off" 
+                                class="register__container p-2 pe-4 ps-4 rounded-4 shadow">
+                            <h3 class="text-center">Join us</h3>
+                                <div class="d-flex flex-column flex-sm-row gap-2">
+                                    <div class="mt-2">
+                                        <label for="name" class="form-label">First Name</label>
+                                        <input v-model="signUp.firstName" type="text" class="form-control" id="name">
+                                        <p class="error__text">{{signUp.errors.firstName}}</p>
+                                    </div>
+                                    <div class="mt-2">
+                                        <label for="lastName" class="form-label">Last Name</label>
+                                        <input v-model="signUp.lastName" type="text" class="form-control" id="lastName">
+                                        <p class="error__text">{{signUp.errors.lastName}}</p>
+                                    </div>
+                                </div>
+                                <div class="d-flex flex-column flex-sm-row gap-2">
+                                    <div class="mt-2">
+                                        <label for="email" class="form-label">Email</label>
+                                        <input v-model="signUp.email"  autocomplete="new-email" type="text" class="form-control" id="email1" placeholder="name@example.com">
+                                        <p class="error__text">{{signUp.errors.email}}</p>
+                                    </div class="mt-2">
+                                    <div class="mt-2">
+                                        <label for="email" class="form-label">Confirm email</label>
+                                        <input  v-model="signUp.confirmEmail" 
+                                                type="text" 
+                                                class="form-control" 
+                                                id="email2" 
+                                                placeholder="name@example.com"
+                                                autocomplete="new-email"
+                                                >
+                                        <p class="error__text">{{signUp.errors.confirmEmail}}</p>
+                                    </div class="mt-2">
+                                </div>
+                                <div class="d-flex flex-column flex-sm-row gap-2">
+                                    <div class="mt-2">
+                                        <label for="password" class="form-label">Password</label>
+                                        <input  v-model="signUp.password" 
+                                                class="form-control" 
+                                                id="password1" 
+                                                :type="typePassword"
+                                                autocomplete="new-password">
+                                        <p class="error__text">{{signUp.errors.password}}</p>
+                                    </div>
+                                    <div class="mt-2">
+                                        <label for="password" class="form-label">Confirm password</label>
+                                        <input  v-model="signUp.confirmPassword" 
+                                                class="form-control" 
+                                                id="password2" 
+                                                :type="typePassword"
+                                                autocomplete="new-password">
+                                        <p class="error__text">{{signUp.errors.confirmPassword}}</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="d-flex flex-column mt-4">
+                                    <button type="button" :disabled="isLoading" class="btn text-light" style="background-color: #e9605a;" @click="register">
+                                        <div    class="spinner-border spinner-border-sm text-light" 
+                                                role="status" 
+                                                v-if="isLoading">
+                                                <span   span class="visually-hidden">Loading...</span>
+                                        </div>
+                                        <span v-if="!isLoading">
+                                            Sign up
+                                        </span>
+                                    </button>
+                                
+                                    <p class="mt-2">Do you have an account?
+                                        <span class="text-decoration-underline"
+                                                style="cursor: pointer"
+                                                @click="handleFormActive">
+                                                Sign in
+                                        </span>
+                                    </p>
+                                </div>
+                        </form>
+                    </template>
+            
+                </div>
+            </template> 
+            </section>
+        
+        </main>
+    </div>
+</body>
+</html>
