@@ -1,0 +1,59 @@
+*{
+
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+
+html, body, #app {
+
+    width: 100vw;
+    height: 100vh;
+
+}
+
+
+body{
+
+    background-image: url(https://www.toptal.com/designers/subtlepatterns/uploads/vintage-wallpaper.png);
+    background-repeat: repeat;
+    backface-visibility: visible;
+    color: white;
+}
+
+
+.bg-color{
+
+    background-color: rgb(70, 108, 167);
+
+}
+
+.inputNumberStart:focus + .box::before{
+    position: absolute;
+    content: "";
+    width: 2px;
+    height: 20px;
+    background: #000000;
+    display: inline-block;
+    animation: cursor-blink 1s steps(2) infinite;
+
+}
+
+.inputNumber:focus + .box::after{
+    content: "";
+    position: absolute;
+    width: 2px;
+    height: 20px;
+    background: #000000;
+    display: inline-block;
+    animation: cursor-blink 1s steps(2) infinite;
+   
+}
+
+
+@keyframes cursor-blink {
+    0% {
+      opacity: 0;
+    }
+  }

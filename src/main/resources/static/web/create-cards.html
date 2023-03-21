@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="./assets/favicon.ico" type="image/x-icon">
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/theme-toggles@4.10.1/css/classic.min.css">
+    <link rel="stylesheet" href="./styles/account.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-player/1.4.3/lottie-player.js" integrity="sha512-gloNJjJNXOqLPOVxOJ/Sg9VN4jSPZpDdEQC+CDP0TczZ6OaOk0Ru1daFEOT/XAJY7fYABwFWVRXOx4HMFr6+lA==" crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.2.47/dist/vue.global.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts" defer></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+      defer
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"
+      defer
+    ></script>
+    <script src="./js/create-cards.js" defer></script>
+    <title>create-cards || HB</title>
+  </head>
+  <body>
+    <div id="app">
+      {{reload}}
+      <div
+        class="gridLayout"
+        :class="{ backgroundDark: themeDark, backgroundLight: !themeDark }"
+      >
+      <div class="nav__account" >
+
+        <nav    class="d-flex flex-column ps-2 pe-2 pt-4 gap-2 nav__basic colorLink"  
+                :class="{navLight: !themeDark, nav: themeDark, navList: !themeDark, border__right : themeDark, border__right__light: !themeDark}" 
+                :style="getAnimationNav()"> 
+ 
+            <a  class="d-flex align-items-center gap-1" 
+                href="./accounts.html"> 
+                <i class="bi bi-house"></i>
+                Home
+            </a>
+            <a  class="d-flex align-items-center gap-1" 
+                href="./cards.html"
+                :class="{actived__section: themeDark, actived__section__light: !themeDark}">
+                <i class="bi bi-credit-card"></i>
+                Cards
+            </a>
+            <a class="d-flex align-items-center gap-1" href="./loan-application.html">
+                <i class="bi bi-cash"></i>
+                Loans
+            </a>
+            <a  class="d-flex align-items-center gap-1" 
+                :href="'./account.html?id='+ getAccountId()">
+                <i class="bi bi-bar-chart"></i>
+                Transactions
+            </a>
+            <a  class="d-flex align-items-center gap-1" 
+                href="./transactions.html">
+                <i class="bi bi-arrow-down-up"></i>
+                Transfer
+            </a>
+            <a class="d-flex align-items-center gap-1" href="./profile.html">
+                <i class="bi bi-person"></i>
+                Profile
+            </a>
+            <a  class="d-flex align-items-center gap-1" 
+                        href="./contactus.html">
+                        <i class="bi bi-headset"></i>
+                        Contact us
+            </a>
+            <template v-if="isMobile">
+              <button   class="btn__logout d-fkex gap-2 btn__logout__dark"
+                        @click="logout"
+                        style="width: 100px">
+                        <i class="bi bi-box-arrow-left"></i>
+                        Sign out
+              </button>
+            </template>   
+        </nav>
+
+    </div>
+    <div
+          class="container__header "
+          :class="{headerLight: !themeDark, border__bottom: themeDark, border__bottom__light: !themeDark}"
+        >
+
+        <div class="d-flex flex-column flex-sm-row gap-4 p-sm-2 justify-content-between h-100">
+          <header class="header d-flex h-100 p-2">
+            <button class="toggleBar" @click="activeBar = !activeBar">
+              <div :style="getAnimationBar(1)"></div>
+              <div :style="getAnimationBar(2)"></div>
+              <div :style="getAnimationBar(3)"></div>
+            </button>
+            <div class="title__icon d-flex gap-1 align-items-center">
+              
+              <img src="./assets/new_logo.png" alt="">
+              <h1 style="color: #fe7d72; ">HUBORANGE</h1>
+
+            </div>
+          </header>
+
+          <div v-if="!isMobile" style="width: fit-content" class="d-flex flex-wrap align-items-center gap-2">
+            <div v-if="clientData" class="d-flex gap-2 align-items-center">
+              {{ clientData?.firstName + " " + clientData?.lastName}}
+              <div class="container__profile size__profile__small">
+                <img v-if="clientData" :src="clientData.avatarUrl ? clientData.avatarUrl : './assets/avatar.jpg'" alt="avatar">
+              </div>
+            </div>
+      
+            
+            <button class="p-1 rounded-4 btn__logout"
+              @click="logout">
+              Sign out
+            </button>
+          </div>
+        </div>
+
+    </div>
+
+
+        <main class="d-flex flex-column align-items-center pt-4 position-relative container" style="max-width: 75vw; width: 1080px; justify-self:center">
+            
+            <a  href="/web/cards.html"
+                class="position-absolute top-0 start-0 text-white m-2">
+                back
+            </a>
+
+            <h3 class="subtitle__page__text">Create a new card</h3>
+              <div class="container__form d-flex gap-4 flex__colum__responsive" style="min-height: 450px; width: 100%;">
+                  
+                  <form class="d-flex flex-column gap-3" @submit.prevent="createCard">
+ 
+                    <div>
+                        <label for="type">Type availible</label>
+                        <select id="type" v-model="cardType" @change="getOptionsColorAvailable()" class="form-select">
+                          <option value="" disabled selected>Select Type</option>
+                          <option v-if="clientData" v-for="optionType of optionsType" :value="optionType">{{optionType}}</option>
+                        </select>
+                    </div>
+                      
+                    <div>
+                        <label for="color">Color availible</label>
+                        <select v-model="cardColor" class="form-select" id="color">
+                          <option v-if="cardType" value="" disabled selected>Select Color</option>
+                          <option v-else  value="" disabled selected>Select type first</option>
+                          <option v-if="cardType" v-for="optionColor of optionsColor"  :value="optionColor">{{optionColor}}</option>
+                        </select>
+                    </div>
+
+                    <div v-if="cardType == 'Debit' && clientData">
+                      <label for="account">Account</label>
+                      <select v-model="accountNumber" class="form-select" id="account">
+                        <option value="" disabled selected>Select debit account</option>
+                        <option v-for="account of clientData.accounts"  :value="account.number">{{account.number}}</option>
+                      </select>
+                  </div>
+
+                    <article  class="card align-self-center">
+
+                      <div class="card__front card__part" :class="{card__part__gold: cardColor === 'Gold', card__part__silver: cardColor === 'Silver', card__part__gray: cardColor === '', card__part__titanium: cardColor == 'Titanium'}">
+                        <img class="card__square" src="./assets/chip.png">
+                        <img class="card__front-logo card__logo" src="./assets/visa_logo.png">
+                        <p class="card_numer">xxxx-xxxx-xxxx-xxxx</p>
+                        <div class="card__space-50">
+                          <span class="card__label" 
+                                :class='{card__gold : cardColor === "Gold", card__silver : cardColor === "Silver", card__titanium : cardColor === "Titanium"}'>
+                                {{(cardType ? cardType : "Type") + " " + (cardColor ? cardColor : "Color")}}</span>
+                          <p class="card__info" v-html="clientData?.firstName + ' ' + clientData?.lastName"></p>
+                        </div>
+
+                        <div class="card__space-25">
+                          <span class="card__label">From</span>
+                          <p class="card__info" style="font-size: 14px">{{getDate(false)}}</p>
+                        </div>
+                        <div class="card__space-25">
+                          <span class="card__label">Expires</span>
+                          <p class="card__info" style="font-size: 14px">{{getDate(true)}}</p>
+                        </div>
+                      </div>
+                      
+                      
+                    </article>
+  
+
+                    <button class="btn btn-orange mt-2" 
+                        :disabled="cardType == 'Select Type' || cardColor == 'Select Color'"
+                      >
+                          <div class="spinner-border spinner-border-sm text-light" role="status" v-if="isLoading">
+                            <span class="visually-hidden">Loading...</span>
+                          </div>
+                          <span v-if="!isLoading">
+                              Create
+                          </span>
+                    </button>
+    
+                  </form>
+             
+                <div class="d-flex flex-column w-100">
+                  <img src="./assets/cardsImage2.png" alt="card" class="align-self-center img__create__card" style="max-width: 550px; width: 100%;">
+
+                  <p v-if="cardColor === '' || cardType === ''" style="font-size: 16px" class="m-0">
+                    Debit and credit cards are a convenient and widely used form of payment in today's world. 
+                    Creating these cards online is now easier than ever, thanks to the advancements in technology 
+                    and the availability of online banking services.
+                  </p>
+
+                  <p v-if="cardColor === 'Silver' && cardType === 'Debit'" style="font-size: 16px" class="m-0">
+                    Our debit silver card offers a range of benefits, 
+                    including worldwide acceptance, easy online account management, 
+                    and advanced security features. It's the perfect solution for anyone looking for 
+                    a simple and affordable way to manage their finances. Apply today and start enjoying 
+                    the many conveniences of our debit silver card!
+                  </p>
+    
+                  <p v-if="cardColor === 'Gold' && cardType === 'Debit'" style="font-size: 16px" class="m-0">
+                    Our debit gold card offers exceptional benefits, 
+                    including a generous rewards program, enhanced security features, 
+                    and worldwide acceptance. With easy online account management and 24/7 customer support, 
+                    it's the ultimate solution for anyone looking for a premium banking experience. 
+                    Apply today and start enjoying the convenience and rewards of our debit gold card!
+                  </p>
+    
+                  <p v-if="cardColor === 'Titanium' && cardType === 'Debit'" style="font-size: 16px" class="m-0">
+                    Our debit titanium card offers exceptional benefits, including a range of exclusive rewards, 
+                    enhanced security features, and easy online account management. 
+                    With worldwide acceptance and 24/7 customer support, 
+                    it's the ultimate solution for anyone looking for a premium banking experience. 
+                    Apply today and start enjoying the convenience and rewards of our debit titanium card!
+                  </p>
+    
+                  <p v-if="cardColor === 'Silver' && cardType === 'Credit'" style="font-size: 16px" class="m-0">
+                    Our silver credit card offers a range of benefits, including cashback rewards, 
+                    travel points, and fraud protection. With easy online account management and flexible payment options, 
+                    it's the perfect choice for anyone looking for a convenient and secure way to make purchases. 
+                    Apply today and start enjoying the many benefits and conveniences of our silver credit card!
+                  </p>
+    
+                  <p v-if="cardColor === 'Gold' && cardType === 'Credit'" style="font-size: 16px" class="m-0">
+                    Our gold credit card offers exceptional benefits, including a generous rewards program, 
+                    advanced fraud protection, and exclusive access to events and experiences. 
+                    With easy online account management and worldwide acceptance, 
+                    it's the ultimate solution for anyone looking for a premium credit card experience. 
+                    Apply today and start enjoying the convenience and rewards of our gold credit card!
+                  </p>
+    
+                  <p v-if="cardColor === 'Titanium' && cardType === 'Credit'" style="font-size: 16px" class="m-0">
+                    Our titanium credit card offers a range of exclusive benefits, including higher rewards rates, 
+                    premium travel perks, and personalized customer support. 
+                    With advanced fraud detection measures and easy online account management, 
+                    it's the perfect choice for anyone looking for a top-tier credit card experience. 
+                    Apply today and start enjoying the many benefits and privileges of our titanium credit card!
+                  </p>
+    
+              
+                </div>
+              </div>
+              
+        </main>
+      </div>
+      <template v-if="messageAlert">
+        <div    class="position-absolute p-4 mt-2 rounded start-50 translate-middle-x"
+                style="top: 10px; z-index: 100000000; color: white; background-color: rgb(194, 67, 67);">
+
+                {{messageAlert}}
+
+        </div>
+    </template>
+    </div>
+  </body>
+</html>
