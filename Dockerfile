@@ -6,4 +6,4 @@ RUN gradle build
 
 EXPOSE 8080
 
-ENTRYPOINT  ["java", "-jar", "build/libs/HomeBanking-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT  ["java", "-jar", "build/libs/Homebanking-0.0.1-SNAPSHOT.jar"]
