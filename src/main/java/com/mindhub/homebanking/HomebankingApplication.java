@@ -11,10 +11,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @SpringBootApplication
 public class HomebankingApplication {
@@ -36,22 +34,27 @@ public class HomebankingApplication {
 									  ClientLoanRepository clientLoanRepository,
 									  CardRepository cardRepository) {
 		return (args) -> {
-
-			Loan loan1 = new Loan("Mortgage", 500000.0, List.of(12,24,36,48,60));
-			Loan loan2 = new Loan("Personal", 100000.0, List.of(6,12,24));
-			Loan loan3 = new Loan("Automotive", 300000.0, List.of(6,12,24,36));
+/*
+			Loan loan1 = new Loan("Mortgage", 500000.0, List.of(12,24,36,48,60), 20);
+			Loan loan2 = new Loan("Personal", 100000.0, List.of(6,12,24), 5);
+			Loan loan3 = new Loan("Automotive", 300000.0, List.of(6,12,24,36),15);
 
 			loanRepository.save(loan1);
 			loanRepository.save(loan2);
 			loanRepository.save(loan3);
 
-			Client admin = new Client("admin", "admin", "admin@mindhub.com", passwordEncoder.encode("admin"));
-			Client cli1 = new Client("Melba", "Morel", "melba@mindhub.com", passwordEncoder.encode("password"));
-			Client cli2 = new Client("Uriel", "Montero", "uriel@mindhub.com", passwordEncoder.encode("password"));
+			Client admin = new Client("admin", "admin", "admin@mindhub.com", passwordEncoder.encode("admin"), RoleType.ADMIN);
+			Client cli1 = new Client("Melba", "Morel", "melba@mindhub.com", passwordEncoder.encode("password"), RoleType.CLIENT);
+			Client cli2 = new Client("Uriel", "Montero", "uriel@mindhub.com", passwordEncoder.encode("password"), RoleType.CLIENT);
+
+			admin.setEnabled(true);
+			cli1.setEnabled(true);
+			cli2.setEnabled(true);
+
 
 			Set<String> numbersCard = new HashSet<>();
 
-			Set<Card> cards = new HashSet<>();
+			List<Card> cards = new ArrayList<>();
 
 			do{
 
@@ -115,10 +118,10 @@ public class HomebankingApplication {
 
 
 
-			Account account1 = new Account("VIN001", LocalDate.now(), 5000.0);
-			Account account2 = new Account("VIN002", LocalDate.now().plusDays(1), 7500.0);
-			Account account3 = new Account("VIN003", LocalDate.now(), 5500.0);
-			Account account4 = new Account("VIN004", LocalDate.now().plusDays(1), 6500.0);
+			Account account1 = new Account("VIN001", LocalDate.now(), 5000.0, AccountType.CHECKING);
+			Account account2 = new Account("VIN002", LocalDate.now().plusDays(1), 7500.0, AccountType.SAVING);
+			Account account3 = new Account("VIN003", LocalDate.now(), 5500.0, AccountType.CHECKING);
+			Account account4 = new Account("VIN004", LocalDate.now().plusDays(1), 6500.0, AccountType.SAVING);
 
 			ClientLoan clientLoan1 = new ClientLoan(400000.0, 60, cli1, loan1);
 			ClientLoan clientLoan2 = new ClientLoan(50000.0, 12, cli1, loan2);
@@ -127,7 +130,6 @@ public class HomebankingApplication {
 
 			cli1.addClientLoan(clientLoan1);
 			cli1.addClientLoan(clientLoan2);
-
 			cli2.addClientLoan(clientLoan3);
 			cli2.addClientLoan(clientLoan4);
 
@@ -141,6 +143,8 @@ public class HomebankingApplication {
 			for(int i = 1; i <= 40; i++){
 
 				double randomValue =  Math.floor(Math.random() * (9999 - 1000 + 1) + 1000);
+
+				double randomBalance =  Math.floor(Math.random() * (9999 - 1000 + 1) + 1000);
 
 				String description;
 
@@ -159,7 +163,7 @@ public class HomebankingApplication {
 					type = TransactionType.DEBIT;
 				}
 
-				Transaction trans = new Transaction(type, randomValue, description, LocalDateTime.now());
+				Transaction trans = new Transaction(type, randomValue, description, LocalDateTime.now(), randomBalance);
 				transactions.add(trans);
 
 				if(i < 11){
@@ -168,7 +172,7 @@ public class HomebankingApplication {
 
 				} else if(i < 21){
 
-					account2.addTransaction(trans);
+					//account2.addTransaction(trans);
 
 				} else if(i < 31){
 
@@ -183,7 +187,7 @@ public class HomebankingApplication {
 			}
 
 			cli1.addAccount(account1);
-			cli1.addAccount(account2);
+			//cli1.addAccount(account2);
 			cli2.addAccount(account3);
 			cli2.addAccount(account4);
 
@@ -192,7 +196,7 @@ public class HomebankingApplication {
 			clientRepository.save(admin);
 
 			accountRepository.save(account1);
-			accountRepository.save(account2);
+			//accountRepository.save(account2);
 			accountRepository.save(account3);
 			accountRepository.save(account4);
 
@@ -203,16 +207,25 @@ public class HomebankingApplication {
 
 			}
 
-			for(Card card : cards){
+			for(int i = 0; i < cards.size(); i++){
 
-				cardRepository.save(card);
+				if(cards.get(i).getCardType() == CardType.DEBIT){
+
+					Optional<Account> account = cli1.getAccounts().stream().findFirst();
+
+					cards.get(i).setAccount(account.get());
+
+				}
+
+				cardRepository.save(cards.get(i));
 
 			}
 
 			clientLoanRepository.save(clientLoan1);
 			clientLoanRepository.save(clientLoan2);
 			clientLoanRepository.save(clientLoan3);
-			clientLoanRepository.save(clientLoan4);
+			clientLoanRepository.save(clientLoan4);*/
+
 
 		};
 	}

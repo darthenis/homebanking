@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="shortcut icon" href="./assets/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="./assets/logo.png" type="image/x-icon">
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -13,11 +13,12 @@
     />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/theme-toggles@4.10.1/css/classic.min.css">
     <link rel="stylesheet" href="./styles/account.css" />
+    <link rel="stylesheet" href="./styles/flip.css">
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css"
     />
-    <script src="https://unpkg.com/vue@3/dist/vue.global.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.2.47/dist/vue.global.min.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts" defer></script>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
@@ -30,7 +31,7 @@
       defer
     ></script>
     <script src="./js/card.js" defer></script>
-    <title>HB || Cards</title>
+    <title>Cards || HB</title>
   </head>
   <body>
     <div id="app">
@@ -39,184 +40,258 @@
         class="gridLayout"
         :class="{ backgroundDark: themeDark, backgroundLight: !themeDark }"
       >
-        <div
-          class="nav__account"
-          :class="{navList: !themeDark, border__right : themeDark && !isMobile, border__right__light: !themeDark && !isMobile}"
-        >
-          <header class="p-4 header h-100">
-            <button class="toggleBar" @click="activeBar = !activeBar">
-              <div :style="getAnimationBar(1)"></div>
-              <div :style="getAnimationBar(2)"></div>
-              <div :style="getAnimationBar(3)"></div>
-            </button>
-            <h1 class="title__icon">HB</h1>
-          </header>
+      <div class="nav__account" >
 
-          <nav
-            class="d-flex flex-column ps-2 pe-2 gap-2 nav__basic colorLink"
-            :class="{navLight: !themeDark, nav: themeDark}"
-            :style="getAnimationNav()"
-          >
-            Menu
-            <a
-              class="d-flex align-items-center gap-1"
-              href="./accounts.html"
-            >
-              <i class="bi bi-house"></i>
-              Home
+        <nav    class="d-flex flex-column ps-2 pe-2 pt-4 gap-2 nav__basic colorLink"  
+                :class="{navLight: !themeDark, nav: themeDark, navList: !themeDark, border__right : themeDark, border__right__light: !themeDark}" 
+                :style="getAnimationNav()"> 
+ 
+            <a  class="d-flex align-items-center gap-1" 
+                href="./accounts.html"> 
+                <i class="bi bi-house"></i>
+                Home
             </a>
             <a  class="d-flex align-items-center gap-1" 
-                :class="{actived__section: themeDark, actived__section__light: !themeDark}"
-                href="#">
-              <i class="bi bi-credit-card"></i>
-              Cards
+                href="./cards.html"
+                :class="{actived__section: themeDark, actived__section__light: !themeDark}">
+                <i class="bi bi-credit-card"></i>
+                Cards
             </a>
-            <a class="d-flex align-items-center gap-1" href="#">
-              <i class="bi bi-cash"></i>
-              Loans
+            <a class="d-flex align-items-center gap-1" href="./loan-application.html">
+                <i class="bi bi-cash"></i>
+                Loans
             </a>
-            <a class="d-flex align-items-center gap-1" href="#">
-              <i class="bi bi-bar-chart"></i>
-              Statics
+            <a  class="d-flex align-items-center gap-1" 
+                :href="'./account.html?id='+ getAccountId()">
+                <i class="bi bi-bar-chart"></i>
+                Transactions
             </a>
-            <hr />
-            Account
-            <a class="d-flex align-items-center gap-1" href="#">
-              <i class="bi bi-person"></i>
-              Profile
+            <a  class="d-flex align-items-center gap-1" 
+                href="./transactions.html">
+                <i class="bi bi-arrow-down-up"></i>
+                Transfer
             </a>
-            <a class="d-flex align-items-center gap-1" href="#">
-              <i class="bi bi-bell"></i>
-              Notifications
-              <span
-                class="badge rounded-pill"
-                :style="{'backgroundColor': themeDark ? 'rgb(0, 199, 0)' : '#ff9975', 'color' : themeDark ? 'black' : 'white'}"
-                >5</span
-              >
+            <a class="d-flex align-items-center gap-1" href="./profile.html">
+                <i class="bi bi-person"></i>
+                Profile
             </a>
-            <a class="d-flex align-items-center gap-1" href="#">
-              <i class="bi bi-gear"></i>
-              Settings
+            <a  class="d-flex align-items-center gap-1" 
+                        href="./contactus.html">
+                        <i class="bi bi-headset"></i>
+                        Contact us
             </a>
-          </nav>
-        </div>
-        <div
-          class="p-4 container__header"
-          :class="{headerLight: !themeDark, border__bottom: themeDark, border__bottom__light: !themeDark}"
-        >
-          <h4>Cards</h4>
+            <template v-if="isMobile">
+              <button   class="btn__logout d-fkex gap-2 btn__logout__dark"
+                        @click="logout"
+                        style="width: 100px">
+                        <i class="bi bi-box-arrow-left"></i>
+                        Sign out
+              </button>
+            </template>   
+        </nav>
 
-          <div class="d-flex justify-content-around gap-4 align-items-center">
-            <template v-if="clientData"
-              >{{ clientData?.firstName + " " + clientData?.lastName
-              }}</template
-            >
-            <label class="theme-toggle" title="Toggle theme">
-              <input type="checkbox" @click="toggleHandle" />
-              <span class="theme-toggle-sr">Toggle theme</span>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                aria-hidden="true"
-                width="25px"
-                height="25px"
-                fill="currentColor"
-                stroke-linecap="round"
-                class="theme-toggle__classic"
-                viewBox="0 0 32 32"
-              >
-                <clipPath id="theme-toggle__classic__cutout">
-                  <path d="M0-5h30a1 1 0 0 0 9 13v24H0Z" />
-                </clipPath>
-                <g clip-path="url(#theme-toggle__classic__cutout)">
-                  <circle cx="16" cy="16" r="9.34" />
-                  <g stroke="currentColor" stroke-width="1.5">
-                    <path d="M16 5.5v-4" />
-                    <path d="M16 30.5v-4" />
-                    <path d="M1.5 16h4" />
-                    <path d="M26.5 16h4" />
-                    <path d="m23.4 8.6 2.8-2.8" />
-                    <path d="m5.7 26.3 2.9-2.9" />
-                    <path d="m5.8 5.8 2.8 2.8" />
-                    <path d="m23.4 23.4 2.9 2.9" />
-                  </g>
-                </g>
-              </svg>
-            </label>
-            <button class="p-1 rounded-4 btn__logout"
-              :class="{btn__logout__light: !themeDark, btn__logout__dark: themeDark}"
-              @click="logout">
-              Sign out
-            </button>
-            <div class="position-relative">
-              <i class="bi bi-bell"></i>
-              <span
-                class="position-absolute translate-middle start-100 badge rounded-pill"
-                style="top: -2px"
-                :style="{'backgroundColor': themeDark ? 'rgb(0, 199, 0)' : '#ff9975', 'color' : themeDark ? 'black' : 'white'}"
-              >
-                5
-                <span class="visually-hidden">unread messages</span>
-              </span>
-            </div>
+    </div>
+    <div
+    class="container__header "
+    :class="{headerLight: !themeDark, border__bottom: themeDark, border__bottom__light: !themeDark}"
+  >
+
+    <div class="d-flex flex-column flex-sm-row gap-4 p-sm-2 justify-content-between h-100">
+      <header class="header d-flex h-100 p-2">
+        <button class="toggleBar" @click="activeBar = !activeBar">
+          <div :style="getAnimationBar(1)"></div>
+          <div :style="getAnimationBar(2)"></div>
+          <div :style="getAnimationBar(3)"></div>
+        </button>
+        <div class="title__icon d-flex gap-1 align-items-center">
+          
+          <img src="./assets/new_logo.png" alt="">
+          <h1 style="color: #fe7d72; ">HUBORANGE</h1>
+
+        </div>
+      </header>
+
+      <div v-if="!isMobile" style="width: fit-content" class="d-flex flex-wrap align-items-center gap-2">
+        <div v-if="clientData" class="d-flex gap-2 align-items-center">
+          {{ clientData?.firstName + " " + clientData?.lastName}}
+          <div class="container__profile size__profile__small">
+            <img v-if="clientData" :src="clientData.avatarUrl ? clientData.avatarUrl : './assets/avatar.jpg'" alt="avatar">
           </div>
         </div>
-
-        <main class="d-flex flex-column align-items-center gap-4 p-4 position-relative" style="max-width: 80vw; justify-self:center">
-
-          <div class="d-flex gap-3" style="height: 30px; width: 300px">
-
-            <select v-model="cardType" class="form-select form-select-sm">
-              <option>Debit</option>
-              <option>Credit</option>
-            </select>
-  
-            <select v-model="cardColor" class="form-select form-select-sm">
-              <option>Silver</option>
-              <option>Gold</option>
-              <option>Titanium</option>
-            </select>
-
-          </div>
    
-          <article v-if="filterCards.length" class="card" v-for="card of filterCards">
-            <div class="card__front card__part">
-              <img class="card__front-square card__square" src="./assets/chip.png">
-              <img class="card__front-logo card__logo" src="./assets/visa_logo.png">
-              <p class="card_numer">{{card.number}}</p>
-              <div class="card__space-50">
-                <span class="card__label" 
-                      :class='{card__gold : card.cardColor === "GOLD", card__silver : card.cardColor === "SILVER", card__titanium : card.cardColor === "TITANIUM"}'>
-                      {{card.cardType + " " + card.cardColor}}</span>
-                <p class="card__info">{{card.cardHolder}}</p>
-              </div>
-              <div class="card__space-25">
-                <span class="card__label">From</span>
-                <p class="card__info" style="font-size: 14px">{{getDateAndMonth(card.fromDate)}}</p>
-              </div>
-              <div class="card__space-25">
-                <span class="card__label">Expires</span>
-                <p class="card__info" style="font-size: 14px">{{getDateAndMonth(card.thruDate)}}</p>
-              </div>
-            </div>
-            
-            <div class="card__back card__part">
-              <div class="card__black-line"></div>
-              <div class="card__back-content">
-                <div class="card__secret">
-                  <p class="card__secret--last">{{card.cvv}}</p>
-                </div>
-                <img class="card__back-square card__square" src="./assets/holograma.png">
-                <img class="card__back-logo card__logo" src="./assets/visa_logo.png">
-                
-              </div>
-            </div>
-            
-          </article>
+        
+        <button class="p-1 rounded-4 btn__logout"
+          @click="logout">
+          Sign out
+        </button>
+      </div>
+    </div>
 
-          <p v-else>Not owned cards for {{cardType + " and " + cardColor}}</p>
+     
+  </div>
+
+        <main class="d-flex flex-column position-relative container" style="width: 100%; justify-self:center; max-width: 1150px;">
+        
+          <div class="img__cards d-flex flex-column flex-md-row gap-4 align-items-center justify-content-center pt-2 pt-md-3">
+            
+            <div class="d-flex flex-column w-100 gap-3 position-relative justify-content-center pb-5" style="max-width: 500px">
+              <div class="mb-2">
+                <h4 class="subtitle__page__text mb-3">Looking for a convenient and secure way to make purchases?</h4>
+                <p class="text__format">
+                  Look no further than our credit & debit cards! 
+                  As one of the leading banks in the industry, 
+                  we offer a range of credit card options  to meet your unique needs and lifestyle.
+                </p>
+              </div>
+              <div>
+                <h4 class="subtitle__page__text2 mb-2">{{getStringSelectCards()}}</h4>
+
+                <div class="d-flex gap-3" style="height: 30px; width: 300px">
+                  <div>
+                    <label class="mb-1" for="">Type</label>
+                    <select v-model="cardType" class="form-select form-select-sm" style="width: 150px">
+                      <option>All</option>
+                      <option>Debit</option>
+                      <option>Credit</option>
+                    </select>
+                  </div>
+  
+                  <div>
+                    <label class="mb-1" for="">Color</label>
+                    <select v-model="cardColor" class="form-select form-select-sm" style="width: 150px">
+                      <option>All</option>
+                      <option>Silver</option>
+                      <option>Gold</option>
+                      <option>Titanium</option>
+                    </select>
+                  </div>
+                  
+                  <div v-if="cardType == 'Debit'">
+                    <label class="mb-1" for="">Account</label>
+                    <select v-model="numberAccount" class="form-select form-select-sm" style="width: 150px">
+                      <option>All</option>
+                      <option v-for="account of accountsDebit">{{account}}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            
+            </div>
+
+            <img src="./assets/cardsImage.png" alt="cards" class="img_cards" style="width: 600px; height: 360px; max-width: 90vw;">
+          
+          </div>
+
+          <div class="d-flex flex-column gap-4 justify-content-center text-center align-items-center">
+           
+
+          <div class="container__cards">
+
+             
+
+              <div 
+                  @click="createCard"
+                  v-if="cardType === 'All' && filterCards.length < 6 || cardType !== 'All' && filterCards.length < 3 && cardColor === 'All' || cardType !== 'All' && CardColor !== 'All' && filterCards.length < 1"
+                  class="create__card__container">
+                  Add a new {{getStringSelectCards(true)}}
+                  <i class="bi bi-plus-square fs-1"></i>
+              </div>
+
+              <article v-if="filterCards.length" class="card position-relative" :class="{flip: !checkDate(card.thruDate)}" v-for="card of filterCards">
+
+                <div @click="selectCardToDelete(card)" class="delete__card position-absolute" style="top:5px; right: 130px; z-index: 100000;">
+                  delete
+                </div>
+
+                <div v-if="checkDate(card.thruDate)" class="position-absolute cover__card d-flex justify-content-center align-items-center" style="top:0; right:-1; z-index: 10000;;">
+                  <img src="./assets/expired.png" alt="expired" style="width: 180px">
+                </div>
+                
+                <div class="card__front card__part" :class="{card__part__gold: card.cardColor === 'GOLD', card__part__silver: card.cardColor === 'SILVER', card__part__titanium: card.cardColor == 'TITANIUM'}">
+                  <img class="card__front-square card__square" src="./assets/chip.png">
+                  <img class="card__front-logo card__logo" src="./assets/visa_logo.png">
+                  <p class="card_numer">{{card.number}}</p>
+                  <div class="card__space-50">
+                    <span class="card__label" 
+                          :class='{card__gold : card.cardColor === "GOLD", card__silver : card.cardColor === "SILVER", card__titanium : card.cardColor === "TITANIUM"}'>
+                          {{card.cardType + " " + card.cardColor}}</span>
+                    <p class="card__info">{{card.cardHolder}}</p>
+                  </div>
+                  <div class="card__space-25">
+                    <span class="card__label">From</span>
+                    <p class="card__info" style="font-size: 14px">{{getDateAndMonth(card.fromDate)}}</p>
+                  </div>
+                  <div class="card__space-25">
+                    <span class="card__label">Expires</span>
+                    <p class="card__info" style="font-size: 14px">{{getDateAndMonth(card.thruDate)}}</p>
+                  </div>
+                </div>
+                
+                <div class="card__back card__part" :class="{card__part__gold: card.cardColor === 'GOLD', card__part__silver: card.cardColor === 'SILVER', card__part__titanium: card.cardColor == 'TITANIUM'}">
+                  <div class="card__black-line"></div>
+                  <div class="card__back-content">
+                    <div class="card__secret">
+                      <p class="card__secret--last">{{card.cvv}}</p>
+                    </div>
+                    <img class="card__back-square card__square" src="./assets/holograma.png">
+                    <img class="card__back-logo card__logo" src="./assets/visa_logo.png">
+                    
+                  </div>
+                </div>
+                
+              </article>
+    
+              <p class="text-center w-100" style="align-self: center;" v-else>Not found cards</p>
+
+              
+            </div>
+          </div>
 
         </main>
       </div>
+
+      <template v-if="activeModalConfirm">
+
+        <div  class="position-absolute p-4 rounded d-flex justify-content-center align-items-center"
+              style="top: 0; left: 0; width: 100%; height: 100vh; z-index: 1000; color: white; background-color: rgba(0, 0, 0, 0.3);">
+    
+            
+            <div  class="p-4 rounded d-flex flex-column justify-content-between text-dark text-center" 
+                  style="height: 200px; width: 400px;background-color: #bfddfc;">
+
+                  <h4>Confirm please</h4>
+
+                Are sure to delete the card number <br/>{{selectedCard.number}}?
+
+                <div class="d-flex justify-content-between w-100">
+                  <button class="btn text-light"
+                      style="background-color: #e9605a;" 
+                      @click="deleteCard">
+                      <div class="spinner-border spinner-border-sm text-light" role="status" v-if="isLoading">
+                          <span class="visually-hidden">Loading...</span>
+                        </div>
+                      <span v-if="!isLoading">
+                          Confirm
+                      </span>
+                  </button>
+                  <button @click="activeModalConfirm = false" class="btn btn-secondary">Cancel</button> 
+                </div>
+            </div>
+      
+        </div>
+
+      </template>
+
+      <template v-if="modalMessage.message">
+        <div class="position-absolute start-50 p-4 mt-2 rounded"
+              style="top: 10px; z-index: 100000000; color: white;"
+              :style="{backgroundColor: modalMessage.isError ? 'red' : 'rgb(43, 75, 146)'}">
+
+              {{modalMessage.message}}
+
+        </div>
+      </template>
+
     </div>
   </body>
 </html>

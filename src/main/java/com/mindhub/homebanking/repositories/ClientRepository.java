@@ -12,4 +12,9 @@ public interface ClientRepository extends JpaRepository<Client, Long> {
 
         public Client findByEmail(String email);
 
+        public Client findByKeyToken(String keyToken);
+
+        public boolean existsByKeyToken(String keyToken);
+
+        public boolean existsByEmail(String email);
 }

@@ -1,37 +1,54 @@
 package com.mindhub.homebanking.configurations;
 
 
-
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.WebAttributes;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.Objects;
 
 @EnableWebSecurity
 @Configuration
-class WebAuthorization extends WebSecurityConfigurerAdapter {
+class WebAuthorization {
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http.authorizeRequests()
 
+                .antMatchers("/api/clients/active").permitAll()
+
+                .antMatchers("/api/clients/resend").permitAll()
+
+                .antMatchers(HttpMethod.GET, "/api/loans").authenticated()
+
+                .antMatchers(HttpMethod.POST, "/api/loans").hasAuthority("ADMIN")
+
+                .antMatchers("/web/index.html", "/web/styles/**", "/web/assets/**", "/web/js/index.js").permitAll()
+
+                .antMatchers(HttpMethod.POST, "/api/clients").permitAll()
+
+                .antMatchers(    "/web/**").hasAuthority("CLIENT")
+
+                .antMatchers("/web/js/components/**").hasAuthority("CLIENT")
+
+                .antMatchers("/api/clients/current/**").hasAuthority("CLIENT")
+
                 .antMatchers("/rest/**").hasAuthority("ADMIN")
 
-                .antMatchers("/web/accounts.html").hasAuthority("CLIENT")
+                .antMatchers("/admin/**").hasAuthority("ADMIN")
 
-                .antMatchers("/web/account.html").hasAuthority("CLIENT")
-
-                .antMatchers("/web/cards.html").hasAuthority("CLIENT")
-
-                .antMatchers(HttpMethod.GET, "/api/clients/**").hasAuthority("CLIENT");
+                .antMatchers(HttpMethod.GET, "/api/**").hasAuthority("ADMIN");
 
         http.formLogin()
 
@@ -44,29 +61,61 @@ class WebAuthorization extends WebSecurityConfigurerAdapter {
 
         http.logout().logoutUrl("/api/logout").deleteCookies();
 
-        // turn off checking for CSRF tokens
-
         http.csrf().disable();
-
-        //disabling frameOptions so h2-console can be accessed
 
         http.headers().frameOptions().disable();
 
-        // if user is not authenticated, just send an authentication failure response
+        http.exceptionHandling().accessDeniedHandler((req, res, ex) ->{
 
-        http.exceptionHandling().authenticationEntryPoint((req, res, exc) -> res.sendError(HttpServletResponse.SC_UNAUTHORIZED));
+            if(req.isUserInRole("ADMIN")){
 
-        // if login is successful, just clear the flags asking for authentication
+               res.sendRedirect("/admin/manager.html");
 
-        http.formLogin().successHandler((req, res, auth) -> clearAuthenticationAttributes(req));
+            } else if(req.isUserInRole("ADMIN")) {
 
-        // if login fails, just send an authentication failure response
+                res.sendRedirect("/web/accounts.html");
 
-        http.formLogin().failureHandler((req, res, exc) -> res.sendError(HttpServletResponse.SC_UNAUTHORIZED));
+            } else {res.sendError(HttpServletResponse.SC_FORBIDDEN);
 
-        // if logout is successful, just send a success response
+            }
+
+        });
+
+        http.exceptionHandling().authenticationEntryPoint((req, res, ex) -> {
+
+            if(req.getRequestURI().contains("web") || req.getRequestURI().contains("admin")){
+
+               res.sendRedirect("/web/index.html");
+
+            } else {
+
+                res.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+
+            }
+
+
+        });
+
+        http.formLogin().successHandler((req, res, auth) -> this.clearAuthenticationAttributes(req));
+
+        http.formLogin().failureHandler((req, res, exc) -> {
+
+            if(exc.getMessage().equals("User is disabled")){
+
+                res.sendError(HttpServletResponse.SC_FORBIDDEN);
+
+            }else{
+
+                res.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+
+            }
+        });
 
         http.logout().logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler());
+
+        http.addFilterAfter(new IndexPageFilter(), UsernamePasswordAuthenticationFilter.class);
+
+        return http.build();
 
     }
 

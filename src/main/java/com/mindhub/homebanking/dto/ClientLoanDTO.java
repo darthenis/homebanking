@@ -24,7 +24,7 @@ public class ClientLoanDTO {
 
         name = clientLoan.getLoan().getName();
 
-        amount = clientLoan.getMount();
+        amount = clientLoan.getAmount();
 
         payment = clientLoan.getPayment();
 

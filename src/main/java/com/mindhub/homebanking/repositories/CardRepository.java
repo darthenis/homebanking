@@ -11,4 +11,6 @@ public interface CardRepository extends JpaRepository<Card, Long> {
 
     public Optional<Card> findByNumber(String number);
 
+    public Boolean existsByNumber(String number);
+
 }

@@ -23,6 +23,10 @@ public class Account {
 
     private Double balance;
 
+    private boolean isDisabled = false;
+
+    private AccountType accountType;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "client_id")
     private Client client;
@@ -30,12 +34,21 @@ public class Account {
     @OneToMany(mappedBy = "account", fetch = FetchType.EAGER)
     private Set<Transaction> transactions = new HashSet<>();
 
+    @OneToOne(mappedBy = "account")
+    private Card card;
+
     public Account(){}
 
-    public Account(String number, LocalDate creationDate, Double balance) {
+    public Account(String number, LocalDate creationDate, Double balance, AccountType accountType) {
         this.number = number;
         this.creationDate = creationDate;
         this.balance = balance;
+        this.accountType = accountType;
+    }
+
+    public void addTransaction(Transaction transaction){
+        transaction.setAccount(this);
+        transactions.add(transaction);
     }
 
     public long getId() {
@@ -76,9 +89,20 @@ public class Account {
 
     public Set<Transaction> getTransactions(){ return transactions; }
 
-    public void addTransaction(Transaction transaction){
-        transaction.setAccount(this);
-        transactions.add(transaction);
+    public boolean getIsDisabled() {
+        return isDisabled;
+    }
+
+    public void setIsDisabled(boolean disabled) {
+        isDisabled = disabled;
+    }
+
+    public AccountType getAccountType() {
+        return accountType;
+    }
+
+    public void setAccountType(AccountType accountType) {
+        this.accountType = accountType;
     }
 
     @Override

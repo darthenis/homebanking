@@ -1,7 +1,7 @@
 package com.mindhub.homebanking.dto;
 
-import com.mindhub.homebanking.models.Card;
 import com.mindhub.homebanking.models.Client;
+import com.mindhub.homebanking.models.RoleType;
 
 import java.util.Set;
 import static java.util.stream.Collectors.toSet;
@@ -16,6 +16,16 @@ public class ClientDTO {
     private String lastName;
 
     private String email;
+
+    private String address;
+
+    private String country;
+
+    private String tel;
+
+    private String avatarUrl;
+
+    private RoleType roleType;
 
     private Set<ClientLoanDTO> loans;
 
@@ -34,11 +44,21 @@ public class ClientDTO {
 
         email = client.getEmail();
 
+        address = client.getAddress();
+
+        country = client.getCountry();
+
+        tel = client.getTel();
+
+        avatarUrl = client.getAvatarUrl();
+
         accounts = client.getAccounts().stream().map(AccountDTO::new).collect(toSet());
 
         loans = client.getClientLoans().stream().map(ClientLoanDTO::new).collect(toSet());
 
         cards = client.getCards().stream().map(CardDTO::new).collect(toSet());
+
+        roleType = client.getRoleType();
 
     }
 
@@ -74,6 +94,10 @@ public class ClientDTO {
         this.email = email;
     }
 
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
     public Set<AccountDTO> getAccounts() {
         return accounts;
     }
@@ -85,4 +109,38 @@ public class ClientDTO {
     public Set<ClientLoanDTO> getLoans(){ return loans; }
 
     public Set<CardDTO> getCards(){ return  cards;}
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String numberHouse) {
+        this.country = numberHouse;
+    }
+
+    public String getTel() {
+        return tel;
+    }
+
+    public void setTel(String tel) {
+        this.tel = tel;
+    }
+
+    public RoleType getRoleType() {
+
+        return roleType;
+
+    }
+
+    public void setRoleType(RoleType roleType) {
+        roleType = roleType;
+    }
 }

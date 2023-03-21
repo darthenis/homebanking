@@ -1,5 +1,6 @@
 package com.mindhub.homebanking.dto;
 
+import com.mindhub.homebanking.models.Account;
 import com.mindhub.homebanking.models.Card;
 import com.mindhub.homebanking.models.CardColor;
 import com.mindhub.homebanking.models.CardType;
@@ -24,6 +25,8 @@ public class CardDTO {
 
     private LocalDate thruDate;
 
+    private String accountNumber;
+
     public CardDTO(Card card){
 
         id = card.getId();
@@ -34,6 +37,8 @@ public class CardDTO {
         cvv = card.getCvv();
         fromDate = card.getFromDate();
         thruDate = card.getThruDate();
+
+        if(card.getAccount() != null) accountNumber = card.getAccount().getNumber();
 
     }
 
@@ -67,5 +72,13 @@ public class CardDTO {
 
     public LocalDate getThruDate() {
         return thruDate;
+    }
+
+    public String getAccountNumber() {
+        return accountNumber;
+    }
+
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
     }
 }
