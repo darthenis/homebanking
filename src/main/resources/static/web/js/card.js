@@ -20,7 +20,6 @@ createApp({
               message :"",
               isError : false
             }
-         
 
 
         }
@@ -34,7 +33,7 @@ createApp({
     methods: {
         loadData(){
 
-            axios.get('http://localhost:8080/api/clients/current')
+            axios.get('/api/clients/current')
                   .then(res => {
 
                       this.clientData = res.data;
