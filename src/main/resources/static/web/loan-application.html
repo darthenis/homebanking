@@ -35,6 +35,7 @@
   </head>
   <body>
     <div id="app">
+      {{checkForm}}
       <div
         class="gridLayout"
         :class="{ backgroundDark: themeDark, backgroundLight: !themeDark }"
@@ -239,11 +240,11 @@
 
             <div class="container__form d-flex flex-column">
               <p class="text-center">Fill the form and apply for loans fast approval process guaranteed</p>
-              <div class="d-flex">
+              <div class="d-flex flex-column flex-lg-row justify-content-center align-items-center">
                 <img src="./assets/loan_select.png" alt="loan_select" style="max-width: 400px;">
                 <form class="d-flex flex-column gap-4 justify-content-center" @submit.prevent="activeModalConfirm = true">
     
-                  <div class="d-flex gap-2">
+                  <div class="d-flex gap-2 justify-content-center">
                     <div style="width: 200px">
                       <label for="loan" class="form-label">Loan</label>
                       <select id="loan" class="form-select" v-model="data.loanId">
@@ -260,10 +261,10 @@
                     </div>
                   </div>
                   
-                  <div class="d-flex gap-2">
+                  <div class="d-flex gap-2 justify-content-center">
                     <div style="width: 200px">
                       <label for="amount" class="form-label">Amount</label>
-                      <input type="text" class="form-control" id="amount" v-model="data.amount" :placeholder="data.loanId ? 'max: ' + getMaxAmount() : ''" >
+                      <input type="text" class="form-control" id="amount" v-model="data.amount" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" :placeholder="data.loanId ? 'max: ' + getMaxAmount() : ''" >
                     </div>
                     <div style="width: 200px">
                       <label for="payment" class="form-label">Payments</label>
@@ -291,7 +292,7 @@
                       </tr>
                     </tbody>
                   </table>
-                  <button class="btn btn-orange">
+                  <button class="btn btn-orange" :disabled="completeData">
                                             <div class="spinner-border spinner-border-sm text-light" role="status" v-if="isLoading">
                                                 <span class="visually-hidden">Loading...</span>
                                             </div>
@@ -331,11 +332,12 @@
 
       </template>
 
-      <template v-if="messageAlert">
-        <div class="position-absolute start-50 p-4 mt-2 rounded"
-              style="top: 10px; z-index: 100000000; color: white; background-color: rgb(43, 75, 146);">
+      <template v-if="modalMessage.message">
+        <div class="position-absolute start-50 p-4 mt-2 rounded translate-middle-x"
+              style="top: 10px; z-index: 100000000; color: white;"
+              :style="{backgroundColor: modalMessage.isError ? 'red' : 'rgb(43, 75, 146)'}">
 
-              {{messageAlert}}
+              {{modalMessage.message}}
 
         </div>
       </template>

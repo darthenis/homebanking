@@ -11,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import javax.swing.text.html.Option;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -74,6 +75,18 @@ public class CardServiceImpl implements CardService {
 
         }
 
+        Optional<Account> account = accountService.findByNumber(accountNumber);
+
+        if(accountNumber != null && account.isEmpty()){
+
+            throw new EntityNotFoundException("Account not found");
+
+        } else if(accountNumber != null && account.get().getCard() != null){
+
+            throw new AccessDeniedException("The account already has a debit card");
+
+        }
+
         String numberCard = this.generateNumberCard();
 
         String randomCvv = String.format("%03d", (int)Math.floor(Math.random() * (999 + 1)));
@@ -81,10 +94,6 @@ public class CardServiceImpl implements CardService {
         Card newCard = new Card(cardType, cardColor, client.getFirstName() + " " + client.getLastName(), numberCard, randomCvv, LocalDate.now(), LocalDate.now().plusYears(5));
 
         if(cardType.equals(CardType.DEBIT)){
-
-            Optional<Account> account = accountService.findByNumber(accountNumber);
-
-            if(account.isEmpty()) throw new EntityNotFoundException("Account not found");
 
             newCard.setAccount(account.get());
 

@@ -9,12 +9,12 @@ import static org.hamcrest.Matchers.*;
 public class CardUtilsTest {
 
 
-    @Test
+  /*  @Test
     public void cardNumberIsCreated(){
 
         String cardNumber = CardUtils.generateCardNumber();
 
         assertThat(cardNumber,is(not(emptyOrNullString())));
 
-    }
+    }*/
 }

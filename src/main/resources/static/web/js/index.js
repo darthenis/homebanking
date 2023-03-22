@@ -240,7 +240,8 @@ createApp({
 
                 axios.post('/api/clients',{firstName : this.signUp.firstName, lastName : this.signUp.lastName, email: this.signUp.email, password : this.signUp.password})
                         .then(res => {
-
+                            
+                            console.log(res)
                             this.confirmEmail = true;
                             this.isLoading = false;
 

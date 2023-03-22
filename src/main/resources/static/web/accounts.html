@@ -162,13 +162,13 @@
                 </div>
 
                     <h4 class="text-center">{{account.number}}</h4>
-                <template v-if="account.transactions.length">
+                <template v-if="account.transactions.length > 1">
                   <div :id="'chart'+account.id" class="d-flex justify-content-center align-items-center">
                   
                   </div>
                   {{createChart(account.id, account.selected)}}
                 </template>
-                <p v-else class="text-center">No registered movements</p>
+                <p v-else class="text-center">two minimus movement for graphic</p>
                 <div>
                   <p class="fs-6">
                     Active since: {{account.creationDate.split("-").reverse().join("/")}}<br/>
@@ -243,7 +243,7 @@
       
           </section>
 
-          <section v-if="clientData?.accounts.length" class="mt-5" style="width: 100%; max-width: 541px;">
+          <section class="mt-5" style="width: 100%; max-width: 541px;">
             
             
             <div class="d-flex justify-content-center rounded mb-1" v-if="!isMobile">
@@ -324,7 +324,7 @@
                 <div class="d-flex justify-content-between w-100">
                   <button class="btn text-light"
                       :disabled="activeModalAccountType && !accountType"
-                      style="background-color: #e9605a;" 
+                      style="background-color: #e9605a; width: 100px;" 
                       @click="confirmModal">
                       <div class="spinner-border spinner-border-sm text-light" role="status" v-if="isLoading">
                           <span class="visually-hidden">Loading...</span>
@@ -333,7 +333,7 @@
                           Confirm
                       </span>
                   </button>
-                  <button @click="desactiveModal" class="btn btn-secondary">Cancel</button> 
+                  <button @click="desactiveModal" class="btn btn-secondary" style="width: 100px;">Cancel</button> 
                 </div>
             </div>
       

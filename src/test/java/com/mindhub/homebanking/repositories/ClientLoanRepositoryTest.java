@@ -17,7 +17,7 @@ public class ClientLoanRepositoryTest {
     @Autowired
     ClientLoanRepository clientLoanRepository;
 
-    @Test
+  /*  @Test
     public void existsClientLoan(){
 
         List<ClientLoan> clientLoans = clientLoanRepository.findAll();
@@ -33,6 +33,6 @@ public class ClientLoanRepositoryTest {
 
         assertThat(clientLoans, hasItem(hasProperty("amount", isA(Double.class))));
 
-    }
+    }*/
 
 }

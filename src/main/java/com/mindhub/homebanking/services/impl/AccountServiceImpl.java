@@ -5,6 +5,8 @@ import com.mindhub.homebanking.models.AccountType;
 import com.mindhub.homebanking.models.Client;
 import com.mindhub.homebanking.repositories.AccountRepository;
 import com.mindhub.homebanking.services.AccountService;
+import com.mindhub.homebanking.services.CardService;
+import com.mindhub.homebanking.services.ClientService;
 import com.mindhub.homebanking.utils.MathsUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -27,7 +29,11 @@ public class AccountServiceImpl implements AccountService {
 
     @Lazy
     @Autowired
-    ClientServiceImpl clientService;
+    ClientService clientService;
+
+    @Lazy
+    @Autowired
+    CardService cardService;
 
     @Override
     public Account createFirstAccount() {
@@ -108,7 +114,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void deleteAccount(Authentication authentication, Long id) throws EntityNotFoundException {
+    public void deleteAccount(Authentication authentication, Long id) throws EntityNotFoundException, Exception {
 
         Client client = clientService.findByEmail(authentication.getName());
 
@@ -118,7 +124,13 @@ public class AccountServiceImpl implements AccountService {
 
             throw new EntityNotFoundException("Account not found");
 
+        } else if(clientAccount.getBalance() > 0){
+
+            throw new Exception("You can not delete accounts with positive balance");
+
         }
+
+        cardService.deleteCard(client, clientAccount.getId());
 
         clientAccount.setIsDisabled(true);
 

@@ -5,9 +5,12 @@ import com.mindhub.homebanking.dto.ClientCreateDTO;
 import com.mindhub.homebanking.dto.ClientEditDTO;
 import com.mindhub.homebanking.models.*;
 import com.mindhub.homebanking.repositories.ClientRepository;
+import com.mindhub.homebanking.repositories.KeyTokenRepository;
 import com.mindhub.homebanking.services.ClientService;
+import com.mindhub.homebanking.utils.SendGridUtil;
 import com.mindhub.homebanking.utils.UploadFileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -37,6 +40,9 @@ public class ClientServiceImpl implements ClientService {
 
     @Autowired
     PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private KeyTokenRepository keyTokenRepository;
 
 
     @Override
@@ -101,7 +107,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public void resendActiveEmail(String email) throws EntityNotFoundException {
+    public void resendActiveEmail(String email) throws Exception {
 
         Client client = clientRepository.findByEmail(email);
 
@@ -117,17 +123,9 @@ public class ClientServiceImpl implements ClientService {
 
         }
 
-        String token;
+        KeyToken keyToken = keyTokenService.generateAndSendKeyToken(client.getEmail(), client);
 
-        do{
-
-            token = UUID.randomUUID().toString();
-
-        }while(keyTokenService.existsByToken(token));
-
-        client.addKeyToken(new KeyToken(token, LocalDateTime.now().plusDays(1)));
-
-        KeyToken keyToken = client.getKeyToken();
+        client.addKeyToken(keyToken);
 
         clientRepository.save(client);
 

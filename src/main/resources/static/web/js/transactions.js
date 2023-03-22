@@ -13,7 +13,10 @@ createApp({
             selectedTransferType : 3,
             selectButtons : true,
             activeModalConfirm: false,
-            messageAlert : "",
+            modalMessage : {
+              message: "",
+              isError: false
+            },
             data:{
               myAccount : "Select your account",
               destinyAccount : "Select your account",
@@ -54,11 +57,14 @@ createApp({
           setTimeout(() => this.activeDisappear = true, 500)
 
         },
-        activeMessageAlert(message, seconds){
+        activeMessageAlert(message, seconds, isError){
 
-          this.messageAlert = message;
+          this.modalMessage = {
+            message : message,
+            isError : isError
+          }
 
-          setTimeout(() => this.messageAlert = "", seconds * 1000);
+          setTimeout(() => this.modalMessage.message = "", seconds * 1000);
 
         },
        
@@ -99,32 +105,37 @@ createApp({
 
                 this.activeModalConfirm = false;
 
-                this.selectedTransferType = 3;
+                //this.selectedTransferType = 3;
 
-                this.flipColourActive = null;
+                //this.flipColourActive = null;
 
-                this.activeDisappear = false;
+                //this.activeDisappear = false;
 
-                this.selectButtons = true;
+                //this.selectButtons = true;
 
         },
         transfer(){
 
-          console.log(this.data)
+          let amount = Number(this.data.amount.replace(/[^0-9.-]+/g,""));
 
-          axios.post("/api/clients/current/transactions", `origin=${this.data.myAccount}&destination=${this.data.destinyAccount}&amount=${this.data.amount}`,
+          console.log(amount)
+
+          axios.post(`/api/clients/current/transactions`, `origin=${this.data.myAccount}&destination=${this.data.destinyAccount}&amount=${amount}`,
           {headers:{'content-type':'application/x-www-form-urlencoded'}})
                 .then(res => {
 
-                this.activeMessageAlert("Transfer relized successfully", 2)
+                this.activeMessageAlert("Transfer relized successfully", 2, false)
 
-               this.desactiveSelecte()
+                this.desactiveSelecte()
 
                 }).catch(err => {
 
                   this.desactiveSelecte();
 
                   console.log("err: ", err)
+
+                  this.activeMessageAlert(err.response.data, 2, false)
+
 
                 })
 

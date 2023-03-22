@@ -1408,6 +1408,13 @@ h1, h2, h3, h4, h5, h6{
 
             height: 250px;
             max-width: 90vw;
+            overflow: hidden;
+
+        }
+
+        .title__page__text{
+
+            font-size: 20px;
 
         }
 
@@ -1536,11 +1543,22 @@ h1, h2, h3, h4, h5, h6{
         background-color: #31618d;
         padding: 20px;
         width: fit-content;
-        max-width: 90vw;
+        max-width: 70vw;
         z-index: 1;
         overflow: visible;
         border-radius: 20px;
 
+    }
+
+    @media (max-width: 645px) {
+
+        .container__form{
+
+            width: 900px!important;
+            max-width: 90vw;
+
+        }
+        
     }
 
     .grid__loans{

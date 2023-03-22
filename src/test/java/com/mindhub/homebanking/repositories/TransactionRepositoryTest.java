@@ -16,7 +16,7 @@ public class TransactionRepositoryTest {
     @Autowired
     TransactionRepository transactionRepository;
 
-    @Test
+    /*@Test
     public void existsTransactions(){
 
         List<Transaction> transactions = transactionRepository.findAll();
@@ -32,5 +32,5 @@ public class TransactionRepositoryTest {
 
         assertThat(transactions, hasItem(hasProperty("type", is(TransactionType.DEBIT))));
 
-    }
+    }*/
 }

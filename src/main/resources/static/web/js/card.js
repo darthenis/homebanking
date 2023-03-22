@@ -55,6 +55,8 @@ createApp({
 
           if(this.cardType !== "All"){
 
+            this.numberAccount = "All"
+
             this.filterCards = this.clientData.cards.filter(card => card.cardType.toLowerCase() === this.cardType.toLowerCase());
           
           } else {
@@ -128,8 +130,7 @@ createApp({
     },
       getAccountsDebit(){
 
-        return this.clientData.cards.filter(card => card.cardType == "DEBIT").map(card => card.accountNumber);
-
+        return new Set(this.clientData.cards.filter(card => card.cardType == "DEBIT").map(card => card.accountNumber));
 
       },
         toggleHandle(){

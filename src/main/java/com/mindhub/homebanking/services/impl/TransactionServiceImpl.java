@@ -73,9 +73,9 @@ public class TransactionServiceImpl implements TransactionService {
 
         accountFrom.get().setBalance(accountFrom.get().getBalance() - amount);
 
-        Transaction transactionDestination = new Transaction(TransactionType.CREDIT, amount, "Credit from account " + accountFrom.get().getNumber(), LocalDateTime.now(), accountDestination.get().getBalance() + amount);
+        Transaction transactionDestination = new Transaction(TransactionType.CREDIT, amount, "Credit from account " + accountFrom.get().getNumber(), LocalDateTime.now(), accountDestination.get().getBalance());
 
-        Transaction transactionFrom = new Transaction(TransactionType.DEBIT, amount, "Debit to account " + accountDestination.get().getNumber(), LocalDateTime.now(),accountFrom.get().getBalance() - amount);
+        Transaction transactionFrom = new Transaction(TransactionType.DEBIT, amount, "Debit to account " + accountDestination.get().getNumber(), LocalDateTime.now(),accountFrom.get().getBalance());
 
         accountDestination.get().addTransaction(transactionDestination);
 

@@ -130,7 +130,7 @@
   </div>
 
 
-        <main class="d-flex flex-column align-items-center gap-2 pt-3 position-relative container" style="width: 100%; justify-self:center;">
+        <main class="d-flex flex-column align-items-center gap-2 pt-3 pb-4 position-relative container" style="width: 100%; justify-self:center;">
 
           
 
@@ -170,9 +170,9 @@
               </div>
 
             </div>
-            <div v-if="selectedTransferType != 3" class="container__form d-flex flex-column gap-1" style="z-index: 0">
+            <div v-if="selectedTransferType != 3" class="container__form d-flex flex-column align-items-center gap-1" style="z-index: 0;">
             
-              <div class="d-flex w-100 justify-content-center gap-4" style="z-index: 0">
+              <div class="d-flex flex-column flex-lg-row w-100 justify-content-center align-items-center gap-4" style="z-index: 0">
                 <form  @submit.prevent="activeModalConfirm = true;" 
                       style="min-height: 300px; animation-name: vanish; animation-duration: 1s;"
                       >
@@ -219,7 +219,7 @@
                 <img v-else src="./assets/transfer-person.png" alt="" style="width: 320px; max-width: 90vw; height: auto;">
             </div>
         
-            <p v-if="selectedTransferType != 3" class="" style="width: 650px; max-width: 90vw" class="m-0">
+            <p v-if="selectedTransferType != 3" class="" style="width: 650px; max-width: 80vw" class="m-0">
               Bank transfers between accounts are a safe and reliable way to send and receive money. 
               With encryption and security measures in place, your information and funds are protected 
               from unauthorized access or fraud. 
@@ -235,7 +235,7 @@
 
       <template v-if="activeModalConfirm">
         <div  class="position-absolute p-4 rounded d-flex justify-content-center align-items-center"
-        style="top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1000; color: white; background-color: rgba(0, 0, 0, 0.3);">
+        style="top: 0; left: 0; width: 100%; height: 100vh; z-index: 1000; color: white; background-color: rgba(0, 0, 0, 0.3);">
     
             
             <div class="p-4 rounded bg-light d-flex flex-column justify-content-between text-dark" style="height: 200px">
@@ -251,11 +251,12 @@
         </div>
 
       </template>
-      <template v-if="messageAlert">
-        <div class="position-absolute start-50 p-4 mt-2 rounded"
-              style="top: 10px; z-index: 100000000; color: white; background-color: rgb(43, 75, 146);">
+      <template v-if="modalMessage.message">
+        <div class="position-absolute start-50 p-4 mt-2 rounded translate-middle-x"
+              style="top: 10px; z-index: 100000000; color: white;"
+              :style="{backgroundColor: modalMessage.isError ? 'red' : 'rgb(43, 75, 146)'}">
 
-              {{messageAlert}}
+              {{modalMessage.message}}
 
         </div>
       </template>

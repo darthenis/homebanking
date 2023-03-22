@@ -7,7 +7,7 @@ import java.io.IOException;
 
 public interface KeyTokenService {
 
-    KeyToken generateAndSendKeyToken(String email, Client newClient) throws IOException;
+    KeyToken generateAndSendKeyToken(String email, Client newClient) throws Exception;
 
     KeyToken findByToken(String token);
 

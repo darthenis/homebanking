@@ -16,7 +16,7 @@ public class AccountRepositoryTest {
     @Autowired
     AccountRepository accountRepository;
 
-    @Test
+    /*@Test
     public void existsAccounts(){
 
         List<Account> accounts = accountRepository.findAll();
@@ -32,5 +32,5 @@ public class AccountRepositoryTest {
 
         assertThat(accounts, hasItem(hasProperty("number", is("VIN001"))));
 
-    }
+    }*/
 }

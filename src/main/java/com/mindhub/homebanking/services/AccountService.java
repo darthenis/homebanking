@@ -24,7 +24,7 @@ public interface AccountService {
 
     Account getAccount(Authentication authentication, Long id) throws EntityNotFoundException;
 
-    void deleteAccount(Authentication authentication, Long id) throws EntityNotFoundException;
+    void deleteAccount(Authentication authentication, Long id) throws EntityNotFoundException, Exception;
 
     List<Account> getAllAccounts();
 

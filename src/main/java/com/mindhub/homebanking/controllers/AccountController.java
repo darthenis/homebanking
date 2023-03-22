@@ -92,9 +92,10 @@ public class AccountController {
             return new ResponseEntity<>(HttpStatus.OK);
 
         }
-        catch (AccessDeniedException accessDeniedException){
+        catch (Exception exception){
 
-            return new ResponseEntity<>(accessDeniedException.getMessage(), HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(exception.getMessage(), HttpStatus.FORBIDDEN);
+
         }
 
 

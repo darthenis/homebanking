@@ -12,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -72,13 +73,18 @@ public class LoanServiceImpl implements LoanService {
 
         account.get().setBalance(account.get().getBalance() + loanApplicationDTO.getAmount());
 
-        clientLoanService.save(clientLoan);
-
-        accountService.save(account.get());
-
         loanRepository.save(loan.get());
 
         clientService.save(client);
 
+        accountService.save(account.get());
+
+        clientLoanService.save(clientLoan);
+
+    }
+
+    @Override
+    public List<Loan> findAll() {
+        return loanRepository.findAll();
     }
 }

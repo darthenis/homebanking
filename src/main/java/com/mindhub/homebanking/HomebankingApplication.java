@@ -34,8 +34,8 @@ public class HomebankingApplication {
 									  ClientLoanRepository clientLoanRepository,
 									  CardRepository cardRepository) {
 		return (args) -> {
-/*
-			Loan loan1 = new Loan("Mortgage", 500000.0, List.of(12,24,36,48,60), 20);
+
+					Loan loan1 = new Loan("Mortgage", 500000.0, List.of(12,24,36,48,60), 20);
 			Loan loan2 = new Loan("Personal", 100000.0, List.of(6,12,24), 5);
 			Loan loan3 = new Loan("Automotive", 300000.0, List.of(6,12,24,36),15);
 
@@ -224,7 +224,7 @@ public class HomebankingApplication {
 			clientLoanRepository.save(clientLoan1);
 			clientLoanRepository.save(clientLoan2);
 			clientLoanRepository.save(clientLoan3);
-			clientLoanRepository.save(clientLoan4);*/
+			clientLoanRepository.save(clientLoan4);
 
 
 		};

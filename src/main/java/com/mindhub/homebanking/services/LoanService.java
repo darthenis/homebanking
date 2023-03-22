@@ -5,11 +5,14 @@ import com.mindhub.homebanking.models.Loan;
 import org.springframework.security.core.Authentication;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
 
 public interface LoanService {
 
     void save(Loan loan);
 
     void loanApplication(Authentication authentication, LoanApplicationDTO loanApplicationDTO) throws IllegalArgumentException, EntityNotFoundException, Exception;
+
+    List<Loan> findAll();
 
 }

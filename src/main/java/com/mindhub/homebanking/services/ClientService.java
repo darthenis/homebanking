@@ -20,7 +20,7 @@ public interface ClientService {
 
     void activeUser(String token) throws Exception;
 
-    void resendActiveEmail(String email) throws EntityNotFoundException;
+    void resendActiveEmail(String email) throws Exception;
 
     boolean existsByEmail(String email);
 

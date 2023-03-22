@@ -3,17 +3,9 @@ package com.mindhub.homebanking.controllers;
 import com.mindhub.homebanking.dto.PayApplicationDTO;
 import com.mindhub.homebanking.dto.TransactionDTO;
 import com.mindhub.homebanking.models.*;
-import com.mindhub.homebanking.repositories.AccountRepository;
-import com.mindhub.homebanking.repositories.CardRepository;
-import com.mindhub.homebanking.repositories.ClientRepository;
-import com.mindhub.homebanking.repositories.TransactionRepository;
-import com.mindhub.homebanking.services.impl.ClientServiceImpl;
-import com.mindhub.homebanking.services.impl.TransactionServiceImpl;
-import com.sendgrid.Response;
-import org.checkerframework.checker.units.qual.A;
+import com.mindhub.homebanking.services.ClientService;
+import com.mindhub.homebanking.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,12 +15,11 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletResponse;
-import java.awt.image.RescaleOp;
 import java.io.*;
+import java.lang.reflect.Array;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -38,22 +29,10 @@ import java.util.stream.Collectors;
 public class TransactionController {
 
     @Autowired
-    TransactionRepository transactionRepository;
+    TransactionService transactionService;
 
     @Autowired
-    AccountRepository accountRepository;
-
-    @Autowired
-    ClientRepository clientRepository;
-
-    @Autowired
-    CardRepository cardRepository;
-
-    @Autowired
-    TransactionServiceImpl transactionService;
-
-    @Autowired
-    ClientServiceImpl clientService;
+    ClientService clientService;
 
     @Transactional
     @PostMapping("/clients/current/transactions")
@@ -138,18 +117,17 @@ public class TransactionController {
 
         if(selectedAccount.isEmpty()) response.sendError(403, "account not found");
 
-        Set<Transaction> transactions = selectedAccount.get().getTransactions();
-
+        List<Transaction> transactions = selectedAccount.get().getTransactions().stream().sorted((p1, p2)->p2.getId().compareTo(p1.getId())).collect(Collectors.toList());
 
         if(dateFrom != null && dateThru == null) {
 
-                transactions = transactions.stream().filter(transaction -> transaction.getDate().isAfter(dateFrom) || transaction.getDate().equals(dateFrom)).collect(Collectors.toSet());
+                transactions = transactions.stream().filter(transaction -> transaction.getDate().isAfter(dateFrom) || transaction.getDate().equals(dateFrom)).collect(Collectors.toList());
 
         }
 
         if(dateThru != null && dateFrom != null) {
 
-                transactions = transactions.stream().filter(transaction -> (transaction.getDate().isBefore(dateThru) && transaction.getDate().isAfter(dateFrom)) || transaction.getDate().equals(dateFrom) || transaction.getDate().equals(dateThru) ).collect(Collectors.toSet());
+                transactions = transactions.stream().filter(transaction -> (transaction.getDate().isBefore(dateThru) && transaction.getDate().isAfter(dateFrom)) || transaction.getDate().equals(dateFrom) || transaction.getDate().equals(dateThru) ).collect(Collectors.toList());
 
         }
 
@@ -161,9 +139,7 @@ public class TransactionController {
         String headerValue = "attachment; filename=transactions_" + currentDateTime + ".pdf";
         response.setHeader(headerKey, headerValue);
 
-        List<Transaction> transactionsList = new ArrayList<>(transactions);
-
-        transactionService.UserPDFExporter(transactionsList);
+        transactionService.UserPDFExporter(transactions);
         transactionService.export(response, dateFrom, dateThru, selectedAccount.get().getNumber(), client.getFirstName() + " " + client.getLastName(), selectedAccount.get().getBalance());
 
     }

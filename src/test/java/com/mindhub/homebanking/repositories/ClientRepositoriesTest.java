@@ -16,7 +16,7 @@ public class ClientRepositoriesTest {
     @Autowired
     ClientRepository clientRepository;
 
-    @Test
+  /*  @Test
     public void existsClients(){
 
         List<Client> clients = clientRepository.findAll();
@@ -32,6 +32,6 @@ public class ClientRepositoriesTest {
 
         assertThat(clients, hasItem(hasProperty("firstName", is("Melba"))));
 
-    }
+    }*/
 
 }

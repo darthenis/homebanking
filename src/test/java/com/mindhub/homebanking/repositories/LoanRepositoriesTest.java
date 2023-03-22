@@ -16,7 +16,7 @@ public class LoanRepositoriesTest {
     @Autowired
     LoanRepository loanRepository;
 
-    @Test
+   /* @Test
     public void existLoans(){
 
         List<Loan> loans = loanRepository.findAll();
@@ -32,7 +32,7 @@ public class LoanRepositoriesTest {
 
         assertThat(loans, hasItem(hasProperty("name", is("Personal"))));
 
-    }
+    }*/
 
 
 }

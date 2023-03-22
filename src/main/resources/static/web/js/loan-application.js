@@ -16,8 +16,12 @@ createApp({
                 payment: "1",
                 accountNumber: ""
             },
+            completeData: true,
             isLoading: false,
-            messageAlert : "",
+            modalMessage : {
+              message: "",
+              isError: false
+            },
             activeModalConfirm : false
             }
 
@@ -84,11 +88,7 @@ createApp({
         },
         getInterest(){
 
-          
-
           if(!this.data.loanId) return;
-
-          console.log(this.loansData)
 
           return this.loansData.find(loan => loan.id == this.data.loanId).interest;
 
@@ -211,7 +211,15 @@ createApp({
           return this.getFormatCurrency(this.loansData.filter(loan => loan.id === this.data.loanId)[0].maxAmount)
 
         },
+        messageAlertHandler(message, seconds, isError){
 
+          this.modalMessage.message = message;
+    
+          this.modalMessage.isError = isError;
+    
+          setTimeout(() => this.modalMessage.message = "", seconds * 1000)
+    
+        },
         applyLoan(){
 
           this.isLoading = true;
@@ -223,9 +231,7 @@ createApp({
 
                 this.isLoading = false;
 
-                this.messageAlert = "Loan applicated sucessfully"
-
-                setTimeout(() => this.messageAlert = "", 3000)
+                this.messageAlertHandler("Loan applicated sucessfully", 3, false)
 
               }).catch(err => {
 
@@ -233,11 +239,7 @@ createApp({
 
                 this.isLoading = false;
 
-                this.messageAlert = err.response.data;
-                
-                setTimeout(() => this.messageAlert = "", 3000)
-
-                console.log(err)
+                this.messageAlertHandler(err.response.data, 3, true)
 
               })
 
@@ -253,5 +255,18 @@ createApp({
           })
     
         }
+    },
+    computed : {
+
+        checkForm(){
+
+          if(!this.data.loanId) this.completeData = true
+          else if(!this.data.amount) this.completeData = true;
+          else if(this.data.payment == 1) this.completeData = true;
+          else if(!this.data.accountNumber) this.completeData = true;
+          else this.completeData = false;
+
+        }
+
     }
 }).mount('#app')

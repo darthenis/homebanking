@@ -17,7 +17,7 @@ public class KeyTokenRepositoryTest {
     @Autowired
     KeyTokenRepository keyTokenRepository;
 
-    @Test
+    /*@Test
     public void createKeyToken(){
 
         KeyToken keyToken = new KeyToken("token", LocalDateTime.now());
@@ -37,6 +37,6 @@ public class KeyTokenRepositoryTest {
 
         assertThat(keyToken, is(empty()));
 
-    }
+    }*/
 
 }

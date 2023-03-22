@@ -75,9 +75,9 @@ const app = createApp({
   
               this.balanceTotal = this.clientData.accounts.reduce((sum, account) => sum += account.balance, 0)
 
-              this.selectedAccoutId = this.clientData.accounts[0].id;
+              this.selectedAccoutId = this.clientData.accounts[0]?.id || null;
 
-              localStorage.setItem("selectedAccount", this.clientData.accounts[0].id)
+              localStorage.setItem("selectedAccount", this.clientData.accounts[0]?.id || null)
 
               localStorage.setItem("clientData", JSON.stringify({ firstName : this.clientData.firstName, 
                                                                 lastName : this.clientData.lastName,
@@ -120,7 +120,9 @@ const app = createApp({
     },
     getSelectedTransactions(){
 
-      let account = this.clientData.accounts.find(account => account.selected)
+      let account = this.clientData?.accounts.find(account => account.selected)
+
+      if(!account) return []; 
 
       return [...account.transactions].splice(0, 5);
 
@@ -151,7 +153,7 @@ const app = createApp({
             console.log(err)
             this.isLoading = false;
             this.activeModalConfirm = false;
-            this.messageAlertHandler("Error, try later", 3, true)
+            this.messageAlertHandler(err.response.data, 3, true)
 
           })
 
@@ -405,9 +407,7 @@ const app = createApp({
 
           }).catch(err => {
 
-            alert(err);
-
-            this.messageAlertHandler("Account created successfully", 3, true)
+            this.messageAlertHandler(err.response.data, 3, true)
 
             this.desactiveModal();
 

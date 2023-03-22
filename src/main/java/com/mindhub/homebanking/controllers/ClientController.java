@@ -4,6 +4,7 @@ import com.mindhub.homebanking.dto.ClientCreateDTO;
 import com.mindhub.homebanking.dto.ClientDTO;
 import com.mindhub.homebanking.dto.ClientEditDTO;
 import com.mindhub.homebanking.models.Client;
+import com.mindhub.homebanking.services.ClientService;
 import com.mindhub.homebanking.services.impl.ClientServiceImpl;
 import org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ import static java.util.stream.Collectors.toList;
 public class ClientController{
 
     @Autowired
-    ClientServiceImpl clientService;
+    ClientService clientService;
 
 
     @PostMapping("/clients")
@@ -56,6 +57,7 @@ public class ClientController{
             return new ResponseEntity<>("Email already in use", HttpStatus.FORBIDDEN);
 
         }
+
         try{
 
             clientService.createUser(clientCreateDTO, authentication);
@@ -93,7 +95,7 @@ public class ClientController{
     }
 
     @PostMapping("/clients/resend")
-    public ResponseEntity<?> resendToken(@RequestParam String email) throws IOException {
+    public ResponseEntity<?> resendToken(@RequestParam String email) throws Exception {
 
         if(email == null){
 
@@ -106,10 +108,9 @@ public class ClientController{
 
             return new ResponseEntity<>(HttpStatus.OK);
 
-        }catch(EntityNotFoundException entityNotFoundException){
+        }catch(Exception exception){
 
-
-            return new ResponseEntity<>(entityNotFoundException.getMessage(), HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(exception.getMessage(), HttpStatus.FORBIDDEN);
 
         }
 

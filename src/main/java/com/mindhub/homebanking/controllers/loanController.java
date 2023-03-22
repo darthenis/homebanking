@@ -34,16 +34,12 @@ import java.util.stream.Collectors;
 public class loanController {
 
     @Autowired
-    LoanRepository loanRepository;
-
-    @Autowired
-    LoanServiceImpl loanService;
-
+    LoanService loanService;
 
     @RequestMapping("/loans")
     public List<LoanBaseDTO> getLoans(){
 
-      return loanRepository.findAll().stream().map(LoanBaseDTO::new).collect(Collectors.toList());
+      return loanService.findAll().stream().map(LoanBaseDTO::new).collect(Collectors.toList());
 
     }
 

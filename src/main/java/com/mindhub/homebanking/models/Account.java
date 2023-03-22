@@ -105,6 +105,14 @@ public class Account {
         this.accountType = accountType;
     }
 
+    public Card getCard() {
+        return card;
+    }
+
+    public void setCard(Card card) {
+        this.card = card;
+    }
+
     @Override
     public String toString() {
         return "Account{" +

@@ -6,9 +6,9 @@ import com.mindhub.homebanking.repositories.KeyTokenRepository;
 import com.mindhub.homebanking.services.KeyTokenService;
 import com.mindhub.homebanking.utils.SendGridUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -18,11 +18,15 @@ public class KeyTokenServiceImpl implements KeyTokenService {
     @Autowired
     KeyTokenRepository keyTokenRepository;
 
-    @Autowired
-    SendGridUtil sendGridUtil;
+    @Value("${sendgrid.apikey}")
+    private String sendGridApiKey;
+
+    @Value("${sendgrid.email}")
+    private String myEmail;
+
 
     @Override
-    public KeyToken generateAndSendKeyToken(String email, Client newClient) throws IOException {
+    public KeyToken generateAndSendKeyToken(String email, Client newClient) throws Exception {
 
         String token;
 
@@ -36,7 +40,7 @@ public class KeyTokenServiceImpl implements KeyTokenService {
 
         keyToken = new KeyToken(token, LocalDateTime.now().plusDays(1));
 
-        sendGridUtil.sendEmailConfirmation(email, keyToken.getToken());
+        new SendGridUtil().sendEmailConfirmation(email, keyToken.getToken(), sendGridApiKey, myEmail);
 
         return keyToken;
 

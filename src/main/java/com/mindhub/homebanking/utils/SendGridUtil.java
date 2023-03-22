@@ -3,6 +3,7 @@ package com.mindhub.homebanking.utils;
 
 import com.sendgrid.Method;
 import com.sendgrid.Request;
+import com.sendgrid.Response;
 import com.sendgrid.SendGrid;
 import com.sendgrid.helpers.mail.Mail;
 import com.sendgrid.helpers.mail.objects.Content;
@@ -12,33 +13,33 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 
-@Service
+
 public class SendGridUtil {
-
-    @Value("${sendgrid.apikey}")
-    private String sendGridApiKey;
-
-    @Value("${sendgrid.email}")
-    private String email;
 
     Request request = new Request();
 
-    public void sendEmailConfirmation(String to, String token) throws IOException {
+    public void sendEmailConfirmation(String to, String token, String sendGridApiKey, String userEmail) throws Exception {
+
+        System.out.println(sendGridApiKey);
+
+        System.out.println(userEmail);
 
         SendGrid sg = new SendGrid(sendGridApiKey);
 
         Content content = new Content("text/html", this.buildEmail(token));
 
-        Mail mail = new Mail(new Email(email), "Confirm email", new Email(to), content);
+        Mail mail = new Mail(new Email(userEmail), "Confirm email", new Email(to), content);
 
         try {
             request.setMethod(Method.POST);
             request.setEndpoint("mail/send");
             request.setBody(mail.build());
-            sg.api(request);
-        } catch (
-                IOException ex) {
-            throw ex;
+            Response response = sg.api(request);
+            System.out.println(response.getStatusCode());
+            System.out.println(response.getBody());
+            System.out.println(response.getHeaders());
+        } catch (Exception ex) {
+            throw new Exception("error sending email");
         }
 
     }
