@@ -4,7 +4,9 @@ import com.mindhub.homebanking.dto.ClientCreateDTO;
 import com.mindhub.homebanking.dto.ClientDTO;
 import com.mindhub.homebanking.dto.ClientEditDTO;
 import com.mindhub.homebanking.models.Client;
+import com.mindhub.homebanking.models.EmailDetails;
 import com.mindhub.homebanking.services.ClientService;
+import com.mindhub.homebanking.services.EmailService;
 import com.mindhub.homebanking.services.impl.ClientServiceImpl;
 import org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityNotFoundException;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
@@ -28,6 +31,9 @@ public class ClientController{
 
     @Autowired
     ClientService clientService;
+
+    @Autowired
+    EmailService emailService;
 
 
     @PostMapping("/clients")
