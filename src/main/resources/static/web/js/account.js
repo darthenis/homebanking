@@ -9,7 +9,7 @@ createApp({
                 transactions : null,
                 filteredTransactions: null,
                 isLoadingData: true,
-                themeDark: localStorage.getItem('themeBH') === "dark" ? true : false || false,
+                themeDark: true,
                 activeBar: null,
                 clientName: localStorage.getItem("clientName"),
                 isLoadingData: false,

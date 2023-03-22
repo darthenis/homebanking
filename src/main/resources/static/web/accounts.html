@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="shortcut icon" href="./assets/logo.png" type="image/x-icon">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"/>
-    <link rel="stylesheet" href="./styles/account.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/theme-toggles@4.10.1/css/classic.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css"/>
+    <link rel="stylesheet" href="./styles/account.css" />
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous" defer></script>
@@ -25,7 +25,7 @@
       >
       <div class="nav__account" >
 
-        <nav    class="d-flex flex-column ps-2 pe-2 pt-4 gap-2 nav__basic colorLink"  
+        <nav    class="ps-2 pe-2 pt-4 gap-2 nav__basic colorLink"  
                 :class="{navLight: !themeDark, nav: themeDark, navList: !themeDark, border__right : themeDark, border__right__light: !themeDark}" 
                 :style="getAnimationNav()"> 
  
@@ -207,7 +207,9 @@
               </button>
             </div>
 
-            <button class="btn btn-orange" v-if="isMobileSmall && clientData?.accounts.length < 3 || isTablet && clientData?.accounts.length < 3 && clientData?.accounts.length > 1">Create a new account</button>
+            <button @click="activeModalAccountType = true" 
+                    class="btn btn-orange" 
+                    v-if="isMobileSmall && clientData?.accounts.length < 3 || isTablet && clientData?.accounts.length < 3 && clientData?.accounts.length > 1">Create a new account</button>
 
             <h5 class="w-100">Loans</h5>
             
@@ -297,11 +299,11 @@
       </div>
       <template v-if="activeModalConfirm || activeModalAccountType">
 
-        <div  class="position-absolute p-4 rounded d-flex justify-content-center align-items-center"
+        <div  class="position-fixed p-4"
               style="top: 0; left: 0; width: 100%; height: 100vh; z-index: 1000; color: white; background-color: rgba(0, 0, 0, 0.3);">
     
             
-            <div  class="p-4 rounded d-flex flex-column justify-content-between text-center" 
+            <div  class="p-4 rounded d-flex position-fixed flex-column justify-content-between text-center top-50 start-50 translate-middle" 
                   style="height: 200px; width: 400px;background-color: #2a6199;">
 
                 <div v-if="!activeModalAccountType">

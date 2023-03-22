@@ -4,7 +4,7 @@ createApp({
     data(){
         return{
             clientData: null,
-            themeDark: localStorage.getItem('themeBH') === "dark" ? true : false || false,
+            themeDark: true,
             cardType: "",
             cardColor: "",
             accountNumber: "",

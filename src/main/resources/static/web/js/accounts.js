@@ -9,7 +9,7 @@ const app = createApp({
       isTablet: false,
       activeBar: null,
       accountType: "",
-      themeDark: localStorage.getItem('themeBH') === "dark" ? true : false || false,
+      themeDark: true,
       balanceTotal: null,
       isLoadingData : false,
       isLoading: false,

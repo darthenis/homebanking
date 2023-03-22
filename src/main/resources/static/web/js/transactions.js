@@ -6,7 +6,7 @@ createApp({
             isMobile : false,
             clientData : null,
             accountsData : null,
-            themeDark: localStorage.getItem('themeBH') === "dark" ? true : false || false,
+            themeDark: true,
             activeBar: null,
             flipColourActive : null,
             activeDisappear : false,

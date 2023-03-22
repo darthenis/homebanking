@@ -7,7 +7,7 @@ createApp({
             clientData : null,
             accountsDebit: [],
             filterCards : [],
-            themeDark: localStorage.getItem('themeBH') === "dark" ? true : false || false,
+            themeDark: true,
             activeBar: null,
             cardType : "All",
             cardColor: "All",

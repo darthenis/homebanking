@@ -6,7 +6,7 @@ createApp({
             clientData: null,
             loansData : null,
             accountsData: null,
-            themeDark: localStorage.getItem('themeBH') === "dark" ? true : false || false,
+            themeDark: true,
             item : "",
             isMobile: false,
             activeApply: false,
