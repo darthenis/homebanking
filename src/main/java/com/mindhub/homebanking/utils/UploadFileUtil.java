@@ -1,8 +1,12 @@
 package com.mindhub.homebanking.utils;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import com.google.auth.Credentials;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.storage.*;
+import com.mindhub.homebanking.models.FirebaseConfig;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -13,25 +17,19 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
+
 public class UploadFileUtil {
 
     final String DOWNLOAD_URL = "https://firebasestorage.googleapis.com/v0/b/portfolioap-102b7.appspot.com/o/%s?alt=media";
 
 
-    private String json(String privateKeyID, String privateKey, String clientId) {
 
-            return "{\n" +
-            "  \"type\": \"service_account\",\n" +
-            "  \"project_id\": \"portfolioap-102b7\",\n" +
-            "  \"private_key_id\": \" "+privateKeyID+"\",\n" +
-            "  \"private_key\": \""+ privateKey +"\\n\",\n" +
-            "  \"client_email\": \"firebase-adminsdk-qyd8q@portfolioap-102b7.iam.gserviceaccount.com\",\n" +
-            "  \"client_id\": \""+clientId+"\",\n" +
-            "  \"auth_uri\": \"https://accounts.google.com/o/oauth2/auth\",\n" +
-            "  \"token_uri\": \"https://oauth2.googleapis.com/token\",\n" +
-            "  \"auth_provider_x509_cert_url\": \"https://www.googleapis.com/oauth2/v1/certs\",\n" +
-            "  \"client_x509_cert_url\": \"https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-qyd8q%40portfolioap-102b7.iam.gserviceaccount.com\"\n" +
-            "}";
+    private String json(String privateKeyID, String privateKey, String clientId) throws JsonProcessingException {
+
+        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+
+        return ow.writeValueAsString(new FirebaseConfig(privateKeyID, privateKey, clientId));
+
     }
 
     private InputStream getInputStream(String privateKeyId, String privateKey, String clientId) throws IOException{
