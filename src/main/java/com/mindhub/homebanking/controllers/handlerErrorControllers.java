@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
+import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,10 +21,10 @@ public class handlerErrorControllers extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>("The file is more bigger than 250kbs", HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(HttpClientErrorException.NotFound.class)
-    public void handle404(HttpServletResponse response) throws IOException {
+    @ExceptionHandler(NoHandlerFoundException.class)
+    public String handle404(NoHandlerFoundException  e) throws IOException {
 
-        response.sendRedirect("/index.html");
+        return  "classpath:public/index.html";
 
     }
 }
