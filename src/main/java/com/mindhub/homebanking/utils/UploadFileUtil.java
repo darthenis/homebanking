@@ -26,6 +26,10 @@ public class UploadFileUtil {
 
     private String json(String privateKeyID, String privateKey, String clientId) throws JsonProcessingException {
 
+        System.out.println("privateKeyID: " + privateKeyID);
+        System.out.println("privateKey: " + privateKey);
+        System.out.println("clientId: " + clientId);
+
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
 
         return ow.writeValueAsString(new FirebaseConfig(privateKeyID, privateKey, clientId));
