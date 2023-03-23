@@ -5,9 +5,7 @@ import com.mindhub.homebanking.models.KeyToken;
 import com.mindhub.homebanking.repositories.KeyTokenRepository;
 import com.mindhub.homebanking.services.EmailService;
 import com.mindhub.homebanking.services.KeyTokenService;
-import com.mindhub.homebanking.utils.SendGridUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

@@ -3,26 +3,47 @@ package com.mindhub.homebanking.utils;
 import com.google.auth.Credentials;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.storage.*;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-
 
 public class UploadFileUtil {
 
     final String DOWNLOAD_URL = "https://firebasestorage.googleapis.com/v0/b/portfolioap-102b7.appspot.com/o/%s?alt=media";
 
-    public String uploadFile(File file, String fileName) throws IOException {
+
+    private String json(String privateKeyID, String privateKey, String clientId) {
+
+            return "{\n" +
+            "  \"type\": \"service_account\",\n" +
+            "  \"project_id\": \"portfolioap-102b7\",\n" +
+            "  \"private_key_id\": \" "+privateKeyID+"\",\n" +
+            "  \"private_key\": \""+ privateKey +"\\n\",\n" +
+            "  \"client_email\": \"firebase-adminsdk-qyd8q@portfolioap-102b7.iam.gserviceaccount.com\",\n" +
+            "  \"client_id\": \""+clientId+"\",\n" +
+            "  \"auth_uri\": \"https://accounts.google.com/o/oauth2/auth\",\n" +
+            "  \"token_uri\": \"https://oauth2.googleapis.com/token\",\n" +
+            "  \"auth_provider_x509_cert_url\": \"https://www.googleapis.com/oauth2/v1/certs\",\n" +
+            "  \"client_x509_cert_url\": \"https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-qyd8q%40portfolioap-102b7.iam.gserviceaccount.com\"\n" +
+            "}";
+    }
+
+    private InputStream getInputStream(String privateKeyId, String privateKey, String clientId) throws IOException{
+
+        return new ByteArrayInputStream(json(privateKeyId, privateKey, clientId).getBytes());
+
+    }
+
+    public String uploadFile(File file, String fileName, String privateKeyId, String privateKey, String clientId) throws IOException {
         BlobId blobId = BlobId.of("portfolioap-102b7.appspot.com", fileName);
         BlobInfo blobInfo = BlobInfo.newBuilder(blobId).setContentType("media").build();
-        Credentials credentials = GoogleCredentials.fromStream(new FileInputStream("firebaseConfig.json"));
+        Credentials credentials = GoogleCredentials.fromStream(getInputStream(privateKeyId, privateKey, clientId));
         Storage storage = StorageOptions.newBuilder().setCredentials(credentials).build().getService();
         storage.create(blobInfo, Files.readAllBytes(file.toPath()));
         return String.format(DOWNLOAD_URL, URLEncoder.encode(fileName, StandardCharsets.UTF_8));
@@ -40,7 +61,7 @@ public class UploadFileUtil {
         return fileName.substring(fileName.lastIndexOf("."));
     }
 
-    public String upload(MultipartFile multipartFile, Long userId) {
+    public String upload(MultipartFile multipartFile, Long userId,  String privateKeyId, String privateKey, String clientId) {
 
         String route = "clientImages/"+userId;
 
@@ -49,7 +70,7 @@ public class UploadFileUtil {
             fileName = userId.toString().concat(this.getExtension(fileName));
             File file = this.convertToFile(multipartFile, fileName);   // to convert multipartFile to File
             String pathToUpload = route.concat(this.getExtension(fileName));
-            String url = this.uploadFile(file, pathToUpload);                                   // to get uploaded file link
+            String url = this.uploadFile(file, pathToUpload, privateKeyId, privateKey, clientId);                                   // to get uploaded file link
             file.delete();                                                                // to delete the copy of uploaded file stored in the project folder
             return url;
         } catch (Exception e) {

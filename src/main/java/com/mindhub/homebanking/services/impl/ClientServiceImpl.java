@@ -7,7 +7,6 @@ import com.mindhub.homebanking.models.*;
 import com.mindhub.homebanking.repositories.ClientRepository;
 import com.mindhub.homebanking.repositories.KeyTokenRepository;
 import com.mindhub.homebanking.services.ClientService;
-import com.mindhub.homebanking.utils.SendGridUtil;
 import com.mindhub.homebanking.utils.UploadFileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -43,6 +42,15 @@ public class ClientServiceImpl implements ClientService {
 
     @Autowired
     private KeyTokenRepository keyTokenRepository;
+
+    @Value("${spring.private.key.id}")
+    private String privateKeyId;
+
+    @Value("${spring.private.key}")
+    private String privateKey;
+
+    @Value("${spring.client.id}")
+    private String clientId;
 
 
     @Override
@@ -157,7 +165,7 @@ public class ClientServiceImpl implements ClientService {
 
             Client client = clientRepository.findByEmail(authentication.getName());
 
-            String urlImg = uploadFileUtil.upload(multipartFile, client.getId());
+            String urlImg = uploadFileUtil.upload(multipartFile, client.getId(), privateKeyId, privateKey, clientId);
 
             client.setAvatarUrl(urlImg);
 
