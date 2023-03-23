@@ -36,6 +36,7 @@
   </head>
   <body>
     <div id="app">
+      {{reloadAvailable}}
       <div
         class="gridLayout"
         :class="{ backgroundDark: themeDark, backgroundLight: !themeDark }"
@@ -206,7 +207,7 @@
                           <div class="form-control position-absolute top-0 w-100 fs-6" style="background-color: white; color: black ">$ {{data.amount}}</div>
                         </div>
                       </label>
-                      
+                      <p class="m-0">{{availableBalance}}</p>
                     </div>
 
                     <button type="submit" class="btn btn-orange mt-4 w-100">

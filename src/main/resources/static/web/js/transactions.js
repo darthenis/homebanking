@@ -13,6 +13,7 @@ createApp({
             selectedTransferType : 3,
             selectButtons : true,
             activeModalConfirm: false,
+            availableBalance: "",
             modalMessage : {
               message: "",
               isError: false
@@ -48,6 +49,24 @@ createApp({
           setTimeout(() => this.selectedTransferType = num, 500)  
 
           setTimeout(() => this.selectButtons = false, 500)
+
+        },
+        getBalance(){
+
+          if(this.data.myAccount !== 'Select your account'){
+
+            let USDollar = new Intl.NumberFormat('en-US', {
+              style: 'currency',
+              currency: 'USD',
+            });
+  
+            //let amount = Number(this.data.amount.replace(/[^0-9.-]+/g,""));
+  
+            let balance = this.accountsData.find(account => account.number == this.data.myAccount).balance;
+  
+            this.availableBalance = "Amount available: " + USDollar.format(balance);
+
+          }
 
         },
         activeFlipColourAnimation(num){
@@ -272,5 +291,12 @@ createApp({
             })
       
           },
+    },
+    computed: {
+      reloadAvailable(){
+
+        this.getBalance();
+
+      }
     },
 }).mount("#app")
