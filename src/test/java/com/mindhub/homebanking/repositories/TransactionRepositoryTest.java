@@ -13,8 +13,8 @@ import static org.hamcrest.Matchers.*;
 @SpringBootTest
 public class TransactionRepositoryTest {
 
-    @Autowired
-    TransactionRepository transactionRepository;
+    //@Autowired
+    //TransactionRepository transactionRepository;
 
     /*@Test
     public void existsTransactions(){

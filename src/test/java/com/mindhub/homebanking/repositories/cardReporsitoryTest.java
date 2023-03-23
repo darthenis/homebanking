@@ -15,8 +15,8 @@ import static org.hamcrest.Matchers.*;
 @SpringBootTest
 public class cardReporsitoryTest {
 
-    @Autowired
-    CardRepository cardRepository;
+    //@Autowired
+    //CardRepository cardRepository;
 
    /* @Test
     public void existsCards(){

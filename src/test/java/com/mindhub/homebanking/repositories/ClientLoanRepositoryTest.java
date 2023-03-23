@@ -14,8 +14,8 @@ import static org.hamcrest.Matchers.*;
 @SpringBootTest
 public class ClientLoanRepositoryTest {
 
-    @Autowired
-    ClientLoanRepository clientLoanRepository;
+    //@Autowired
+    //ClientLoanRepository clientLoanRepository;
 
   /*  @Test
     public void existsClientLoan(){

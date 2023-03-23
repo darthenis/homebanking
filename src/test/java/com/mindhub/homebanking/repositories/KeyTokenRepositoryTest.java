@@ -14,8 +14,8 @@ import java.util.List;
 @SpringBootTest
 public class KeyTokenRepositoryTest {
 
-    @Autowired
-    KeyTokenRepository keyTokenRepository;
+    //@Autowired
+    //KeyTokenRepository keyTokenRepository;
 
     /*@Test
     public void createKeyToken(){

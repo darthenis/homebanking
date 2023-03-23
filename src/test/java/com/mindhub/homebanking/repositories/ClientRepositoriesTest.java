@@ -13,8 +13,8 @@ import java.util.List;
 @SpringBootTest
 public class ClientRepositoriesTest {
 
-    @Autowired
-    ClientRepository clientRepository;
+    //@Autowired
+    //ClientRepository clientRepository;
 
   /*  @Test
     public void existsClients(){
