@@ -21,10 +21,4 @@ public class handlerErrorControllers extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>("The file is more bigger than 250kbs", HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(NoHandlerFoundException.class)
-    public String handle404(NoHandlerFoundException  e) throws IOException {
-
-        return  "classpath:public/index.html";
-
-    }
 }
