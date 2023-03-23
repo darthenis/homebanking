@@ -43,13 +43,13 @@ public class ClientServiceImpl implements ClientService {
     @Autowired
     private KeyTokenRepository keyTokenRepository;
 
-    @Value("${spring.private.key.id}")
+    @Value("${private.key.id}")
     private String privateKeyId;
 
-    @Value("${spring.private.key}")
+    @Value("${private.key}")
     private String privateKey;
 
-    @Value("${spring.client.id}")
+    @Value("${client.id}")
     private String clientId;
 
 
