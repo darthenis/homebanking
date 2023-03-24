@@ -95,7 +95,7 @@ public class EmailServiceImpl implements EmailService {
                         "<div style='font-size: 20px'>"+
                         "<div style=\"margin: 0; text-align: center\">"+
                         "<p>We are happy to receive you</p>" +
-                        "<p>Please confirm your email to continue registration. Click this <a style='color: white;' href='https://huborange.up.railway.app/web/index.html?token="+token+"'>LINK</a></p>"+
+                        "<p>Please confirm your email to continue registration. Click this <a style='color: white;' href='https://mindhub-huborange.up.railway.app/web/index.html?token="+token+"'>LINK</a></p>"+
                         "<p>The link is valid for the next 24 hours</p>"+
                         "</div>"+
                         "</div>"+
