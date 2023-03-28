@@ -26,7 +26,7 @@ class WebAuthorization {
 
         http.authorizeRequests()
 
-                .antMatchers("/api/clients/active", "/api/clients/resend").permitAll()
+                .antMatchers("/api/clients/active", "/api/clients/resend", "/api/transactions/pay").permitAll()
 
                 .antMatchers(HttpMethod.GET, "/api/loans").authenticated()
 
